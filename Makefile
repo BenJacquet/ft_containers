@@ -2,7 +2,7 @@ NAME = containers
 
 SRCS = main.cpp
 
-INCS = vector.hpp
+INCS = vector/Vector.hpp
 
 OBJS = $(SRCS:.cpp=.o)
 

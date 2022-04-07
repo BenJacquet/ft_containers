@@ -6,7 +6,7 @@
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/17 15:37:25 by jabenjam          #+#    #+#             */
-/*   Updated: 2022/02/17 16:24:59 by jabenjam         ###   ########.fr       */
+/*   Updated: 2022/04/07 13:34:05 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ int main()
 // 	int idx;
 // 	char buff[BUFFER_SIZE];
 // };
-
 
 // #define COUNT (MAX_RAM / (int)sizeof(Buffer))
 
