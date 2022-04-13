@@ -6,17 +6,26 @@
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/17 15:37:25 by jabenjam          #+#    #+#             */
-/*   Updated: 2022/04/07 13:34:05 by jabenjam         ###   ########.fr       */
+/*   Updated: 2022/04/13 17:48:13 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 // TESTS PERSO
 
+#include "iterator/iterator_traits.hpp"
+#include "utils/utils.hpp"
 #include <vector>
 
 int main()
 {
+
+
+	typename ft::iterator_traits<std::vector<int>>::difference_type type;
+	typename ft::iterator_traits<std::vector<int>>::value_type value;
+
+	COUT(WHITE, "type: " << type);
+	COUT(WHITE, "value: " << value);
 	return (0);
 }
 
