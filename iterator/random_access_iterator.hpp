@@ -52,7 +52,7 @@ namespace ft
 			Iterator&
 			operator++()
 			{
-				++_current;
+				++this->_current;
 				return (*this);
 			};
 
@@ -85,7 +85,7 @@ namespace ft
 			{ return (this->_current); };
 
 			random_access_iterator()
-			: current() {};
+			: _current() {};
 
 			/*
 			** Bidirectional Iterator Requirements
@@ -94,7 +94,7 @@ namespace ft
 			Iterator&
 			operator--()
 			{
-				--_current;
+				--this->_current;
 				return (*this);
 			};
 
@@ -109,12 +109,12 @@ namespace ft
 			// AJOUTER SUPPORT NON CONST ?
 
 			Iterator
-			operator+(difference_type _n) const
-			{ return (this->_current + _n); };
+			operator+(difference_type n) const
+			{ return (this->_current + n); };
 
 			Iterator
-			operator-(difference_type _n) const
-			{ return (this->_current - _n); };
+			operator-(difference_type n) const
+			{ return (this->_current - n); };
 
 			template<typename IteratorL, typename IteratorR>
 			bool
@@ -141,21 +141,21 @@ namespace ft
 			{ return (lhs.base() >= rhs.base()); };
 
 			Iterator&
-			operator+=(difference_type _n)
+			operator+=(difference_type n)
 			{
-				this->_current += _n);
+				this->_current += n);
 				return (*this);
 			};
 
 			Iterator&
-			operator-=(difference_type _n)
+			operator-=(difference_type n)
 			{
-				this->_current -= _n);
+				this->_current -= n);
 				return (*this);
 			};
 
 			reference
-			operator[](difference_type _n) const
-			{ return (this->_current[_n]); };
+			operator[](difference_type n) const
+			{ return (this->_current[n]); };
 	};
 };

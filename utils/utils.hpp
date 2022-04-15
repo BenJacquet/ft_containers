@@ -6,16 +6,14 @@
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 14:18:40 by jabenjam          #+#    #+#             */
-/*   Updated: 2022/04/13 14:19:57 by jabenjam         ###   ########.fr       */
+/*   Updated: 2022/04/15 12:12:45 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
 #include <iostream>
-
-#define COUT(COLOR, DATA) (std::cout << COLOR << DATA << "\r\n" << RESET)
-#define CERR(COLOR, DATA) (std::cerr << COLOR << DATA << "\r\n" << RESET)
+#include <vector>
 
 #define RESET		"\033[0m"			/* Reset*/
 #define BLACK		"\033[30m"			/* Black */
@@ -40,3 +38,6 @@
 #define L_BLUE		"\033[94m"			/* Light Blue */
 #define L_MAGENTA	"\033[95m"			/* Light Magenta */
 #define L_CYAN		"\033[96m"			/* Light Cyan */
+
+#define COUT(COLOR, DATA) (std::cout << COLOR << DATA << "\r\n" << RESET)
+#define CERR(COLOR, DATA) (std::cerr << COLOR << DATA << "\r\n" << RESET)
