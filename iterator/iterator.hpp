@@ -6,7 +6,7 @@
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/11 16:00:08 by jabenjam          #+#    #+#             */
-/*   Updated: 2022/04/13 17:49:32 by jabenjam         ###   ########.fr       */
+/*   Updated: 2022/04/22 14:13:33 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,11 @@
 
 namespace ft
 {
-	template <	typename _Category,
-				typename _Tp,
-				typename _Distance = std::ptrdiff_t,
-				typename _Pointer = _Tp *,
-				typename _Reference = _Tp &>
+	template <	typename Category,
+				typename Tp,
+				typename Distance = std::ptrdiff_t,
+				typename Pointer = Tp*,
+				typename Reference = Tp&>
 	class iterator
 	{
 		public:

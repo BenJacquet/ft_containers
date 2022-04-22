@@ -20,7 +20,7 @@ namespace ft
 	using ft::iterator_traits;
 	using ft::iterator;
 	template<typename Iterator>
-	class random_accessiterator
+	class random_access_iterator
 	{
 		protected:
 			Iterator _current;
@@ -29,7 +29,7 @@ namespace ft
 		public:
 			typedef Iterator								value_type;
 			typedef std::ptrdiff_t							difference_type;
-			typedef ft::random_accessiterator_tag			iterator_category;
+			typedef ft::random_access_iterator_tag			iterator_category;
 			typedef Iterator*								pointer;
 			typedef Iterator&								reference;
 
