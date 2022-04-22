@@ -6,7 +6,7 @@
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 12:24:50 by jabenjam          #+#    #+#             */
-/*   Updated: 2022/04/22 15:53:08 by jabenjam         ###   ########.fr       */
+/*   Updated: 2022/04/22 17:13:50 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,13 +40,20 @@ namespace ft
 			size_type		_size;
 
 		public:
-			vector(const allocator_type& alloc = allocator_type());//default constructor
+			//default (1) ---
+			vector(const allocator_type& alloc = allocator_type());
+
+			//fill (2) ---
 			vector(size_type n, const value_type& val = value_type(),
-					const allocator_type& alloc = allocator_type());//fill constructor
+					const allocator_type& alloc = allocator_type());
 			template <class InputIterator>
+
+			//range (3) ---
 			vector(InputIterator first, InputIterator last,
-					const allocator_type& alloc = allocator_type());//range constructor
-			vector(const vector& rhs);//copy constructor
+					const allocator_type& alloc = allocator_type());
+
+			//copy (4) ---
+			vector(const vector& rhs);
 
 			~vector();
 
@@ -58,6 +65,10 @@ namespace ft
 				this->_size = rhs._size;
 				return (*this);
 			}
+
+			/*
+			** ITERATORS
+			*/
 
 			iterator begin(); { return(iterator(this->_base)); }
 
@@ -75,6 +86,10 @@ namespace ft
 
 			//const reverse_iterator rend() const;
 
+			/*
+			** CAPACITY
+			*/
+
 			size_type size() const; { return(this->_size); }
 			
 			size_type max_size() const; { return(allocator_type.max_size()); }
@@ -85,9 +100,93 @@ namespace ft
 
 			bool empty() const; { return(this->_size == 0); }
 
-			//void reserve(size_type n);
+			// void reserve(size_type n);
 
+			/*
+			** ELEMENT ACCESS
+			*/
 
+			// reference operator[](size_type n);
+			// const_reference operator[](size_type n) const;
 
+			// reference at(size_type n);
+			// const_reference at(size_type n) const;
+
+			// reference front();
+			// const_reference front() const;
+
+			// reference back();
+			// const_reference back() const;
+
+			/*
+			** MODIFIERS
+			*/
+
+			// range (1) ---
+			// template<class InputIterator>
+			// void assign(InputIterator first, InputIterator last);
+			
+			// fill (2) ---
+			// void assign(size_type n, const value_type& val);
+
+			// void push_back(const value_type& val);
+
+			// void pop_back();
+
+			// single element(1) ---
+			// iterator insert(iterator position, const value_type& val);
+
+			// fill (2) ---
+			// void insert(iterator position, size_type n, const value_type& val);
+
+			// range (3) ---
+			// template<class InputIterator>
+			// void insert(iterator position, InputIterator first, InputIterator last);
+
+			// iterator erase(iterator position);
+			// iterator erase(iterator first, iterator last);
+
+			// void swap(vector& x);
+
+			// void clear();
+
+			/*
+			** ALLOCATOR
+			*/
+
+			// allocator_type get_allocator() const;
+
+			/*
+			** NON MEMBER FUNCTION OVERLOADS
+			*/
+
+			// (1) ---
+			// template <class T, class Alloc>
+			//   bool operator== (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
+
+			// (2) ---
+			// template <class T, class Alloc>
+			//   bool operator!= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
+
+			// (3) ---
+			// template <class T, class Alloc>
+			//   bool operator<  (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
+
+			// (4) ---
+			// template <class T, class Alloc>
+			//   bool operator<= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
+
+			// (5) ---
+			// template <class T, class Alloc>
+			//   bool operator>  (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
+
+			// (6) ---
+			// template <class T, class Alloc>
+			//   bool operator>= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
+
+			// template <class T, class Alloc>
+			// void swap (vector<T,Alloc>& x, vector<T,Alloc>& y);
+
+			// TEMPLATE SPECIALIZATION FOR BOOL IS NOT NEEDED
 	};
 };
