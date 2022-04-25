@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   random_accessiterator.hpp                         :+:      :+:    :+:   */
+/*   random_access_iterator.hpp                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/04/13 15:01:18 by jabenjam          #+#    #+#             */
-/*   Updated: 2022/04/13 17:43:29 by jabenjam         ###   ########.fr       */
+/*   Created: 2022/04/25 13:57:01 by jabenjam          #+#    #+#             */
+/*   Updated: 2022/04/25 14:53:21 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,143 +19,139 @@ namespace ft
 {
 	using ft::iterator_traits;
 	using ft::iterator;
-	template<typename Iterator>
+	template<typename iterator>
 	class random_access_iterator
 	{
-		protected:
-			Iterator _current;
-			typedef iterator_traits<Iterator>				_traits_type;
-
 		public:
-			typedef Iterator								value_type;
+			typedef iterator								value_type;
 			typedef std::ptrdiff_t							difference_type;
 			typedef ft::random_access_iterator_tag			iterator_category;
-			typedef Iterator*								pointer;
-			typedef Iterator&								reference;
+			typedef iterator*								pointer;
+			typedef iterator&								reference;
 
 			/*
-			** All Iterator Categories Requirements
+			** All iterator Categories Requirements
 			*/
 
-			random_access_iterator(const Iterator &rhs)
-			:current(rhs) {};
+			random_access_iterator(const random_access_iterator &rhs)
+			:_current(rhs._current) {}
 
-			operator=(const Iterator &rhs)
-			{*this = rhs};
+			random_access_iterator(pointer rhs)
+			:_current(rhs) {}
 
-			~random_access_iterator() {};
+			random_access_iterator &
+			operator=(const random_access_iterator &rhs)
+			{this->_current = rhs._current;}
 
-			const Iterator&
+			~random_access_iterator() {}
+
+			const random_access_iterator&
 			base() const
-			{ return (this->_current); };
+			{ return (this->_current); }
 
-			Iterator&
+			random_access_iterator&
 			operator++()
 			{
 				++this->_current;
 				return (*this);
-			};
+			}
 
-			Iterator
+			random_access_iterator
 			operator++(int)
-			{ return (Iterator(this->_current++)); };
+			{ return (random_access_iterator(this->_current++)); }
 
 			/*
-			** Forward Iterator Requirements
+			** Forward iterator Requirements
 			*/
 
-			template<typename IteratorL, typename IteratorR>
+			template<typename iteratorL, typename iteratorR>
 			bool
-			operator==(const Iterator<IteratorL> &lhs,
-					const Iterator<IteratorR> &rhs)
-			{ return (lhs.base() == rhs.base()); };
+			operator==(const random_access_iterator<iteratorR> &rhs)
+			{ return (this->base() == rhs.base()); }
 
-			template<typename IteratorL, typename IteratorR>
+			template<typename iteratorL, typename iteratorR>
 			bool
-			operator!=(const Iterator<IteratorL> &lhs,
-					const Iterator<IteratorR> &rhs)
-			{ return (lhs.base() != rhs.base()); };
+			operator!=(const random_access_iterator<iteratorR> &rhs)
+			{ return (this->base() != rhs.base()); }
 
 			reference
 			operator*() const
-			{ return (*(this->_current)); };
+			{ return (*(this->_current)); }
 
 			pointer
 			operator->() const
-			{ return (this->_current); };
+			{ return (this->_current); }
 
 			random_access_iterator()
-			: _current() {};
+			: _current(0) {};
 
 			/*
-			** Bidirectional Iterator Requirements
+			** Bidirectional iterator Requirements
 			*/
 
-			Iterator&
+			iterator&
 			operator--()
 			{
 				--this->_current;
 				return (*this);
-			};
+			}
 
-			Iterator
+			iterator
 			operator--(int)
-			{ return (Iterator(this->_current--)); };
+			{ return (iterator(this->_current--)); }
 
 			/*
-			** Random Access Iterator Requirements
+			** Random Access iterator Requirements
 			*/
 
 			// AJOUTER SUPPORT NON CONST ?
 
-			Iterator
+			random_access_iterator
 			operator+(difference_type n) const
-			{ return (this->_current + n); };
+			{ return (this->_current + n); }
 
-			Iterator
+			random_access_iterator
 			operator-(difference_type n) const
-			{ return (this->_current - n); };
+			{ return (this->_current - n); }
 
-			template<typename IteratorL, typename IteratorR>
+			template<typename iteratorL, typename iteratorR>
 			bool
-			operator<(const Iterator<IteratorL> &lhs,
-					const Iterator<IteratorR> &rhs)
-			{ return (lhs.base() < rhs.base()); };
+			operator<(const random_access_iterator<iteratorR> &rhs)
+			{ return (this->base() < rhs.base()); }
 
-			template<typename IteratorL, typename IteratorR>
+			template<typename iteratorL, typename iteratorR>
 			bool
-			operator>(const Iterator<IteratorL> &lhs,
-					const Iterator<IteratorR> &rhs)
-			{ return (lhs.base() > rhs.base()); };
+			operator>(const random_access_iterator<iteratorR> &rhs)
+			{ return (this->base() > rhs.base()); }
 
-			template<typename IteratorL, typename IteratorR>
+			template<typename iteratorL, typename iteratorR>
 			bool
-			operator<=(const Iterator<IteratorL> &lhs,
-					const Iterator<IteratorR> &rhs)
-			{ return (lhs.base() <= rhs.base()); };
+			operator<=(const random_access_iterator<iteratorR> &rhs)
+			{ return (this->base() <= rhs.base()); }
 
-			template<typename IteratorL, typename IteratorR>
+			template<typename iteratorL, typename iteratorR>
 			bool
-			operator>=(const Iterator<IteratorL> &lhs,
-					const Iterator<IteratorR> &rhs)
-			{ return (lhs.base() >= rhs.base()); };
+			operator>=(const random_access_iterator<iteratorR> &rhs)
+			{ return (this->base() >= rhs.base()); }
 
-			Iterator&
+			random_access_iterator&
 			operator+=(difference_type n)
 			{
-				this->_current += n);
+				this->_current += n;
 				return (*this);
-			};
+			}
 
-			Iterator&
+			random_access_iterator&
 			operator-=(difference_type n)
 			{
-				this->_current -= n);
+				this->_current -= n;
 				return (*this);
-			};
+			}
 
 			reference
 			operator[](difference_type n) const
-			{ return (this->_current[n]); };
+			{ return (this->_current[n]); }
+		private:
+			pointer _current;
 	};
 };

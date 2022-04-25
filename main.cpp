@@ -6,7 +6,7 @@
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/17 15:37:25 by jabenjam          #+#    #+#             */
-/*   Updated: 2022/04/15 12:17:54 by jabenjam         ###   ########.fr       */
+/*   Updated: 2022/04/25 14:31:16 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,24 +15,14 @@
 
 #include "iterator/iterator_traits.hpp"
 #include "utils/utils.hpp"
+#include "vector/vector.hpp"
 #include <vector>
 
 int main()
 {
+	ft::vector<int> numbers;
 
-
-	// typename ft::iterator_traits<std::vector<int>>::difference_type type;
-	// typename ft::iterator_traits<std::vector<int>>::value_type value;
-
-	std::vector<int>::iterator::difference_type type;
-	std::vector<int>::iterator::value_type value;
-	std::vector<int>::iterator::iterator_category category;
-	std::vector<int>::iterator::iterator_type it_type;
-
-	COUT(WHITE, "difference_type: " << type);
-	COUT(WHITE, "value_type: " << value);
-	COUT(WHITE, "iterator_type: " << it_type);
-
+	numbers.begin();
 	return (0);
 }
 

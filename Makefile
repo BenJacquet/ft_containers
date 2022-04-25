@@ -2,7 +2,12 @@ NAME = containers
 
 SRCS = main.cpp
 
-INCS = vector/Vector.hpp
+INCS =  iterator/iterator.hpp\
+		iterator/iterator_traits.hpp\
+		iterator/bidirectional_iterator.hpp\
+		iterator/random_access_iterator.hpp\
+		vector/vector.hpp\
+		utils/utils.hpp
 
 OBJS = $(SRCS:.cpp=.o)
 
