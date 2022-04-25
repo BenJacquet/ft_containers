@@ -6,7 +6,7 @@
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/17 15:37:25 by jabenjam          #+#    #+#             */
-/*   Updated: 2022/04/25 14:31:16 by jabenjam         ###   ########.fr       */
+/*   Updated: 2022/04/25 17:30:38 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,27 @@
 #include "vector/vector.hpp"
 #include <vector>
 
+template<typename T>
+void vector_status(ft::vector<T> &v)
+{
+	COUT(WHITE, "-----------------");
+	COUT(WHITE, "begin=" << &(*v.begin()));
+	COUT(WHITE, "end=" << &(*v.end()));
+	COUT(WHITE, "size=" << v.size());
+	COUT(WHITE, "capacity=" << v.capacity());
+	COUT(WHITE, "content:");
+	for (std::size_t i = 0; i < v.size(); i++)
+		COUT(WHITE, "[" << i << "] - " << v[i]);
+	COUT(WHITE, "-----------------");
+}
+
 int main()
 {
 	ft::vector<int> numbers;
 
-	numbers.begin();
+	vector_status(numbers);
+	numbers.insert(numbers.begin(), 1);
+	vector_status(numbers);
 	return (0);
 }
 

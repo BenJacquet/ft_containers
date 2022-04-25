@@ -6,7 +6,7 @@
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 12:24:50 by jabenjam          #+#    #+#             */
-/*   Updated: 2022/04/25 14:52:40 by jabenjam         ###   ########.fr       */
+/*   Updated: 2022/04/25 17:35:16 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,8 @@ namespace ft
 			//copy (4) ---
 			vector(const vector& rhs);
 
-			~vector();
+			~vector()
+			{}
 
 			vector &operator=(const vector& rhs)
 			{
@@ -97,7 +98,7 @@ namespace ft
 
 			size_type size() const { return(this->_size); }
 			
-			size_type max_size() const { return(this->allocator_type.max_size()); }
+			size_type max_size() const { return(this->_allocator.max_size()); }
 
 			//void resize(size_type n, value_type val = value_type());
 
@@ -105,14 +106,33 @@ namespace ft
 
 			bool empty() const { return(this->_size == 0); }
 
-			// void reserve(size_type n);
+			void reserve(size_type n)
+			{
+				if (n > this->max_size())
+					throw std::length_error("vector::reserve");
+				if (n > this->_capacity)
+				{
+					pointer old_mem = this->_base;
+					pointer new_mem = this->_allocator.allocate(n);
+
+					for (size_type i = 0; i < this->_size; i++)
+					{
+						this->_allocator.construct(&new_mem[i], old_mem[i]);
+						new_mem[i] = old_mem[i];
+					}
+					this->_base = new_mem;
+					this->_allocator.deallocate(old_mem, this->_size);
+					this->_capacity = n;
+				}
+			}
 
 			/*
 			** ELEMENT ACCESS
 			*/
 
-			// reference operator[](size_type n);
-			// const_reference operator[](size_type n) const;
+			reference operator[](size_type n) { return(this->_base[n]); }
+
+			const_reference operator[](size_type n) const { return(this->_base[n]); }
 
 			// reference at(size_type n);
 			// const_reference at(size_type n) const;
@@ -139,7 +159,18 @@ namespace ft
 			// void pop_back();
 
 			// single element(1) ---
-			// iterator insert(iterator position, const value_type& val);
+			iterator insert(iterator position, const value_type& val)
+			{
+				if (this->_size + 1 >= this->_capacity)
+				{
+					
+					this->_capacity = (this->capacity() == 0 ? 1 : this->capacity() * 2);
+					this->reserve(this->_size + 1);
+					*position = val;
+					this->_size++;
+				}
+				return(iterator(this->_base));
+			}
 
 			// fill (2) ---
 			// void insert(iterator position, size_type n, const value_type& val);
