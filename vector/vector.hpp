@@ -6,7 +6,7 @@
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 12:24:50 by jabenjam          #+#    #+#             */
-/*   Updated: 2022/04/28 11:44:06 by jabenjam         ###   ########.fr       */
+/*   Updated: 2022/04/29 16:44:31 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ namespace ft
 			{
 				if (n > this->max_size())
 					throw std::length_error("vector::reserve");
-				if (n > this->_capacity)
+				if (n >= this->_capacity)
 				{
 					pointer old_mem = this->_base;
 					pointer new_mem = this->_allocator.allocate(n);
@@ -162,20 +162,42 @@ namespace ft
 			// single element(1) ---
 			iterator insert(iterator position, const value_type& val)
 			{
-				difference_type idx = position - this->begin();
-				if (this->_size + 1 >= this->_capacity)
-				{
-					COUT(WHITE, idx);
-					this->_capacity = (this->capacity() == 0 ? 1 : this->capacity() * 2);
-					this->reserve(this->_size + 1);
-					this->_base[idx] = val;
-					this->_size++;
-				}
-				return(iterator(&this->_base[idx])); // retourner iterateur vers valeur inserée
+				size_type idx = position - this->begin();
+				this->insert(position, 1, val);
+				return(iterator(this->_base + idx)); // retourner iterateur vers valeur inserée
 			}
 
 			// fill (2) ---
-			// void insert(iterator position, size_type n, const value_type& val);
+			void insert(iterator position, size_type n, const value_type& val)
+			{
+				size_type idx = position - this->begin();
+				COUT(WHITE, idx);
+				if (this->_size + n >= this->_capacity)
+				{
+					this->_capacity = (this->_capacity == 0 ? 1 : this->_capacity * 2);
+					this->reserve(this->_size + n);
+					if (this->_size == 0)
+					{
+						for (size_type i = 0; i < n; i++)
+						{
+							this->_allocator.construct(this->_base + i, val);
+							this->_size++;
+						}
+					}
+					else
+					{ // need to shift all data n times to the right
+						// size_type i = this->_size - 1 + n - 1;
+						// COUT(GREEN, "i=" << i << " | n=" << n << " | i-n="<< i - n << " | idx=" << idx);
+						// for (; i > idx + n - 1; i--)
+						// {
+						// 	COUT(GREEN, "this->_base[" << i + 1 << "]=" << this->_base[i + 1] << " replaced by this->_base[" << i << "]=" << this->_base[i]);
+						// 	this->_base[i + 1] = this->_base[i];
+						// }
+						// for (; i > idx; i--)
+						// 	this->_base[i] = val;
+					}
+				}
+			}
 
 			// range (3) ---
 			// template<class InputIterator>

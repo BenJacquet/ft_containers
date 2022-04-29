@@ -6,7 +6,7 @@
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/17 15:37:25 by jabenjam          #+#    #+#             */
-/*   Updated: 2022/04/28 11:44:49 by jabenjam         ###   ########.fr       */
+/*   Updated: 2022/04/29 16:28:42 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,10 @@ int main()
 	ft::vector<int> numbers;
 
 	vector_status(numbers);
-	numbers.insert(numbers.begin(), 0);
+	numbers.insert(numbers.begin(), 2, 30);
+	// numbers.reserve(1);
+	vector_status(numbers);
+	numbers.insert(numbers.begin(), 2, 30);
 	vector_status(numbers);
 	return (0);
 }
