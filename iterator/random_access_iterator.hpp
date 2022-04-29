@@ -6,7 +6,7 @@
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 13:57:01 by jabenjam          #+#    #+#             */
-/*   Updated: 2022/04/25 16:25:19 by jabenjam         ###   ########.fr       */
+/*   Updated: 2022/04/28 10:26:26 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ namespace ft
 
 			~random_access_iterator() {}
 
-			const random_access_iterator&
+			pointer
 			base() const
 			{ return (this->_current); }
 
@@ -114,6 +114,18 @@ namespace ft
 			operator-(difference_type n) const
 			{ return (this->_current - n); }
 
+
+			template<typename iteratorR>
+			difference_type
+			operator+(const random_access_iterator<iteratorR> &rhs)
+			{ return (this->base() - rhs.base()); }
+
+			template<typename iteratorR>
+			difference_type
+			operator-(const random_access_iterator<iteratorR> &rhs)
+			{ return (this->base() - rhs.base()); }
+
+
 			template<typename iteratorL, typename iteratorR>
 			bool
 			operator<(const random_access_iterator<iteratorR> &rhs)
@@ -151,6 +163,7 @@ namespace ft
 			reference
 			operator[](difference_type n) const
 			{ return (this->_current[n]); }
+
 		private:
 			pointer _current;
 	};
