@@ -1,4 +1,4 @@
-NAME = containers
+NAME = containers_test
 
 SRCS = main.cpp
 
