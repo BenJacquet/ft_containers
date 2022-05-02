@@ -6,7 +6,7 @@
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 12:24:50 by jabenjam          #+#    #+#             */
-/*   Updated: 2022/04/29 16:44:31 by jabenjam         ###   ########.fr       */
+/*   Updated: 2022/05/02 13:58:50 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,15 +42,20 @@ namespace ft
 		public:
 			//default (1) ---
 			vector(const allocator_type& alloc = allocator_type())
-			:_allocator(alloc)
-			,_base(NULL)
-			,_capacity(0)
-			,_size(0)
+			: _allocator(alloc)
+			, _base(NULL)
+			, _capacity(0)
+			, _size(0)
 			{}
 
 			//fill (2) ---
 			vector(size_type n, const value_type& val = value_type(),
-					const allocator_type& alloc = allocator_type());
+					const allocator_type& alloc = allocator_type())
+			: _allocator(alloc)
+			, _base(NULL)
+			, _capacity(0)
+			, _size(0)
+			{ this->insert(NULL, n, val); }
 
 			//range (3) ---
 			template <class InputIterator>
@@ -58,10 +63,26 @@ namespace ft
 					const allocator_type& alloc = allocator_type());
 
 			//copy (4) ---
-			vector(const vector& rhs);
+			vector(const vector& rhs)
+			: _allocator(rhs.get_allocator())
+			, _base(rhs.base())
+			, _capacity(rhs.capacity())
+			, _size(rhs.size())
+			{
+				if (*this != rhs)
+				{
+					this->clear();
+					this->reserve(rhs.capacity());
+					vector::iterator r_it = rhs.begin();
+					vector::iterator r_ite = rhs.end();
+					vector::iterator l_it = this->begin();
+					for (; r_it != r_ite; r_it++, l_it++)
+						*l_it = *r_it;
+				}
+			}
 
 			~vector()
-			{}
+			{ this->_allocator.deallocate(this->_base, this->_capacity); }
 
 			vector &operator=(const vector& rhs)
 			{
@@ -185,16 +206,25 @@ namespace ft
 						}
 					}
 					else
-					{ // need to shift all data n times to the right
-						// size_type i = this->_size - 1 + n - 1;
-						// COUT(GREEN, "i=" << i << " | n=" << n << " | i-n="<< i - n << " | idx=" << idx);
-						// for (; i > idx + n - 1; i--)
-						// {
-						// 	COUT(GREEN, "this->_base[" << i + 1 << "]=" << this->_base[i + 1] << " replaced by this->_base[" << i << "]=" << this->_base[i]);
-						// 	this->_base[i + 1] = this->_base[i];
-						// }
-						// for (; i > idx; i--)
-						// 	this->_base[i] = val;
+					{
+						size_type i = this->_size - 1 + n;
+						COUT(GREEN, "i=" << i << " | n=" << n << " | i-n=" << i - n << " | idx=" << idx);
+						for (; i >= idx + n; i--)
+						{
+							COUT(GREEN, "this->_base[" << i << "]=" << this->_base[i] << " replaced by this->_base[" << i - n << "]=" << this->_base[i - n]);
+							this->_base[i] = this->_base[i - n];
+							if (i == 0)
+								break;
+						}
+						for (; i >= idx ; i--)
+						{
+							COUT(WHITE, "idx=" << idx << " | i=" << i);
+							COUT(YELLOW, "added " << val << " to this->_base[" << i << "]");
+							this->_base[i] = val;
+							this->_size++;
+							if (i == 0)
+								break;
+						}
 					}
 				}
 			}
@@ -208,7 +238,11 @@ namespace ft
 
 			// void swap(vector& x);
 
-			// void clear();
+			void clear()
+			{
+				if (this->_capacity >= 0)
+					this->_allocator.destroy(this->_base);
+			}
 
 			/*
 			** ALLOCATOR

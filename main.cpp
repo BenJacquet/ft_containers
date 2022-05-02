@@ -6,7 +6,7 @@
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/17 15:37:25 by jabenjam          #+#    #+#             */
-/*   Updated: 2022/04/29 16:28:42 by jabenjam         ###   ########.fr       */
+/*   Updated: 2022/05/02 14:04:37 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,12 @@ int main()
 
 	vector_status(numbers);
 	numbers.insert(numbers.begin(), 2, 30);
-	// numbers.reserve(1);
 	vector_status(numbers);
-	numbers.insert(numbers.begin(), 2, 30);
+	numbers.insert(numbers.begin(), 2, 15);
+	vector_status(numbers);
+	numbers.insert(numbers.begin(), 8, 10);
+	vector_status(numbers);
+	numbers.insert(numbers.begin() + 5, 3, 5);
 	vector_status(numbers);
 	return (0);
 }
