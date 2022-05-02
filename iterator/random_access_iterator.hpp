@@ -6,7 +6,7 @@
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 13:57:01 by jabenjam          #+#    #+#             */
-/*   Updated: 2022/04/28 10:26:26 by jabenjam         ###   ########.fr       */
+/*   Updated: 2022/05/02 17:24:21 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,12 +67,12 @@ namespace ft
 			template<typename iteratorL, typename iteratorR>
 			bool
 			operator==(const random_access_iterator<iteratorR> &rhs)
-			{ return (this->base() == rhs.base()); }
+			{ return (this->base() == rhs.base()); };
 
-			template<typename iteratorL, typename iteratorR>
+			template<typename iteratorR>
 			bool
 			operator!=(const random_access_iterator<iteratorR> &rhs)
-			{ return (this->base() != rhs.base()); }
+			{ return (this->base() != rhs.base()); };
 
 			reference
 			operator*() const
@@ -118,33 +118,33 @@ namespace ft
 			template<typename iteratorR>
 			difference_type
 			operator+(const random_access_iterator<iteratorR> &rhs)
-			{ return (this->base() - rhs.base()); }
+			{ return (this->base() - rhs.base()); };
 
 			template<typename iteratorR>
 			difference_type
 			operator-(const random_access_iterator<iteratorR> &rhs)
-			{ return (this->base() - rhs.base()); }
+			{ return (this->base() - rhs.base()); };
 
 
 			template<typename iteratorL, typename iteratorR>
 			bool
 			operator<(const random_access_iterator<iteratorR> &rhs)
-			{ return (this->base() < rhs.base()); }
+			{ return (this->base() < rhs.base()); };
 
 			template<typename iteratorL, typename iteratorR>
 			bool
 			operator>(const random_access_iterator<iteratorR> &rhs)
-			{ return (this->base() > rhs.base()); }
+			{ return (this->base() > rhs.base()); };
 
 			template<typename iteratorL, typename iteratorR>
 			bool
 			operator<=(const random_access_iterator<iteratorR> &rhs)
-			{ return (this->base() <= rhs.base()); }
+			{ return (this->base() <= rhs.base()); };
 
 			template<typename iteratorL, typename iteratorR>
 			bool
 			operator>=(const random_access_iterator<iteratorR> &rhs)
-			{ return (this->base() >= rhs.base()); }
+			{ return (this->base() >= rhs.base()); };
 
 			random_access_iterator&
 			operator+=(difference_type n)

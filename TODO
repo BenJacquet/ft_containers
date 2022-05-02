@@ -1,5 +1,7 @@
 Ne pas utiliser new pour l'allocation d'une nouvelle paire dans tree
 
+-GERER LES INSERTIONS ET SUPPRESSIONS QUI PEUVENT CAUSE SEGFAULT
+
 Vector:
 - https://www.cplusplus.com/reference/vector/vector/
 

@@ -6,12 +6,13 @@
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 12:24:50 by jabenjam          #+#    #+#             */
-/*   Updated: 2022/05/02 13:58:50 by jabenjam         ###   ########.fr       */
+/*   Updated: 2022/05/02 17:39:22 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 #include "../iterator/random_access_iterator.hpp"
+#include "../utils/type_traits.hpp"
 #include <memory>
 
 namespace ft
@@ -65,7 +66,7 @@ namespace ft
 			//copy (4) ---
 			vector(const vector& rhs)
 			: _allocator(rhs.get_allocator())
-			, _base(rhs.base())
+			, _base(rhs._base)
 			, _capacity(rhs.capacity())
 			, _size(rhs.size())
 			{
@@ -82,7 +83,11 @@ namespace ft
 			}
 
 			~vector()
-			{ this->_allocator.deallocate(this->_base, this->_capacity); }
+			{
+				this->clear();
+				if (this->_size >= 0 && this->_base != NULL)
+					this->_allocator.deallocate(this->_base, this->_capacity); 
+			}
 
 			vector &operator=(const vector& rhs)
 			{
@@ -91,7 +96,7 @@ namespace ft
 				this->_capacity = rhs._capacity;
 				this->_size = rhs._size;
 				return (*this);
-			};
+			}
 
 			/*
 			** ITERATORS
@@ -176,64 +181,83 @@ namespace ft
 			// fill (2) ---
 			// void assign(size_type n, const value_type& val);
 
-			// void push_back(const value_type& val);
+			void push_back(const value_type& val)
+			{
+				this->insert(this->end(), val);
+			}
 
-			// void pop_back();
+			void pop_back()
+			{
+				if (this->_size > 0)
+				{
+					this->_allocator.destroy(this->_base + this->_size - 1);
+					this->_size--;
+				}
+			}
 
 			// single element(1) ---
 			iterator insert(iterator position, const value_type& val)
 			{
 				size_type idx = position - this->begin();
 				this->insert(position, 1, val);
-				return(iterator(this->_base + idx)); // retourner iterateur vers valeur inserée
+				return(iterator(this->_base + idx));
 			}
 
 			// fill (2) ---
 			void insert(iterator position, size_type n, const value_type& val)
 			{
 				size_type idx = position - this->begin();
-				COUT(WHITE, idx);
 				if (this->_size + n >= this->_capacity)
 				{
 					this->_capacity = (this->_capacity == 0 ? 1 : this->_capacity * 2);
 					this->reserve(this->_size + n);
-					if (this->_size == 0)
+				}
+				if (this->_size == 0)
+				{
+					for (size_type i = 0; i < n; i++)
 					{
-						for (size_type i = 0; i < n; i++)
-						{
-							this->_allocator.construct(this->_base + i, val);
-							this->_size++;
-						}
+						this->_allocator.construct(this->_base + i, val);
+						this->_size++;
 					}
-					else
+				}
+				else
+				{
+					size_type i = this->_size - 1 + n;
+					for (; i >= idx + n; i--)
 					{
-						size_type i = this->_size - 1 + n;
-						COUT(GREEN, "i=" << i << " | n=" << n << " | i-n=" << i - n << " | idx=" << idx);
-						for (; i >= idx + n; i--)
-						{
-							COUT(GREEN, "this->_base[" << i << "]=" << this->_base[i] << " replaced by this->_base[" << i - n << "]=" << this->_base[i - n]);
-							this->_base[i] = this->_base[i - n];
-							if (i == 0)
-								break;
-						}
-						for (; i >= idx ; i--)
-						{
-							COUT(WHITE, "idx=" << idx << " | i=" << i);
-							COUT(YELLOW, "added " << val << " to this->_base[" << i << "]");
-							this->_base[i] = val;
-							this->_size++;
-							if (i == 0)
-								break;
-						}
+						this->_base[i] = this->_base[i - n];
+						if (i == 0)
+							break;
+					}
+					for (; i >= idx ; i--)
+					{
+						this->_base[i] = val;
+						this->_size++;
+						if (i == 0)
+							break;
 					}
 				}
 			}
 
 			// range (3) ---
-			// template<class InputIterator>
-			// void insert(iterator position, InputIterator first, InputIterator last);
+			template<class InputIterator>
+			void insert(iterator position, InputIterator first, InputIterator last)
+			{
+				size_type idx = position - this->begin();
+				size_type to_copy = last - first;
+				COUT(WHITE, "to_copy=" << to_copy);
+				COUT(WHITE, "idx=" << idx);
+			}
 
 			// iterator erase(iterator position);
+			// {
+			// 	size_type idx = position - this->begin();
+			// 	if (position > this->begin() && position < this->end())
+			// 	{
+					
+			// 	}
+			// }
+
 			// iterator erase(iterator first, iterator last);
 
 			// void swap(vector& x);
@@ -242,13 +266,15 @@ namespace ft
 			{
 				if (this->_capacity >= 0)
 					this->_allocator.destroy(this->_base);
+				this->_size = 0;
 			}
 
 			/*
 			** ALLOCATOR
 			*/
 
-			// allocator_type get_allocator() const;
+			allocator_type get_allocator() const
+			{ return(this->_allocator); }
 
 			/*
 			** NON MEMBER FUNCTION OVERLOADS

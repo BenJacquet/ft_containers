@@ -6,7 +6,7 @@
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/17 15:37:25 by jabenjam          #+#    #+#             */
-/*   Updated: 2022/05/02 14:04:37 by jabenjam         ###   ########.fr       */
+/*   Updated: 2022/05/02 17:43:44 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,25 @@ void vector_status(ft::vector<T> &v)
 	COUT(WHITE, "-----------------");
 }
 
+template<typename T>
+void vector_status(std::vector<T> &v)
+{
+	COUT(WHITE, "-----------------");
+	COUT(WHITE, "begin=" << &(*v.begin()));
+	COUT(WHITE, "end=" << &(*v.end()));
+	COUT(WHITE, "size=" << v.size());
+	COUT(WHITE, "capacity=" << v.capacity());
+	COUT(WHITE, "content:");
+	for (std::size_t i = 0; i < v.size(); i++)
+		COUT(WHITE, "[" << i << "] - " << v[i]);
+	COUT(WHITE, "-----------------");
+}
+
 int main()
 {
 	ft::vector<int> numbers;
 
+	COUT(GREEN, "numbers");
 	vector_status(numbers);
 	numbers.insert(numbers.begin(), 2, 30);
 	vector_status(numbers);
@@ -43,8 +58,22 @@ int main()
 	vector_status(numbers);
 	numbers.insert(numbers.begin(), 8, 10);
 	vector_status(numbers);
-	numbers.insert(numbers.begin() + 5, 3, 5);
+	numbers.insert(numbers.begin() + 5, 2, 5);
 	vector_status(numbers);
+
+	numbers.push_back(45);
+	vector_status(numbers);
+
+	numbers.pop_back();
+	vector_status(numbers);
+	
+	// COUT(WHITE, (ft::enable_if<ft::is_integral<ft::vector<int>::iterator>::value>));
+
+	// COUT(BLUE, "numbers2");
+	// ft::vector<int> numbers2;
+	// numbers2.insert(numbers2.begin(), numbers.begin(), numbers.end());
+	// vector_status(numbers2);
+
 	return (0);
 }
 

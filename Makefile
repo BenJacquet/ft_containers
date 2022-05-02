@@ -7,7 +7,8 @@ INCS =  iterator/iterator.hpp\
 		iterator/bidirectional_iterator.hpp\
 		iterator/random_access_iterator.hpp\
 		vector/vector.hpp\
-		utils/utils.hpp
+		utils/utils.hpp\
+		utils/type_traits.hpp
 
 OBJS = $(SRCS:.cpp=.o)
 
