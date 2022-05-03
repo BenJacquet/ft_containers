@@ -6,7 +6,7 @@
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 12:24:50 by jabenjam          #+#    #+#             */
-/*   Updated: 2022/05/02 17:39:22 by jabenjam         ###   ########.fr       */
+/*   Updated: 2022/05/03 17:59:08 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "../iterator/random_access_iterator.hpp"
 #include "../utils/type_traits.hpp"
 #include <memory>
+#include <stdexcept>
 
 namespace ft
 {
@@ -59,9 +60,9 @@ namespace ft
 			{ this->insert(NULL, n, val); }
 
 			//range (3) ---
-			template <class InputIterator>
-			vector(InputIterator first, InputIterator last,
-					const allocator_type& alloc = allocator_type());
+			// template <class InputIterator>
+			// vector(InputIterator first, InputIterator last,
+			// 		const allocator_type& alloc = allocator_type());
 
 			//copy (4) ---
 			vector(const vector& rhs)
@@ -126,7 +127,21 @@ namespace ft
 			
 			size_type max_size() const { return(this->_allocator.max_size()); }
 
-			//void resize(size_type n, value_type val = value_type());
+			void resize(size_type n, value_type val = value_type())
+			{
+				if (n < this->_size)
+				{
+					for (; this->_size > n ; this->_size--)
+						this->_allocator.destroy(this->_base + n);
+				}
+				else if (n > this->_size)
+				{
+					if (n > this->_capacity)
+						this->reserve(n);
+					for (; this->_size < n; this->_size++)
+						this->_base[this->_size] = val;
+				}
+			}
 
 			size_type capacity() const { return(this->_capacity); }
 
@@ -140,7 +155,6 @@ namespace ft
 				{
 					pointer old_mem = this->_base;
 					pointer new_mem = this->_allocator.allocate(n);
-
 					for (size_type i = 0; i < this->_size; i++)
 					{
 						this->_allocator.construct(new_mem + i, old_mem[i]);
@@ -161,14 +175,31 @@ namespace ft
 
 			const_reference operator[](size_type n) const { return(this->_base[n]); }
 
-			// reference at(size_type n);
-			// const_reference at(size_type n) const;
+			reference at(size_type n)
+			{
+				if (n >= this->_size)
+					throw std::out_of_range("Out of range");
+				return(*(this->begin() + n));
+			}
 
-			// reference front();
-			// const_reference front() const;
+			const_reference at(size_type n) const
+			{
+				if (n >= this->_size)
+					throw std::out_of_range("Out of range");
+				return(*(this->begin() + n));
+			}
 
-			// reference back();
-			// const_reference back() const;
+			reference front()
+			{ return(*this->begin()); }
+ 
+			const_reference front() const
+			{ return(*this->begin()); }
+
+			reference back()
+			{ return(*(this->end() - 1)); }
+
+			const_reference back() const
+			{ return(*(this->end() - 1)); }
 
 			/*
 			** MODIFIERS
@@ -179,12 +210,14 @@ namespace ft
 			// void assign(InputIterator first, InputIterator last);
 			
 			// fill (2) ---
-			// void assign(size_type n, const value_type& val);
+			void assign(size_type n, const value_type& val)
+			{
+				this->resize(0);
+				this->resize(n, val);
+			}
 
 			void push_back(const value_type& val)
-			{
-				this->insert(this->end(), val);
-			}
+			{ this->insert(this->end(), val); }
 
 			void pop_back()
 			{
@@ -199,6 +232,7 @@ namespace ft
 			iterator insert(iterator position, const value_type& val)
 			{
 				size_type idx = position - this->begin();
+				COUT(GREEN, position - this->begin());
 				this->insert(position, 1, val);
 				return(iterator(this->_base + idx));
 			}
@@ -208,10 +242,7 @@ namespace ft
 			{
 				size_type idx = position - this->begin();
 				if (this->_size + n >= this->_capacity)
-				{
-					this->_capacity = (this->_capacity == 0 ? 1 : this->_capacity * 2);
 					this->reserve(this->_size + n);
-				}
 				if (this->_size == 0)
 				{
 					for (size_type i = 0; i < n; i++)
@@ -240,27 +271,65 @@ namespace ft
 			}
 
 			// range (3) ---
-			template<class InputIterator>
-			void insert(iterator position, InputIterator first, InputIterator last)
-			{
-				size_type idx = position - this->begin();
-				size_type to_copy = last - first;
-				COUT(WHITE, "to_copy=" << to_copy);
-				COUT(WHITE, "idx=" << idx);
-			}
-
-			// iterator erase(iterator position);
+			// template<class InputIterator>
+			// void insert(iterator position, InputIterator first, InputIterator last)
 			// {
 			// 	size_type idx = position - this->begin();
-			// 	if (position > this->begin() && position < this->end())
-			// 	{
-					
-			// 	}
+			// 	size_type to_copy = last - first;
+			// 	COUT(WHITE, "to_copy=" << to_copy);
+			// 	COUT(WHITE, "idx=" << idx);
 			// }
 
-			// iterator erase(iterator first, iterator last);
 
-			// void swap(vector& x);
+			// single element (1) ---
+			iterator erase(iterator position)
+			{
+				size_type idx = position - this->begin();
+				size_type backup = idx;
+
+				this->_allocator.destroy(this->_base + idx);
+				for (; idx < this->_size - 1; idx++)
+					this->_base[idx] = this->_base[idx + 1];
+				this->_size--;
+				return(iterator(this->_base + backup));
+			}
+			
+			// range (2) ---
+			iterator erase(iterator first, iterator last)
+			{
+				size_type idx = first - this->begin();
+				size_type end = last - this->begin();
+				size_type backup = idx;
+
+				for (; idx != end; idx++)
+				{
+					// COUT(YELLOW, "idx=" << idx << " | end=" << end);
+					this->_allocator.destroy(this->_base + idx);
+				}
+				for (idx = backup; idx < this->_size - (end - backup); idx++)
+				{
+					this->_base[idx] = this->_base[idx + end];
+				}
+				return(iterator(this->_base + backup));
+			}
+
+			void swap(vector& x)
+			{
+				size_type capacity = this->_capacity;
+				size_type size = this->_size;
+				pointer base = this->_base;
+				allocator_type allocator = this->_allocator;
+
+				this->_capacity = x._capacity;
+				this->_size = x._size;
+				this->_base = x._base;
+				this->_allocator = x._allocator;
+
+				x._capacity = capacity;
+				x._size = size;
+				x._base = base;
+				x._allocator = allocator;
+			}
 
 			void clear()
 			{

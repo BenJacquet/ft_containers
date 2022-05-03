@@ -6,7 +6,7 @@
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/17 15:37:25 by jabenjam          #+#    #+#             */
-/*   Updated: 2022/05/02 17:43:44 by jabenjam         ###   ########.fr       */
+/*   Updated: 2022/05/03 17:59:14 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,28 +21,17 @@
 template<typename T>
 void vector_status(ft::vector<T> &v)
 {
-	COUT(WHITE, "-----------------");
-	COUT(WHITE, "begin=" << &(*v.begin()));
-	COUT(WHITE, "end=" << &(*v.end()));
-	COUT(WHITE, "size=" << v.size());
-	COUT(WHITE, "capacity=" << v.capacity());
-	COUT(WHITE, "content:");
-	for (std::size_t i = 0; i < v.size(); i++)
-		COUT(WHITE, "[" << i << "] - " << v[i]);
-	COUT(WHITE, "-----------------");
-}
+	typename ft::vector<T>::iterator it = v.begin();
+	typename ft::vector<T>::iterator ite = v.end();
 
-template<typename T>
-void vector_status(std::vector<T> &v)
-{
 	COUT(WHITE, "-----------------");
 	COUT(WHITE, "begin=" << &(*v.begin()));
 	COUT(WHITE, "end=" << &(*v.end()));
 	COUT(WHITE, "size=" << v.size());
 	COUT(WHITE, "capacity=" << v.capacity());
 	COUT(WHITE, "content:");
-	for (std::size_t i = 0; i < v.size(); i++)
-		COUT(WHITE, "[" << i << "] - " << v[i]);
+	for (int i = 0; it != ite; it++, i++)
+		COUT(WHITE, "[" << i << "] - " << *it);
 	COUT(WHITE, "-----------------");
 }
 
@@ -50,29 +39,68 @@ int main()
 {
 	ft::vector<int> numbers;
 
-	COUT(GREEN, "numbers");
+	COUT(BLUE, "numbers");
 	vector_status(numbers);
 	numbers.insert(numbers.begin(), 2, 30);
+	COUT(BLUE, "numbers");
 	vector_status(numbers);
 	numbers.insert(numbers.begin(), 2, 15);
+	COUT(BLUE, "numbers");
 	vector_status(numbers);
 	numbers.insert(numbers.begin(), 8, 10);
+	COUT(BLUE, "numbers");
 	vector_status(numbers);
 	numbers.insert(numbers.begin() + 5, 2, 5);
+	COUT(BLUE, "numbers");
 	vector_status(numbers);
 
 	numbers.push_back(45);
+	COUT(BLUE, "numbers");
 	vector_status(numbers);
 
 	numbers.pop_back();
+	COUT(BLUE, "numbers");
 	vector_status(numbers);
-	
+
+	COUT(BLUE, numbers.front());
+
+	COUT(BLUE, numbers.back());
+
+	COUT(BLUE, numbers.at(13));
+
 	// COUT(WHITE, (ft::enable_if<ft::is_integral<ft::vector<int>::iterator>::value>));
 
-	// COUT(BLUE, "numbers2");
-	// ft::vector<int> numbers2;
-	// numbers2.insert(numbers2.begin(), numbers.begin(), numbers.end());
+	COUT(GREEN, "numbers2");
+	ft::vector<int> numbers2(5, 12);
+	COUT(GREEN, "numbers2");
+	vector_status(numbers2);
+
+	numbers2.swap(numbers);
+	COUT(BLUE, "numbers");
+	vector_status(numbers);
+	COUT(GREEN, "numbers2");
+	vector_status(numbers2);
+	
+	
+	numbers2.resize(50);
+	vector_status(numbers2);
+
+	numbers2.resize(3);
+	vector_status(numbers2);
+
+	numbers2.resize(30, 20);
+	vector_status(numbers2);
+
+	numbers2.assign(5, 5);
+	vector_status(numbers2);
+
+	numbers2.erase(numbers2.begin() + 3);
+	vector_status(numbers2);
+
+	// numbers2.erase(numbers2.begin(), numbers.begin() + 1);
 	// vector_status(numbers2);
+
+	// numbers2.insert(numbers2.begin(), numbers.begin(), numbers.end());
 
 	return (0);
 }
