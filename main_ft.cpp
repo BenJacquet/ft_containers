@@ -6,7 +6,7 @@
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/17 15:37:25 by jabenjam          #+#    #+#             */
-/*   Updated: 2022/05/04 12:55:08 by jabenjam         ###   ########.fr       */
+/*   Updated: 2022/05/04 14:53:46 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,8 @@
 
 #include "iterator/iterator_traits.hpp"
 #include "utils/utils.hpp"
-#include "vector/vector.hpp"
+#include "containers/vector.hpp"
+#include "containers/stack.hpp"
 
 template<typename T>
 void vector_status(ft::vector<T> &v)
@@ -147,9 +148,20 @@ void	vector_tests()
 	// numbers2.insert(numbers2.begin(), numbers.begin(), numbers.end());
 }
 
+void	stack_tests()
+{
+	ft::stack<int> numbers;
+
+	numbers.push(5);
+}
+
+void	map_tests() {}
+
 int main()
 {
 	vector_tests();
+	stack_tests();
+	map_tests();
 	return (0);
 }
 
