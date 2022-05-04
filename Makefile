@@ -52,7 +52,7 @@ test : clean all
 	./$(NAME_STD) > $(STD_OUTPUT)
 	@echo "$(_CYAN)Generating the test output of ft containers >>> $(_PURPLE)$(FT_OUTPUT)$(_WHITE)"
 	./$(NAME_FT) > $(FT_OUTPUT)
-	@echo "$(_CYAN)Generating the diff between them >>> $(_PURPLE)$(DIFF_OUTPUT)$(_WHITE)"
+	@echo "$(_CYAN)Generating the diff between std and ft containers >>> $(_PURPLE)$(DIFF_OUTPUT)$(_WHITE)"
 	-diff $(FT_OUTPUT) $(STD_OUTPUT) > $(DIFF_OUTPUT) || /bin/true
 	@echo "$(_CYAN)Checking if $(_PURPLE)$(DIFF_OUTPUT)$(_WHITE) $(_CYAN)is empty...$(_WHITE)"
 	-sh check_diff.sh $(DIFF_OUTPUT) || /bin/true
