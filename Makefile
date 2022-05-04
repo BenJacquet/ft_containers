@@ -1,10 +1,12 @@
 NAME_FT = ft_containers
 
-FT_OUTPUT = ft.log
+LOG_DIR = logs
 
-STD_OUTPUT = std.log
+FT_OUTPUT = logs/ft.log
 
-DIFF_OUTPUT = diff.log
+STD_OUTPUT = logs/std.log
+
+DIFF_OUTPUT = logs/diff.log
 
 NAME_STD = std_containers
 
@@ -41,37 +43,43 @@ _CYAN = $'\033[36m
 _GREY = $'\033[37m
 _WHITE = $'\033[0m
 
-test : all
-	@echo "$(_BLUE)generating the test output of ft containers >>> $(_PURPLE)ft.log$(_WHITE)"
-	@./$(NAME_FT) > $(FT_OUTPUT)
-	@echo "$(_BLUE)generating the test output of std containers >>> $(_PURPLE)std.log$(_WHITE)"
-	@./$(NAME_STD) > $(STD_OUTPUT)
-	@echo "$(_BLUE)generating the difference between them >>> $(_PURPLE)diff.log$(_WHITE)"
-	@diff $(FT_OUTPUT) $(STD_OUTPUT) > $(DIFF_OUTPUT)
-	@diff -i ft.log std.log > diff.log || /bin/true
-	@echo "$(_GREEN)all good!$(_WHITE)"
+test : clean all
+	@echo "$(_CYAN)Creating the logs folder >>> $(_PURPLE)$(LOG_DIR)$(_WHITE)"
+	mkdir logs
+	@echo "$(_CYAN)Generating the test output of ft containers >>> $(_PURPLE)$(FT_OUTPUT)$(_WHITE)"
+	./$(NAME_FT) > $(FT_OUTPUT)
+	@echo "$(_CYAN)Generating the test output of std containers >>> $(_PURPLE)$(STD_OUTPUT)$(_WHITE)"
+	./$(NAME_STD) > $(STD_OUTPUT)
+	@echo "$(_CYAN)Generating the diff between them >>> $(_PURPLE)$(DIFF_OUTPUT)$(_WHITE)"
+	-diff $(FT_OUTPUT) $(STD_OUTPUT) > $(DIFF_OUTPUT) || /bin/true
+	@echo "$(_CYAN)Checking if $(_PURPLE)$(DIFF_OUTPUT)$(_WHITE) $(_CYAN)is empty...$(_WHITE)"
+	-sh check_diff.sh $(DIFF_OUTPUT) || /bin/true
 
 all : $(NAME_FT) $(NAME_STD)
 
 $(OBJS_FT) : $(INCS_FT)
 
 $(OBJS_STD) : $(INCS_STD)
-	@echo "$(_CYAN)generating the std version of main.cpp >>> $(_PURPLE)$(SRCS_STD)$(_WHITE)"
+	@echo "$(_CYAN)Generating the std version of main.cpp >>> $(_PURPLE)$(SRCS_STD)$(_WHITE)"
 	cp $(SRCS_FT) $(SRCS_STD)
-	sed -i -e "s/ft::vector/std::vector/g" $(SRCS_STD)
+	sed -i -e "s/ft::/std::/g" $(SRCS_STD)
 	sed -i -e "s/main_ft.cpp /main_std.cpp/g" $(SRCS_STD)
 	$(CXX) $(CXXFLAGS) -c $(SRCS_STD)
 
 $(NAME_FT) : $(OBJS_FT)
+	@echo "$(_CYAN)Generating the ft binary >>> $(_PURPLE)$(NAME_STD)$(_WHITE)"
 	$(CXX) $(CXXFLAGS) -o $@ $(OBJS_FT)
 
 $(NAME_STD) : $(OBJS_STD)
+	@echo "$(_CYAN)Generating the std binary >>> $(_PURPLE)$(NAME_STD)$(_WHITE)"
 	$(CXX) $(CXXFLAGS) -o $@ $(OBJS_STD)
 
 clean :
-	rm -rf $(OBJS_FT) $(OBJS_STD) $(FT_OUTPUT) $(STD_OUTPUT) $(DIFF_OUTPUT)
+	@echo "$(_CYAN)Cleaning all objects and output files$(_WHITE)"
+	rm -rf $(OBJS_FT) $(OBJS_STD) $(LOG_DIR)
 
 fclean : clean
+	@echo "$(_CYAN)Cleaning the binaries and $(SRCS_STD)$(_WHITE)"
 	rm -rf $(NAME_FT) $(NAME_STD) $(SRCS_STD)
 
 re : fclean test

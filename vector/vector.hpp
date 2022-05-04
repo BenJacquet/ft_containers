@@ -6,7 +6,7 @@
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 12:24:50 by jabenjam          #+#    #+#             */
-/*   Updated: 2022/05/04 11:30:59 by jabenjam         ###   ########.fr       */
+/*   Updated: 2022/05/04 13:44:39 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -309,7 +309,7 @@ namespace ft
 					this->_allocator.destroy(this->_base + idx);
 				for (idx = backup; idx < this->_size - (end - backup); idx++)
 					this->_base[idx] = this->_base[idx + end];
-				this->_size-= idx - end - 1;
+				this->_size -= end - backup;
 				return(iterator(this->_base + backup));
 			}
 
@@ -375,7 +375,5 @@ namespace ft
 
 			// template <class T, class Alloc>
 			// void swap(vector<T,Alloc>& x, vector<T,Alloc>& y);
-
-			// TEMPLATE SPECIALIZATION FOR BOOL IS NOT NEEDED
 	};
 };

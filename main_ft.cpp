@@ -6,7 +6,7 @@
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/17 15:37:25 by jabenjam          #+#    #+#             */
-/*   Updated: 2022/05/04 11:32:36 by jabenjam         ###   ########.fr       */
+/*   Updated: 2022/05/04 12:55:08 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void vector_status(ft::vector<T> &v)
 	COUT_NC("-----------------" << std::endl);
 }
 
-int main()
+void	vector_tests()
 {
 	COUT_NC("CONSTRUCTOR --- NO_ARG_OVERLOAD");
 	ft::vector<int> numbers;
@@ -140,12 +140,16 @@ int main()
 	numbers2.erase(numbers2.begin(), numbers2.begin() + 1);
 	vector_status(numbers2);
 	
-	COUT_NC("ERASE --- SINGLE_ELEMENT");	
+	COUT_NC("ERASE --- SINGLE_ELEMENT_OVERLOAD");	
 	numbers2.erase(numbers2.begin() + 3);
 	vector_status(numbers2);
 
 	// numbers2.insert(numbers2.begin(), numbers.begin(), numbers.end());
+}
 
+int main()
+{
+	vector_tests();
 	return (0);
 }
 
