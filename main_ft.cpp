@@ -6,7 +6,7 @@
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/17 15:37:25 by jabenjam          #+#    #+#             */
-/*   Updated: 2022/05/04 14:53:46 by jabenjam         ###   ########.fr       */
+/*   Updated: 2022/05/04 16:29:20 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@
 #include "utils/utils.hpp"
 #include "containers/vector.hpp"
 #include "containers/stack.hpp"
+#include <vector>
+#include <stack>
 
 template<typename T>
 void vector_status(ft::vector<T> &v)
@@ -25,8 +27,6 @@ void vector_status(ft::vector<T> &v)
 	typename ft::vector<T>::iterator ite = v.end();
 
 	COUT_NC("-----------------");
-	// COUT_NC("begin=" << &(*v.begin()));
-	// COUT_NC("end=" << &(*v.end()));
 	COUT_NC("size=" << v.size());
 	COUT_NC("capacity=" << v.capacity());
 	COUT_NC("content:");
@@ -37,6 +37,7 @@ void vector_status(ft::vector<T> &v)
 
 void	vector_tests()
 {
+	COUT_NC("---------------------- VECTOR ----------------------");
 	COUT_NC("CONSTRUCTOR --- NO_ARG_OVERLOAD");
 	ft::vector<int> numbers;
 	COUT_NC("numbers");
@@ -150,12 +151,58 @@ void	vector_tests()
 
 void	stack_tests()
 {
-	ft::stack<int> numbers;
+	COUT_NC("---------------------- STACK ----------------------");
+	ft::stack<int, std::vector<int> > numbers;
+	// ft::stack<int, ft::vector<int> > numbers;
+	// ft::stack<int, std::deque<int> > numbers;
 
+
+	COUT_NC("EMPTY --- EMPTY");
+	COUT_NC(numbers.empty() << std::endl);
+
+	COUT_NC("SIZE --- EMPTY");
+	COUT_NC(numbers.size() << std::endl);
+
+	COUT_NC("PUSH OF FIVE ELEMENTS");
+	for (int i = 0; i < 5; i++)
+	{
+		numbers.push(i);
+		COUT_NC("STACK TOP ELEMENT");
+		COUT_NC(numbers.top() << std::endl);
+	}
+
+	COUT_NC("PUSH");
 	numbers.push(5);
+	COUT_NC("STACK TOP ELEMENT");
+	COUT_NC(numbers.top() << std::endl);
+
+	COUT_NC("SIZE --- NOT EMPTY");
+	COUT_NC(numbers.size() << std::endl);
+
+	COUT_NC("EMPTY --- NOT EMPTY");
+	COUT_NC(numbers.empty() << std::endl);
+
+	COUT_NC("POP");
+	numbers.pop();
+	COUT_NC("STACK TOP ELEMENT");
+	COUT_NC(numbers.top() << std::endl);
+
+	ft::stack<int, std::vector<int> > numbers2;
+
+	COUT_NC("OPERATOR=");
+	numbers2 = numbers;
+	
+	COUT_NC("STACK TOP ELEMENT");
+	COUT_NC(numbers.top() << std::endl);
+
+	COUT_NC("SIZE --- NOT EMPTY");
+	COUT_NC(numbers.size() << std::endl);
 }
 
-void	map_tests() {}
+void	map_tests()
+{
+	COUT_NC("---------------------- MAP ----------------------");
+}
 
 int main()
 {

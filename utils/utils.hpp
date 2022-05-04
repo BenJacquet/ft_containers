@@ -6,7 +6,7 @@
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 14:18:40 by jabenjam          #+#    #+#             */
-/*   Updated: 2022/05/04 11:07:41 by jabenjam         ###   ########.fr       */
+/*   Updated: 2022/05/04 15:39:39 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,6 @@
 #define L_MAGENTA	"\033[95m"			/* Light Magenta */
 #define L_CYAN		"\033[96m"			/* Light Cyan */
 
-#define COUT(COLOR, DATA) (std::cout << COLOR << DATA << "\n" << RESET)
-#define COUT_NC(DATA) (std::cout << DATA << "\n")
+#define COUT(COLOR, DATA) (std::cout << COLOR << DATA << std::endl << RESET)
+#define COUT_NC(DATA) (std::cout << DATA << std::endl)
 #define CERR(COLOR, DATA) (std::cerr << COLOR << DATA << "\n" << RESET)

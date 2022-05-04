@@ -6,7 +6,7 @@
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 12:24:50 by jabenjam          #+#    #+#             */
-/*   Updated: 2022/05/04 14:46:01 by jabenjam         ###   ########.fr       */
+/*   Updated: 2022/05/04 16:25:33 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,18 +22,18 @@ namespace ft
 	class vector
 	{
 		public:
-			typedef T											value_type;
-			typedef Alloc										allocator_type;
-			typedef T&											reference;
-			typedef const T&									const_reference;
-			typedef typename allocator_type::pointer			pointer;
-			typedef typename allocator_type::const_pointer		const_pointer;
+			typedef T												value_type;
+			typedef Alloc											allocator_type;
+			typedef T&												reference;
+			typedef const T&										const_reference;
+			typedef typename allocator_type::pointer				pointer;
+			typedef typename allocator_type::const_pointer			const_pointer;
 			typedef typename ft::random_access_iterator<T>			iterator;
 			typedef	typename ft::random_access_iterator<const T>	const_iterator;
 			//typedef	reverse_iterator<iterator>					reverse_iterator;
 			//typedef	reverse_iterator<const iterator>			const_reverse_iterator;
-			typedef	ptrdiff_t									difference_type;
-			typedef	size_t										size_type;
+			typedef	ptrdiff_t										difference_type;
+			typedef	size_t											size_type;
 
 		private:
 			allocator_type	_allocator;
@@ -75,9 +75,9 @@ namespace ft
 				{
 					this->clear();
 					this->reserve(rhs.capacity());
-					vector::iterator r_it = rhs.begin();
-					vector::iterator r_ite = rhs.end();
-					vector::iterator l_it = this->begin();
+					iterator r_it = rhs.begin();
+					iterator r_ite = rhs.end();
+					iterator l_it = this->begin();
 					for (; r_it != r_ite; r_it++, l_it++)
 						*l_it = *r_it;
 				}
@@ -345,35 +345,41 @@ namespace ft
 			allocator_type get_allocator() const
 			{ return(this->_allocator); }
 
-			/*
-			** NON MEMBER FUNCTION OVERLOADS
-			*/
-
-			// (1) ---
-			// template <class T, class Alloc>
-			//   bool operator==(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
-
-			// (2) ---
-			// template <class T, class Alloc>
-			//   bool operator!=(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
-
-			// (3) ---
-			// template <class T, class Alloc>
-			//   bool operator<(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
-
-			// (4) ---
-			// template <class T, class Alloc>
-			//   bool operator<=(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
-
-			// (5) ---
-			// template <class T, class Alloc>
-			//   bool operator>(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
-
-			// (6) ---
-			// template <class T, class Alloc>
-			//   bool operator>=(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
-
-			// template <class T, class Alloc>
-			// void swap(vector<T,Alloc>& x, vector<T,Alloc>& y);
 	};
+	/*
+	** NON MEMBER FUNCTION OVERLOADS
+	*/
+
+	// (1) ---
+	template <class T, class Alloc>
+	bool operator==(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs)
+	{
+		return (&lhs == &rhs);
+	}
+
+	// (2) ---
+	template <class T, class Alloc>
+	bool operator!=(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs)
+	{
+		return (&lhs != &rhs);
+	}
+
+	// (3) ---
+	// template <class T, class Alloc>
+	//   bool operator<(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
+
+	// (4) ---
+	// template <class T, class Alloc>
+	//   bool operator<=(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
+
+	// (5) ---
+	// template <class T, class Alloc>
+	//   bool operator>(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
+
+	// (6) ---
+	// template <class T, class Alloc>
+	//   bool operator>=(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
+
+	// template <class T, class Alloc>
+	// void swap(vector<T,Alloc>& x, vector<T,Alloc>& y);
 };

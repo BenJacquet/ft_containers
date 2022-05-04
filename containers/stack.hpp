@@ -6,7 +6,7 @@
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/04 13:59:59 by jabenjam          #+#    #+#             */
-/*   Updated: 2022/05/04 14:53:01 by jabenjam         ###   ########.fr       */
+/*   Updated: 2022/05/04 16:22:27 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,21 +25,36 @@ namespace ft
 			typedef size_t				size_type;
 
 		protected:
-			container_type				sub_container;
+			container_type				c;
 
 		public:
-			explicit stack (const container_type& ctnr = container_type());
+			explicit stack(const container_type& ctnr = container_type())
+			: c(ctnr)
+			{}
+
+			~stack()
+			{}
+
+			stack& operator=(const stack& other)
+			{
+				this->c = other.c;
+				return(*this);
+			}
 
 		    value_type& top()
-			{ return (this->sub_container.back()); }
+			{ return (this->c.back()); }
 
 			const value_type& top() const
-			{ return (this->sub_container.back()); }
+			{ return (this->c.back()); }
 
 			void push (const value_type& val)
-			{ this->sub_container.push_back(val); }
+			{ this->c.push_back(val); }
 
 			void pop()
-			{ this->sub_container.pop_back(); }
+			{ this->c.pop_back(); }
+
+			bool empty() const { return(this->c.empty()); }
+
+			size_type size() const { return(this->c.size()); }
 	};
 }

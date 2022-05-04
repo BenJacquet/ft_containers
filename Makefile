@@ -48,10 +48,10 @@ _WHITE = $'\033[0m
 test : clean all
 	@echo "$(_CYAN)Creating the logs folder >>> $(_PURPLE)$(LOG_DIR)$(_WHITE)"
 	mkdir logs
-	@echo "$(_CYAN)Generating the test output of ft containers >>> $(_PURPLE)$(FT_OUTPUT)$(_WHITE)"
-	./$(NAME_FT) > $(FT_OUTPUT)
 	@echo "$(_CYAN)Generating the test output of std containers >>> $(_PURPLE)$(STD_OUTPUT)$(_WHITE)"
 	./$(NAME_STD) > $(STD_OUTPUT)
+	@echo "$(_CYAN)Generating the test output of ft containers >>> $(_PURPLE)$(FT_OUTPUT)$(_WHITE)"
+	./$(NAME_FT) > $(FT_OUTPUT)
 	@echo "$(_CYAN)Generating the diff between them >>> $(_PURPLE)$(DIFF_OUTPUT)$(_WHITE)"
 	-diff $(FT_OUTPUT) $(STD_OUTPUT) > $(DIFF_OUTPUT) || /bin/true
 	@echo "$(_CYAN)Checking if $(_PURPLE)$(DIFF_OUTPUT)$(_WHITE) $(_CYAN)is empty...$(_WHITE)"
