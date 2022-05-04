@@ -6,7 +6,7 @@
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 12:24:50 by jabenjam          #+#    #+#             */
-/*   Updated: 2022/05/03 17:59:08 by jabenjam         ###   ########.fr       */
+/*   Updated: 2022/05/04 11:30:59 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -232,7 +232,6 @@ namespace ft
 			iterator insert(iterator position, const value_type& val)
 			{
 				size_type idx = position - this->begin();
-				COUT(GREEN, position - this->begin());
 				this->insert(position, 1, val);
 				return(iterator(this->_base + idx));
 			}
@@ -241,8 +240,13 @@ namespace ft
 			void insert(iterator position, size_type n, const value_type& val)
 			{
 				size_type idx = position - this->begin();
-				if (this->_size + n >= this->_capacity)
-					this->reserve(this->_size + n);
+				if (this->_size + n > this->_capacity)
+				{
+					if (this->_size + n > this->_capacity * 2)
+						this->reserve(this->_size + n);
+					else
+						this->reserve(this->_capacity * 2);
+				}
 				if (this->_size == 0)
 				{
 					for (size_type i = 0; i < n; i++)
@@ -301,15 +305,11 @@ namespace ft
 				size_type end = last - this->begin();
 				size_type backup = idx;
 
-				for (; idx != end; idx++)
-				{
-					// COUT(YELLOW, "idx=" << idx << " | end=" << end);
+				for (; idx < end; idx++)
 					this->_allocator.destroy(this->_base + idx);
-				}
 				for (idx = backup; idx < this->_size - (end - backup); idx++)
-				{
 					this->_base[idx] = this->_base[idx + end];
-				}
+				this->_size-= idx - end - 1;
 				return(iterator(this->_base + backup));
 			}
 
