@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main_ft.cpp                                        :+:      :+:    :+:   */
+/*   main_std.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/17 15:37:25 by jabenjam          #+#    #+#             */
-/*   Updated: 2022/05/05 13:39:39 by jabenjam         ###   ########.fr       */
+/*   Updated: 2022/05/05 13:34:41 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,10 @@
 #include <stack>
 
 template<typename T>
-void vector_status(ft::vector<T> &v)
+void vector_status(std::vector<T> &v)
 {
-	typename ft::vector<T>::iterator it = v.begin();
-	typename ft::vector<T>::iterator ite = v.end();
+	typename std::vector<T>::iterator it = v.begin();
+	typename std::vector<T>::iterator ite = v.end();
 
 	COUT_NC("-----------------");
 	COUT_NC("size=" << v.size());
@@ -39,7 +39,7 @@ void	vector_tests()
 {
 	COUT_NC("---------------------- VECTOR ----------------------");
 	COUT_NC("CONSTRUCTOR --- NO_ARG_OVERLOAD");
-	ft::vector<int> numbers;
+	std::vector<int> numbers;
 	COUT_NC("numbers");
 	vector_status(numbers);
 
@@ -90,11 +90,11 @@ void	vector_tests()
 	COUT_NC(numbers.at(13));
 	std::cout << std::endl;
 
-	// COUT_NC((ft::enable_if<ft::is_integral<ft::vector<int>::iterator>::value>));
+	// COUT_NC((std::enable_if<std::is_integral<std::vector<int>::iterator>::value>));
 
 	COUT_NC("CONSTRUCTOR --- FILL_OVERLOAD");
 	COUT_NC("numbers2");
-	ft::vector<int> numbers2(5, 12);
+	std::vector<int> numbers2(5, 12);
 	COUT_NC("numbers2");
 	vector_status(numbers2);
 
@@ -146,17 +146,15 @@ void	vector_tests()
 	numbers2.erase(numbers2.begin() + 3);
 	vector_status(numbers2);
 
-	ft::vector<int>	numbers3(numbers2);
-
 	// numbers2.insert(numbers2.begin(), numbers.begin(), numbers.end());
 }
 
 void	stack_tests()
 {
 	COUT_NC("---------------------- STACK ----------------------");
-	ft::stack<int, std::vector<int> > numbers;
-	// ft::stack<int, ft::vector<int> > numbers;
-	// ft::stack<int, std::deque<int> > numbers;
+	std::stack<int, std::vector<int> > numbers;
+	// std::stack<int, std::vector<int> > numbers;
+	// std::stack<int, std::deque<int> > numbers;
 
 
 	COUT_NC("EMPTY --- EMPTY");
@@ -189,7 +187,7 @@ void	stack_tests()
 	COUT_NC("STACK TOP ELEMENT");
 	COUT_NC(numbers.top() << std::endl);
 
-	ft::stack<int, std::vector<int> > numbers2;
+	std::stack<int, std::vector<int> > numbers2;
 
 	COUT_NC("OPERATOR=");
 	numbers2 = numbers;
@@ -243,7 +241,7 @@ int main()
 // #define COUNT (MAX_RAM / (int)sizeof(Buffer))
 
 // template<typename T>
-// class MutantStack : public ft::stack<T>
+// class MutantStack : public std::stack<T>
 // {
 // public:
 // 	MutantStack() {}
@@ -255,7 +253,7 @@ int main()
 // 	}
 // 	~MutantStack() {}
 
-// 	typedef typename ft::stack<T>::container_type::iterator iterator;
+// 	typedef typename std::stack<T>::container_type::iterator iterator;
 
 // 	iterator begin() { return this->c.begin(); }
 // 	iterator end() { return this->c.end(); }
@@ -272,12 +270,12 @@ int main()
 // 	const int seed = atoi(argv[1]);
 // 	srand(seed);
 
-// 	ft::vector<std::string> vector_str;
-// 	ft::vector<int> vector_int;
-// 	ft::stack<int> stack_int;
-// 	ft::vector<Buffer> vector_buffer;
-// 	ft::stack<Buffer, std::deque<Buffer> > stack_deq_buffer;
-// 	ft::map<int, int> map_int;
+// 	std::vector<std::string> vector_str;
+// 	std::vector<int> vector_int;
+// 	std::stack<int> stack_int;
+// 	std::vector<Buffer> vector_buffer;
+// 	std::stack<Buffer, std::deque<Buffer> > stack_deq_buffer;
+// 	std::map<int, int> map_int;
 
 // 	for (int i = 0; i < COUNT; i++)
 // 	{
@@ -289,7 +287,7 @@ int main()
 // 		const int idx = rand() % COUNT;
 // 		vector_buffer[idx].idx = 5;
 // 	}
-// 	ft::vector<Buffer>().swap(vector_buffer);
+// 	std::vector<Buffer>().swap(vector_buffer);
 
 // 	try
 // 	{
@@ -307,7 +305,7 @@ int main()
 	
 // 	for (int i = 0; i < COUNT; ++i)
 // 	{
-// 		map_int.insert(ft::make_pair(rand(), rand()));
+// 		map_int.insert(std::make_pair(rand(), rand()));
 // 	}
 
 // 	int sum = 0;
@@ -319,7 +317,7 @@ int main()
 // 	std::cout << "should be constant with the same seed: " << sum << std::endl;
 
 // 	{
-// 		ft::map<int, int> copy = map_int;
+// 		std::map<int, int> copy = map_int;
 // 	}
 // 	MutantStack<char> iterable_stack;
 // 	for (char letter = 'a'; letter <= 'z'; letter++)

@@ -6,13 +6,14 @@
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 12:24:50 by jabenjam          #+#    #+#             */
-/*   Updated: 2022/05/04 16:25:33 by jabenjam         ###   ########.fr       */
+/*   Updated: 2022/05/05 13:57:36 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 #include "../iterator/random_access_iterator.hpp"
 #include "../utils/type_traits.hpp"
+#include "../utils/algorithm.hpp"
 #include <memory>
 #include <stdexcept>
 
@@ -66,21 +67,9 @@ namespace ft
 
 			//copy (4) ---
 			vector(const vector& rhs)
-			: _allocator(rhs.get_allocator())
-			, _base(rhs._base)
-			, _capacity(rhs.capacity())
-			, _size(rhs.size())
 			{
 				if (*this != rhs)
-				{
-					this->clear();
-					this->reserve(rhs.capacity());
-					iterator r_it = rhs.begin();
-					iterator r_ite = rhs.end();
-					iterator l_it = this->begin();
-					for (; r_it != r_ite; r_it++, l_it++)
-						*l_it = *r_it;
-				}
+					*this = rhs;
 			}
 
 			~vector()
@@ -90,12 +79,12 @@ namespace ft
 					this->_allocator.deallocate(this->_base, this->_capacity); 
 			}
 
-			vector &operator=(const vector& rhs)
+			vector& operator=(const vector& rhs)
 			{
-				this->_allocator = rhs._allocator;
-				this->_base = rhs._base;
-				this->_capacity = rhs._capacity;
-				this->_size = rhs._size;
+				this->clear();
+				this->_capacity = rhs.capacity();
+				this->_allocator = rhs.get_allocator();
+				this->insert(this->begin(), rhs.begin(), rhs.end());
 				return (*this);
 			}
 
@@ -275,14 +264,14 @@ namespace ft
 			}
 
 			// range (3) ---
-			// template<class InputIterator>
-			// void insert(iterator position, InputIterator first, InputIterator last)
-			// {
-			// 	size_type idx = position - this->begin();
-			// 	size_type to_copy = last - first;
-			// 	COUT(WHITE, "to_copy=" << to_copy);
-			// 	COUT(WHITE, "idx=" << idx);
-			// }
+			template<class InputIterator>
+			void insert(iterator position, InputIterator first, InputIterator last)
+			{
+				size_type idx = position - this->begin();
+				size_type to_copy = last - first;
+				COUT(WHITE, "to_copy=" << to_copy);
+				COUT(WHITE, "idx=" << idx);
+			}
 
 
 			// single element (1) ---
@@ -354,15 +343,19 @@ namespace ft
 	template <class T, class Alloc>
 	bool operator==(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs)
 	{
-		return (&lhs == &rhs);
-	}
+		if (lhs.size() != rhs.size())
+			return (false);
+		else if (equal(lhs.begin(), lhs.end(), rhs.begin()))
+			return (true);
+		return (false);
+	};
 
 	// (2) ---
 	template <class T, class Alloc>
 	bool operator!=(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs)
 	{
-		return (&lhs != &rhs);
-	}
+		return (!(lhs == rhs));
+	};
 
 	// (3) ---
 	// template <class T, class Alloc>
