@@ -6,7 +6,7 @@
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/17 15:37:25 by jabenjam          #+#    #+#             */
-/*   Updated: 2022/05/05 13:34:41 by jabenjam         ###   ########.fr       */
+/*   Updated: 2022/05/06 11:23:09 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,6 +145,14 @@ void	vector_tests()
 	COUT_NC("ERASE --- SINGLE_ELEMENT_OVERLOAD");	
 	numbers2.erase(numbers2.begin() + 3);
 	vector_status(numbers2);
+
+	COUT_NC("NON MEMBER SWAP");
+	std::swap(numbers2, numbers);
+	COUT_NC("numbers");
+	vector_status(numbers);
+	COUT_NC("numbers2");
+	vector_status(numbers2);
+	// std::vector<int>	numbers3(numbers2);
 
 	// numbers2.insert(numbers2.begin(), numbers.begin(), numbers.end());
 }

@@ -6,7 +6,7 @@
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/17 15:37:25 by jabenjam          #+#    #+#             */
-/*   Updated: 2022/05/05 13:39:39 by jabenjam         ###   ########.fr       */
+/*   Updated: 2022/05/06 11:23:09 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,7 +146,13 @@ void	vector_tests()
 	numbers2.erase(numbers2.begin() + 3);
 	vector_status(numbers2);
 
-	ft::vector<int>	numbers3(numbers2);
+	COUT_NC("NON MEMBER SWAP");
+	ft::swap(numbers2, numbers);
+	COUT_NC("numbers");
+	vector_status(numbers);
+	COUT_NC("numbers2");
+	vector_status(numbers2);
+	// ft::vector<int>	numbers3(numbers2);
 
 	// numbers2.insert(numbers2.begin(), numbers.begin(), numbers.end());
 }

@@ -6,11 +6,12 @@
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 12:24:50 by jabenjam          #+#    #+#             */
-/*   Updated: 2022/05/05 13:57:36 by jabenjam         ###   ########.fr       */
+/*   Updated: 2022/05/06 16:46:20 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
+
 #include "../iterator/random_access_iterator.hpp"
 #include "../utils/type_traits.hpp"
 #include "../utils/algorithm.hpp"
@@ -76,7 +77,7 @@ namespace ft
 			{
 				this->clear();
 				if (this->_size >= 0 && this->_base != NULL)
-					this->_allocator.deallocate(this->_base, this->_capacity); 
+					this->_allocator.deallocate(this->_base, this->_capacity);
 			}
 
 			vector& operator=(const vector& rhs)
@@ -238,11 +239,8 @@ namespace ft
 				}
 				if (this->_size == 0)
 				{
-					for (size_type i = 0; i < n; i++)
-					{
+					for (size_type i = 0; i < n; i++, this->_size++)
 						this->_allocator.construct(this->_base + i, val);
-						this->_size++;
-					}
 				}
 				else
 				{
@@ -264,14 +262,14 @@ namespace ft
 			}
 
 			// range (3) ---
-			template<class InputIterator>
-			void insert(iterator position, InputIterator first, InputIterator last)
-			{
-				size_type idx = position - this->begin();
-				size_type to_copy = last - first;
-				COUT(WHITE, "to_copy=" << to_copy);
-				COUT(WHITE, "idx=" << idx);
-			}
+			// template<class InputIterator>
+			// void insert(iterator position, InputIterator first, InputIterator last)
+			// {
+			// 	size_type idx = position - this->begin();
+			// 	size_type to_copy = last - first;
+			// 	COUT(WHITE, "to_copy=" << to_copy);
+			// 	COUT(WHITE, "idx=" << idx);
+			// }
 
 
 			// single element (1) ---
@@ -335,6 +333,7 @@ namespace ft
 			{ return(this->_allocator); }
 
 	};
+
 	/*
 	** NON MEMBER FUNCTION OVERLOADS
 	*/
@@ -353,26 +352,29 @@ namespace ft
 	// (2) ---
 	template <class T, class Alloc>
 	bool operator!=(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs)
-	{
-		return (!(lhs == rhs));
-	};
+	{ return (!(lhs == rhs)); };
 
 	// (3) ---
-	// template <class T, class Alloc>
-	//   bool operator<(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
+	template <class T, class Alloc>
+	bool operator<(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
+	{ return(lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end())); };
 
 	// (4) ---
-	// template <class T, class Alloc>
-	//   bool operator<=(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
+	template <class T, class Alloc>
+	bool operator<=(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
+	{ return(!(rhs < lhs)); };
 
 	// (5) ---
-	// template <class T, class Alloc>
-	//   bool operator>(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
+	template <class T, class Alloc>
+	bool operator>(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
+	{ return(rhs < lhs); };
 
 	// (6) ---
-	// template <class T, class Alloc>
-	//   bool operator>=(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
+	template <class T, class Alloc>
+	bool operator>=(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
+	{ return(!(lhs < rhs)); };
 
-	// template <class T, class Alloc>
-	// void swap(vector<T,Alloc>& x, vector<T,Alloc>& y);
+	template <class T, class Alloc>
+	void swap(vector<T,Alloc>& x, vector<T,Alloc>& y)
+	{ x.swap(y); };
 };
