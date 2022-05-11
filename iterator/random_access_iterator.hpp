@@ -6,7 +6,7 @@
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 13:57:01 by jabenjam          #+#    #+#             */
-/*   Updated: 2022/05/06 11:49:05 by jabenjam         ###   ########.fr       */
+/*   Updated: 2022/05/11 12:57:50 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,14 +82,14 @@ namespace ft
 			** Bidirectional iterator Requirements
 			*/
 
-			iterator&
+			random_access_iterator&
 			operator--()
 			{
 				--this->_current;
 				return (*this);
 			}
 
-			iterator
+			random_access_iterator
 			operator--(int)
 			{ return (iterator(this->_current--)); }
 

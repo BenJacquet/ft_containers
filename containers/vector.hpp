@@ -6,7 +6,7 @@
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 12:24:50 by jabenjam          #+#    #+#             */
-/*   Updated: 2022/05/06 16:46:20 by jabenjam         ###   ########.fr       */
+/*   Updated: 2022/05/11 13:03:43 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -262,14 +262,15 @@ namespace ft
 			}
 
 			// range (3) ---
-			// template<class InputIterator>
-			// void insert(iterator position, InputIterator first, InputIterator last)
-			// {
-			// 	size_type idx = position - this->begin();
-			// 	size_type to_copy = last - first;
-			// 	COUT(WHITE, "to_copy=" << to_copy);
-			// 	COUT(WHITE, "idx=" << idx);
-			// }
+			template<class InputIterator>
+			void insert(iterator position, InputIterator first, InputIterator last,
+						typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type* = 0)
+			{
+				size_type idx = position - this->begin();
+				size_type to_copy = last - first;
+				COUT(WHITE, "to_copy=" << to_copy);
+				COUT(WHITE, "idx=" << idx);
+			}
 
 
 			// single element (1) ---

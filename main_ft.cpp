@@ -6,7 +6,7 @@
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/17 15:37:25 by jabenjam          #+#    #+#             */
-/*   Updated: 2022/05/06 11:23:09 by jabenjam         ###   ########.fr       */
+/*   Updated: 2022/05/11 12:59:38 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,7 +160,7 @@ void	vector_tests()
 void	stack_tests()
 {
 	COUT_NC("---------------------- STACK ----------------------");
-	ft::stack<int, std::vector<int> > numbers;
+	ft::stack<int, ft::vector<int> > numbers;
 	// ft::stack<int, ft::vector<int> > numbers;
 	// ft::stack<int, std::deque<int> > numbers;
 
@@ -195,7 +195,7 @@ void	stack_tests()
 	COUT_NC("STACK TOP ELEMENT");
 	COUT_NC(numbers.top() << std::endl);
 
-	ft::stack<int, std::vector<int> > numbers2;
+	ft::stack<int, ft::vector<int> > numbers2;
 
 	COUT_NC("OPERATOR=");
 	numbers2 = numbers;
