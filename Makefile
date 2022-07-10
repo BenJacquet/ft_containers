@@ -15,6 +15,7 @@ SRCS_FT = main_ft.cpp
 SRCS_STD = main_std.cpp
 
 INCS_FT =  iterator/iterator.hpp\
+		iterator/reverse_iterator.hpp\
 		iterator/iterator_traits.hpp\
 		iterator/bidirectional_iterator.hpp\
 		iterator/random_access_iterator.hpp\
@@ -23,7 +24,8 @@ INCS_FT =  iterator/iterator.hpp\
 		containers/map.hpp\
 		utils/utils.hpp\
 		utils/type_traits.hpp\
-		utils/algorithm.hpp
+		utils/algorithm.hpp\
+		utils/utility.hpp
 
 INCS_STD =  utils/utils.hpp
 

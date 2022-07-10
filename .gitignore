@@ -1,3 +1,5 @@
 *.o
-containers_test
 logs/*
+std_continers
+ft_containers
+main_std.cpp
