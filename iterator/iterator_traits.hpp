@@ -6,7 +6,7 @@
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 12:21:54 by jabenjam          #+#    #+#             */
-/*   Updated: 2022/05/02 17:24:27 by jabenjam         ###   ########.fr       */
+/*   Updated: 2022/07/10 16:54:52 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,5 +64,4 @@ namespace ft
 		typedef const Iterator*							pointer;
 		typedef const Iterator&							reference;
 	};
-
 };

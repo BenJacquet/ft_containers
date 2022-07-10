@@ -6,7 +6,7 @@
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 13:57:01 by jabenjam          #+#    #+#             */
-/*   Updated: 2022/05/11 12:57:50 by jabenjam         ###   ########.fr       */
+/*   Updated: 2022/07/10 16:53:47 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,8 @@ namespace ft
 			random_access_iterator &
 			operator=(const random_access_iterator &rhs)
 			{
-				this->_current = rhs._current;
+				if (this != &rhs)
+					this->_current = rhs._current;
 				return (*this);
 			}
 
@@ -55,7 +56,7 @@ namespace ft
 			random_access_iterator&
 			operator++()
 			{
-				++this->_current;
+				this->_current++;
 				return (*this);
 			}
 
@@ -85,7 +86,7 @@ namespace ft
 			random_access_iterator&
 			operator--()
 			{
-				--this->_current;
+				this->_current--;
 				return (*this);
 			}
 
@@ -105,17 +106,6 @@ namespace ft
 			operator-(difference_type n) const
 			{ return (this->_current - n); }
 
-
-			template<typename iteratorR>
-			difference_type
-			operator+(const random_access_iterator<iteratorR> &rhs)
-			{ return (this->base() - rhs.base()); };
-
-			template<typename iteratorR>
-			difference_type
-			operator-(const random_access_iterator<iteratorR> &rhs)
-			{ return (this->base() - rhs.base()); };
-
 			random_access_iterator&
 			operator+=(difference_type n)
 			{
@@ -131,7 +121,7 @@ namespace ft
 			}
 
 			reference
-			operator[](difference_type n) const
+			operator[](difference_type n)
 			{ return (this->_current[n]); }
 
 		private:
@@ -173,4 +163,28 @@ namespace ft
 	operator>=(const random_access_iterator<iteratorL> &lhs,
 				const random_access_iterator<iteratorR> &rhs)
 	{ return (lhs.base() >= rhs.base()); };
+
+	template<typename iterator>
+	typename random_access_iterator<iterator>::difference_type
+	operator-(const random_access_iterator<iterator> &lhs,
+			const random_access_iterator<iterator> &rhs)
+	{ return (lhs.base() - rhs.base()); };
+
+	template <typename iteratorL, typename iteratorR>
+	typename random_access_iterator<iteratorL>::difference_type
+	operator-(const random_access_iterator<iteratorL> lhs,
+			const random_access_iterator<iteratorR> rhs)
+	{ return (lhs.base() - rhs.base()); }
+
+	template<typename iterator>
+	typename random_access_iterator<iterator>::difference_type
+	operator+(const random_access_iterator<iterator> &lhs,
+			const random_access_iterator<iterator> &rhs)
+	{ return (lhs.base() + rhs.base()); };
+
+	template<typename iterator>
+	random_access_iterator<iterator> operator+(
+		typename ft::random_access_iterator<iterator>::difference_type n,
+		typename ft::random_access_iterator<iterator>& rhs)
+	{ return (&(*rhs) + n); }
 };

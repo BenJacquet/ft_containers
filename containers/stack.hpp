@@ -6,7 +6,7 @@
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/04 13:59:59 by jabenjam          #+#    #+#             */
-/*   Updated: 2022/05/11 13:10:04 by jabenjam         ###   ########.fr       */
+/*   Updated: 2022/07/10 16:55:07 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,4 +57,32 @@ namespace ft
 
 			size_type size() const { return(this->c.size()); }
 	};
+
+	/*
+	** Non Member Functions
+	*/
+
+	template <class T, class Container>
+	bool operator==(const stack<T, Container> &lhs, const stack<T, Container> &rhs)
+	{ return (lhs.c == rhs.c); }
+
+	template <class T, class Container>
+	bool operator!=(const stack<T, Container> &lhs, const stack<T, Container> &rhs)
+	{ return (!(lhs == rhs)); }
+
+	template <class T, class Container>
+	bool operator<(const stack<T, Container> &lhs, const stack<T, Container> &rhs)
+	{ return (lhs.c < rhs.c); }
+
+	template <class T, class Container>
+	bool operator<=(const stack<T, Container> &lhs, const stack<T, Container> &rhs)
+	{ return (!(rhs < lhs)); }
+
+	template <class T, class Container>
+	bool operator>(const stack<T, Container> &lhs, const stack<T, Container> &rhs)
+	{ return (rhs < lhs); }
+
+	template <class T, class Container>
+	bool operator>=(const stack<T, Container> &lhs, const stack<T, Container> &rhs)
+	{ return (!(lhs < rhs)); }
 }

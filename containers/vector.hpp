@@ -6,7 +6,7 @@
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 12:24:50 by jabenjam          #+#    #+#             */
-/*   Updated: 2022/05/11 13:03:43 by jabenjam         ###   ########.fr       */
+/*   Updated: 2022/07/10 16:55:23 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -336,7 +336,7 @@ namespace ft
 	};
 
 	/*
-	** NON MEMBER FUNCTION OVERLOADS
+	** Non Member Functions
 	*/
 
 	// (1) ---

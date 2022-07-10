@@ -6,7 +6,7 @@
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/17 15:37:25 by jabenjam          #+#    #+#             */
-/*   Updated: 2022/05/11 12:59:38 by jabenjam         ###   ########.fr       */
+/*   Updated: 2022/07/10 15:48:17 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -216,7 +216,7 @@ int main()
 {
 	vector_tests();
 	stack_tests();
-	map_tests();
+	// map_tests();
 	return (0);
 }
 
