@@ -63,8 +63,8 @@ $(OBJS_FT) : $(INCS_FT)
 $(OBJS_STD) : $(INCS_STD)
 	@echo "$(_CYAN)Generating the std version of main.cpp >>> $(_PURPLE)$(SRCS_STD)$(_WHITE)"
 	cp $(SRCS_FT) $(SRCS_STD)
-	sed -i -e "s/ft::/std::/g" $(SRCS_STD)
-	sed -i -e "s/main_ft.cpp /main_std.cpp/g" $(SRCS_STD)
+	# sed -i -e "s/ft::/std::/g" $(SRCS_STD)
+	# sed -i -e "s/main_ft.cpp /main_std.cpp/g" $(SRCS_STD)
 	$(CXX) $(CXXFLAGS) -c $(SRCS_STD)
 
 $(NAME_FT) : $(OBJS_FT)

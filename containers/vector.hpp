@@ -6,7 +6,7 @@
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 12:24:50 by jabenjam          #+#    #+#             */
-/*   Updated: 2022/07/24 18:45:33 by jabenjam         ###   ########.fr       */
+/*   Updated: 2022/07/25 01:02:55 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,14 +26,14 @@ namespace ft
 		public:
 			typedef T												value_type;
 			typedef Alloc											allocator_type;
-			typedef	std::ptrdiff_t									difference_type;
 			typedef	size_t											size_type;
 			typedef T&												reference;
-			typedef const T&										const_reference;
-			typedef typename Alloc::pointer							pointer;
-			typedef const typename Alloc::const_pointer				const_pointer;
+			typedef typename allocator_type::const_reference		const_reference;
+			typedef typename allocator_type::pointer				pointer;
+			typedef typename allocator_type::const_pointer			const_pointer;
 			typedef ft::random_access_iterator<T>					iterator;
 			typedef	ft::random_access_iterator<const T>				const_iterator;
+			typedef	std::ptrdiff_t									difference_type;
 			typedef	ft::reverse_iterator<iterator>					reverse_iterator;
 			typedef	ft::reverse_iterator<const_iterator>			const_reverse_iterator;
 
@@ -78,19 +78,20 @@ namespace ft
 			, _size(0)
 			{ *this = rhs; }
 
-			~vector()
+			virtual ~vector()
 			{
 				this->clear();
-				if (this->_size >= 0 && this->_base != NULL)
+				if (this->_capacity > 0 && this->_base != NULL)
 					this->_allocator.deallocate(this->_base, this->_capacity);
 			}
 
 			vector& operator=(const vector& rhs)
 			{
-				this->clear();
-				this->_capacity = rhs.capacity();
-				this->_allocator = rhs.get_allocator();
-				this->insert(this->begin(), rhs.begin(), rhs.end());
+				if (&rhs != this)
+				{
+					this->_allocator = rhs._allocator;
+					assign(rhs.begin(), rhs.end());
+				}
 				return (*this);
 			}
 
@@ -162,10 +163,13 @@ namespace ft
 				{
 					pointer old_mem = this->_base;
 					this->_base = this->_allocator.allocate(n);
-					for (size_type i = 0; i < this->_size; i++)
+					if (this->_capacity)
 					{
-						this->_allocator.construct(this->_base + i, old_mem[i]);
-						this->_allocator.destroy(old_mem + i);
+						for (size_type i = 0; i < this->_size; i++)
+						{
+							this->_allocator.construct(this->_base + i, old_mem[i]);
+							this->_allocator.destroy(old_mem + i);
+						}
 					}
 					this->_allocator.deallocate(old_mem, this->_capacity);
 					this->_capacity = n;
@@ -228,28 +232,26 @@ namespace ft
 			// fill (2) ---
 			void assign(size_type n, const value_type& val)
 			{
-				this->resize(0);
-				this->resize(n, val);
+				this->clear();
+				if (n > this->_capacity)
+					this->reserve(n);
+				iterator it = this->begin();
+				for(size_type i(0); i < n ; i++, it++)
+					this->insert(it, val);
 			}
 
 			void push_back(const value_type& val)
 			{ this->insert(this->end(), val); }
 
 			void pop_back()
-			{
-				if (this->_size > 0)
-				{
-					this->_allocator.destroy(this->_base + this->_size - 1);
-					this->_size--;
-				}
-			}
+			{ erase(this->end() - 1); }
 
 			// single element(1) ---
 			iterator insert(iterator position, const value_type& val)
 			{
 				size_type idx = position - this->begin();
 				this->insert(position, 1, val);
-				return(iterator(this->_base + idx));
+				return(this->begin() + idx);
 			}
 
 			// fill (2) ---
@@ -266,7 +268,7 @@ namespace ft
 					if ((this->_capacity * 2) > (this->_capacity + n))
 						reserve(this->_size * 2);
 					else
-						reserve(this->_capacity + n);
+						reserve(this->_size + n);
 				}
 				if (this->_size != 0 && static_cast<unsigned long>(idx) != this->_size)
 				{
@@ -339,20 +341,22 @@ namespace ft
 				return(first);
 			}
 
-			void swap(vector& x)
+			void swap(vector& rhs)
 			{
-				pointer			tmp_value;
-				size_type			tmp;
+				pointer tmp = this->_base;
+				size_type tmpsize = this->_size;
+				size_type tmpcapacity =this-> _capacity;
+				allocator_type tmpalloc = this->_allocator;
 
-				tmp = _capacity;
-				_capacity = x._capacity;
-				x._capacity = tmp;
-				tmp = _size;
-				_size = x._size;
-				x._size = tmp;
-				tmp_value = _base;
-				_base = x._value;
-				x._value = tmp_value;
+				this->_base = rhs._base;
+				this->_size = rhs._size;
+				this->_capacity = rhs._capacity;
+				this->_allocator = rhs._allocator;
+
+				rhs._base = tmp;
+				rhs._size = tmpsize;
+				rhs._capacity = tmpcapacity;
+				rhs._allocator = tmpalloc;
 			}
 
 			void clear()

@@ -6,7 +6,7 @@
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/17 15:37:25 by jabenjam          #+#    #+#             */
-/*   Updated: 2022/07/24 16:44:45 by jabenjam         ###   ########.fr       */
+/*   Updated: 2022/07/25 00:41:30 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,72 @@ void vector_status(ft::vector<T> &v)
 	COUT_NC("-----------------" << std::endl);
 }
 
+class Awesome {
+
+	public:
+
+		Awesome( void ) : _n( 42 ) { std::cout << "Default constructor" << std::endl; } //should not happen too often or else there is a wrong use of allocator (which calls the copy constructor)
+		Awesome( int n ) : _n( n ) { std::cout << "Int constructor" << std::endl; (void)n; }
+		Awesome( Awesome const &rhs ) : _n( 42 ) { *this = rhs;}
+		virtual ~Awesome(void) {}
+
+		Awesome &operator=( Awesome const & rhs ) { this->_n = rhs._n; return (*this); }
+		bool operator==( Awesome const & rhs ) const { return (this->_n == rhs._n); }
+		bool operator!=( Awesome const & rhs ) const { return (this->_n != rhs._n); }
+		bool operator>( Awesome const & rhs ) const { return (this->_n > rhs._n); }
+		bool operator<( Awesome const & rhs ) const { return (this->_n < rhs._n); }
+		bool operator>=( Awesome const & rhs ) const { return (this->_n >= rhs._n); }
+		bool operator<=( Awesome const & rhs ) const { return (this->_n <= rhs._n); }
+		void operator+=(int rhs){ _n += rhs; }
+		int get( void ) const { return this->_n; }
+
+	private:
+
+		int _n;
+};
+
+std::ostream & operator<<( std::ostream & o, Awesome const & rhs ) { o << rhs.get(); return o; }
+
+namespace ft {
+
+template <class T>
+void	print_vector(vector<T> &test)
+{
+	typename vector<T>::iterator		beg = test.begin();
+	typename vector<T>::iterator		end = test.end();
+	std::cout << "size : " << test.size() << ", capacity : " << test.capacity() << std::endl;
+	for (typename vector<T>::iterator it = beg; it != end; it++)
+	{
+		std::cout << *it << " ";
+		if (((it - beg) % 10 == 9) && it > beg)
+			std::cout << std::endl;
+	}
+	std::cout << std::endl;
+}
+
+template <class T>
+void	copy_swap_tests(void)
+{
+	std::cout << std::endl << "COPY && SWAP TESTS" << std::endl;
+	ft::vector<T> test;
+	for (size_t i = 0; i < 50; i++) { test.push_back(i); }
+	ft::vector<T> test_copy(test);
+	for (size_t i = 0; i < test_copy.size(); i++) { test_copy[i] += 100; }
+	print_vector<T>(test_copy);
+	ft::vector<T> test_range(test.begin() + 20, test.begin() + 30);
+	print_vector<T>(test_range);
+	test_copy.swap(test);
+	print_vector<T>(test);
+	print_vector<T>(test_copy);
+	test_copy.swap(test_range);
+	print_vector<T>(test_range);
+	print_vector<T>(test_copy);
+	test.swap(test_copy);
+	print_vector<T>(test);
+	print_vector<T>(test_copy);
+}
+}
+
 void	vector_tests()
 {
 	COUT_NC("---------------------- VECTOR ----------------------");
@@ -47,22 +113,22 @@ void	vector_tests()
 	COUT_NC("numbers");
 	vector_status(numbers);
 
-	COUT_NC("INSERT --- FILL_OVERLOAD");
+	COUT_NC("INSERT --- FILL_OVERLOAD - ADDING TWO");
 	numbers.insert(numbers.begin(), 2, 30);
 	COUT_NC("numbers");
 	vector_status(numbers);
 
-	COUT_NC("INSERT --- FILL_OVERLOAD");
+	COUT_NC("INSERT --- FILL_OVERLOAD - ADDING TWO");
 	numbers.insert(numbers.begin(), 2, 15);
 	COUT_NC("numbers");
 	vector_status(numbers);
 
-	COUT_NC("INSERT --- FILL_OVERLOAD");
+	COUT_NC("INSERT --- FILL_OVERLOAD - ADDING EIGHT");
 	numbers.insert(numbers.begin(), 8, 10);
 	COUT_NC("numbers");
 	vector_status(numbers);
 
-	COUT_NC("INSERT --- FILL_OVERLOAD");
+	COUT_NC("INSERT --- FILL_OVERLOAD ADDING TWO");
 	numbers.insert(numbers.begin() + 5, 2, 5);
 	COUT_NC("numbers");
 	vector_status(numbers);
@@ -88,8 +154,6 @@ void	vector_tests()
 	COUT_NC("AT");
 	COUT_NC(numbers.at(13));
 	std::cout << std::endl;
-
-	// COUT_NC((ft::enable_if<ft::is_integral<ft::vector<int>::iterator>::value>));
 
 	COUT_NC("CONSTRUCTOR --- FILL_OVERLOAD");
 	COUT_NC("numbers2");
@@ -151,9 +215,10 @@ void	vector_tests()
 	vector_status(numbers);
 	COUT_NC("numbers2");
 	vector_status(numbers2);
-	// ft::vector<int>	numbers3(numbers2);
 
-	// numbers2.insert(numbers2.begin(), numbers.begin(), numbers.end());
+	// COUT_NC("MAZOISE TEST FOR CHECK OF COPY_SWAP");
+	ft::copy_swap_tests<Awesome>();
+
 }
 
 void	stack_tests()

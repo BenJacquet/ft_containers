@@ -6,7 +6,7 @@
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/04 13:59:59 by jabenjam          #+#    #+#             */
-/*   Updated: 2022/07/24 15:58:17 by jabenjam         ###   ########.fr       */
+/*   Updated: 2022/07/25 00:40:12 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,11 @@ namespace ft
 	class stack
 	{
 		public:
-			typedef Container							container_type;
-			typedef T									value_type;
-			typedef size_t								size_type;
+			typedef Container								container_type;
+			typedef typename Container::value_type			value_type;
+			typedef typename Container::size_type			size_type;
+			typedef typename Container::reference			reference;
+			typedef typename Container::const_reference		const_reference;
 
 		protected:
 			container_type				c;
@@ -41,7 +43,7 @@ namespace ft
 				return(*this);
 			}
 
-		    value_type& top()
+			value_type& top()
 			{ return (this->c.back()); }
 
 			const value_type& top() const

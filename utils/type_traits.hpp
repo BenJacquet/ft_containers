@@ -6,9 +6,11 @@
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/02 16:46:06 by jabenjam          #+#    #+#             */
-/*   Updated: 2022/05/02 17:42:27 by jabenjam         ###   ########.fr       */
+/*   Updated: 2022/07/25 00:37:58 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#pragma once
 
 namespace ft
 {
@@ -18,7 +20,7 @@ namespace ft
 	template<class T>
 	struct enable_if<true, T> { typedef T type; };
 
-	template<typename T>
+	template<class T>
 	struct is_integral { static const bool value = false; };
 
 	template<>
