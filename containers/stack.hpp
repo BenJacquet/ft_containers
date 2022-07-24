@@ -6,7 +6,7 @@
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/04 13:59:59 by jabenjam          #+#    #+#             */
-/*   Updated: 2022/07/10 16:55:07 by jabenjam         ###   ########.fr       */
+/*   Updated: 2022/07/24 15:58:17 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,9 @@ namespace ft
 	class stack
 	{
 		public:
-			typedef Container			container_type;
-			typedef T					value_type;
-			typedef size_t				size_type;
+			typedef Container							container_type;
+			typedef T									value_type;
+			typedef size_t								size_type;
 
 		protected:
 			container_type				c;
