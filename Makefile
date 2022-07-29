@@ -21,7 +21,8 @@ INCS_FT =  iterator/iterator.hpp\
 		utils/utils.hpp\
 		utils/type_traits.hpp\
 		utils/algorithm.hpp\
-		utils/utility.hpp
+		utils/node.hpp\
+		utils/pair.hpp
 
 INCS_STD =  utils/utils.hpp
 

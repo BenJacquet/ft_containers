@@ -6,13 +6,14 @@
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/11 16:00:08 by jabenjam          #+#    #+#             */
-/*   Updated: 2022/07/25 00:31:26 by jabenjam         ###   ########.fr       */
+/*   Updated: 2022/07/29 05:01:49 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
 #include <iostream>
+#include "../utils/node.hpp"
 
 namespace ft
 {
@@ -122,7 +123,7 @@ namespace ft
 			:_current(rhs) {}
 
 			operator random_access_iterator<const iterator>()
-			{ return random_access_iterator<const iterator>(*(this->_current)); }
+			{ return (random_access_iterator<const iterator>(*(this->_current))); }
 
 			random_access_iterator&
 			operator=(random_access_iterator &rhs)
@@ -245,6 +246,106 @@ namespace ft
 	{ return (lhs.base() >= rhs.base()); };
 
 	/*
+	** BIDIRECTIONAL ITERATOR (FOR MAP)
+	*/
+
+	template <class T>
+	class bidirectional_iterator
+	{
+		public:
+			typedef std::ptrdiff_t					difference_type;
+			typedef T								value_type;
+			typedef T*								pointer;
+			typedef T&								reference;
+			typedef bidirectional_iterator_tag		iterator_category;
+
+			bidirectional_iterator()
+			: _n(NULL)
+			{}
+
+			bidirectional_iterator(node<value_type> *n)
+			: _n(n)
+			{}
+
+			bidirectional_iterator(const bidirectional_iterator &it)
+			: _n(it._n)
+			{}
+
+			virtual ~bidirectional_iterator()
+			{}
+
+			reference	operator*()
+			{ return ( *(this->_n->get_value())); }
+
+			pointer	operator->()
+			{ return ( this->_n->get_value()); }
+
+			bool	operator==(const bidirectional_iterator& rhs) const
+			{ return (this->_n == rhs._n); }
+
+			bool	operator!=(const bidirectional_iterator& rhs) const
+			{ return (this->_n != rhs._n); }
+
+			bidirectional_iterator& operator++()
+			{ return (this->_n = this->_get_nearest(E_RIGHT)); }
+
+			bidirectional_iterator& operator++(int)
+			{
+				bidirectional_iterator tmp = *this;
+				(*this)++;
+				return (tmp);
+			}
+
+			bidirectional_iterator& operator--()
+			{ return (this->_n = this->_get_nearest(E_LEFT)); }
+
+			bidirectional_iterator& operator--(int)
+			{
+				bidirectional_iterator tmp = *this;
+				(*this)--;
+				return (tmp);
+			}
+
+		private:
+			node<value_type>	*_n;
+
+			/**
+			 * @brief Returns a pointer to the nearest node according to the direction provided as argument
+			 * 
+			 * @param direction false/0 = left, true/1 = right
+			 * @return node<value_type>* 
+			 */
+			node<value_type>	*_get_nearest(bool direction) const
+			{
+				node<value_type> *found = this->_n;
+
+				if (!found)
+					return (NULL);
+				if (found->get_child(direction) && !found->get_child(direction)->empty())
+				{
+					found = found->get_child(direction);
+					while (found->get_child(!direction) && !found->get_child(!direction)->empty())
+						found = found->get_child(!direction);
+					return (found);
+				}
+				else if (found->get_parent())
+				{
+					if (found->get_dir() != direction)
+						found = found->get_parent();
+					else
+					{
+						while (found->get_parent() && found->get_dir() == direction)
+							found = found->get_parent();
+						if (!found->get_parent())
+						return (found->get_parent());
+					}
+				}
+				else
+					return (this->_n->get_child[direction]);
+			}
+	};
+
+	/*
 	** REVERSE ITERATOR (SUPPORTS UP TO RANDOM ACCESS ITERATOR)
 	*/
 
@@ -271,7 +372,7 @@ namespace ft
 			reverse_iterator()
 			: _current() {};
 
-			~reverse_iterator() {}
+			virtual ~reverse_iterator() {}
 
 			reverse_iterator&
 			operator=(reverse_iterator &rhs)
@@ -293,7 +394,7 @@ namespace ft
 			reference operator*() const
 			{
 				iterator_type tmp = this->_current;
-				return(*(--tmp));
+				return (*(--tmp));
 			}
 
 			pointer operator->() const
@@ -389,7 +490,7 @@ namespace ft
 
 	template< class iterator >
 	reverse_iterator<iterator> operator+( typename reverse_iterator<iterator>::difference_type n, const reverse_iterator<iterator>& it )
-	{ return(reverse_iterator<iterator>(it.base() - n)); }
+	{ return (reverse_iterator<iterator>(it.base() - n)); }
 
 	template< class iterator >
 	typename reverse_iterator<iterator>::difference_type operator-( const reverse_iterator<iterator>& lhs, const reverse_iterator<iterator>& rhs )

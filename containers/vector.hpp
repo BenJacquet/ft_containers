@@ -6,7 +6,7 @@
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 12:24:50 by jabenjam          #+#    #+#             */
-/*   Updated: 2022/07/25 01:02:55 by jabenjam         ###   ########.fr       */
+/*   Updated: 2022/07/28 22:43:19 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include "../iterator/iterator.hpp"
 #include "../utils/type_traits.hpp"
 #include "../utils/algorithm.hpp"
+
 #include <memory>
 #include <stdexcept>
 
@@ -100,38 +101,38 @@ namespace ft
 			*/
 
 			iterator begin()
-			{ return(this->_base); }
+			{ return (this->_base); }
 
 			const_iterator begin() const
-			{ return(this->_base); }
+			{ return (this->_base); }
 
 			iterator end()
-			{ return(this->_base + this->_size); }
+			{ return (this->_base + this->_size); }
 
 			const_iterator end() const
-			{ return(this->_base + this->_size); }
+			{ return (this->_base + this->_size); }
 
 			reverse_iterator rbegin()
-			{ return(reverse_iterator(this->end())); }
+			{ return (reverse_iterator(this->end())); }
 
 			const_reverse_iterator rbegin() const
-			{ return(const_reverse_iterator(this->end())); }
+			{ return (const_reverse_iterator(this->end())); }
 
 			reverse_iterator rend()
-			{ return(reverse_iterator(this->begin())); }
+			{ return (reverse_iterator(this->begin())); }
 
 			const_reverse_iterator rend() const
-			{ return(const_reverse_iterator(this->begin())); }
+			{ return (const_reverse_iterator(this->begin())); }
 
 			/*
 			** CAPACITY
 			*/
 
 			size_type size() const
-			{ return(this->_size); }
+			{ return (this->_size); }
 			
 			size_type max_size() const
-			{ return(this->_allocator.max_size()); }
+			{ return (this->_allocator.max_size()); }
 
 			void resize(size_type n, value_type val = value_type())
 			{
@@ -150,10 +151,10 @@ namespace ft
 			}
 
 			size_type capacity() const
-			{ return(this->_capacity); }
+			{ return (this->_capacity); }
 
 			bool empty() const
-			{ return(this->_size == 0); }
+			{ return (this->_size == 0); }
 
 			void reserve(size_type n)
 			{
@@ -181,36 +182,36 @@ namespace ft
 			*/
 
 			reference operator[](size_type n)
-			{ return(this->_base[n]); }
+			{ return (this->_base[n]); }
 
 			const_reference operator[](size_type n) const
-			{ return(this->_base[n]); }
+			{ return (this->_base[n]); }
 
 			reference at(size_type n)
 			{
 				if (n >= this->_size)
 					throw std::out_of_range("Out of range");
-				return(*(this->begin() + n));
+				return (*(this->begin() + n));
 			}
 
 			const_reference at(size_type n) const
 			{
 				if (n >= this->_size)
 					throw std::out_of_range("Out of range");
-				return(*(this->begin() + n));
+				return (*(this->begin() + n));
 			}
 
 			reference front()
-			{ return(*this->begin()); }
+			{ return (*this->begin()); }
  
 			const_reference front() const
-			{ return(*this->begin()); }
+			{ return (*this->begin()); }
 
 			reference back()
-			{ return(*(this->end() - 1)); }
+			{ return (*(this->end() - 1)); }
 
 			const_reference back() const
-			{ return(*(this->end() - 1)); }
+			{ return (*(this->end() - 1)); }
 
 			/*
 			** MODIFIERS
@@ -251,7 +252,7 @@ namespace ft
 			{
 				size_type idx = position - this->begin();
 				this->insert(position, 1, val);
-				return(this->begin() + idx);
+				return (this->begin() + idx);
 			}
 
 			// fill (2) ---
@@ -325,7 +326,7 @@ namespace ft
 					*it = *(it + 1);
 				this->_allocator.destroy(&this->_base[this->_size - 1]);
 				this->_size--;
-				return(position);
+				return (position);
 			}
 			
 			// range (2) ---
@@ -338,7 +339,7 @@ namespace ft
 				for (iterator it = this->end() - len; it != this->end(); it++)
 					this->_allocator.destroy(&(*it));
 				this->_size -= len;
-				return(first);
+				return (first);
 			}
 
 			void swap(vector& rhs)
@@ -367,7 +368,7 @@ namespace ft
 			*/
 
 			allocator_type get_allocator() const
-			{ return(this->_allocator); }
+			{ return (this->_allocator); }
 
 	};
 
@@ -392,22 +393,22 @@ namespace ft
 	// (3) ---
 	template <class T, class Alloc>
 	bool operator<(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
-	{ return(lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end())); };
+	{ return (lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end())); };
 
 	// (4) ---
 	template <class T, class Alloc>
 	bool operator<=(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
-	{ return(!(rhs < lhs)); };
+	{ return (!(rhs < lhs)); };
 
 	// (5) ---
 	template <class T, class Alloc>
 	bool operator>(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
-	{ return(rhs < lhs); };
+	{ return (rhs < lhs); };
 
 	// (6) ---
 	template <class T, class Alloc>
 	bool operator>=(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
-	{ return(!(lhs < rhs)); };
+	{ return (!(lhs < rhs)); };
 
 	template <class T, class Alloc>
 	void swap(vector<T,Alloc>& x, vector<T,Alloc>& y)

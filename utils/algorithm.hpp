@@ -6,7 +6,7 @@
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/05 11:59:14 by jabenjam          #+#    #+#             */
-/*   Updated: 2022/07/25 00:37:49 by jabenjam         ###   ########.fr       */
+/*   Updated: 2022/07/28 17:53:33 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,9 @@ namespace ft
 		for (; first1 != last1; first1++, first2++)
 		{
 			if (*first1 != *first2)
-				return false;
+				return (false);
 		}
-		return true;
+		return (true);
 	};
 
 	template< class InputIterator1, class InputIterator2, class BinaryPredicate >
@@ -32,9 +32,9 @@ namespace ft
 		for ( ; first1 != last1; first1++, first2++)
 		{
 			if (!p(*first1, *first2))
-				return false;
+				return (false);
 		}
-		return true;
+		return (true);
 	}
 
 	template <class InputIterator1, class InputIterator2>
@@ -44,9 +44,9 @@ namespace ft
 		for ( ; first1 != last1; first1++, first2++)
 		{
 			if (first2 == last2 || *first2 < *first1)
-				return false;
+				return (false);
 			if (*first1 < *first2)
-				return true;
+				return (true);
 		}
 		return (first2 != last2);
 	};
@@ -57,10 +57,10 @@ namespace ft
 		for ( ; first1 != last1; first1++, first2++)
 		{
 			if (first2 == last2 || comp(*first2, *first1))
-				return false;
+				return (false);
 			if (comp(*first1, *first2))
-				return true;
+				return (true);
 		}
-		return true;
+		return (true);
 	}
 }
