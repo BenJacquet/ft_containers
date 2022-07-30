@@ -6,18 +6,17 @@
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 12:24:50 by jabenjam          #+#    #+#             */
-/*   Updated: 2022/07/28 22:43:19 by jabenjam         ###   ########.fr       */
+/*   Updated: 2022/07/30 00:44:55 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
+#include "../utils/utils.hpp"
 #include "../iterator/iterator.hpp"
 #include "../utils/type_traits.hpp"
 #include "../utils/algorithm.hpp"
-
-#include <memory>
-#include <stdexcept>
+#include <limits>
 
 namespace ft
 {
@@ -27,14 +26,14 @@ namespace ft
 		public:
 			typedef T												value_type;
 			typedef Alloc											allocator_type;
-			typedef	size_t											size_type;
+			typedef	std::size_t										size_type;
+			typedef	std::ptrdiff_t									difference_type;
 			typedef T&												reference;
 			typedef typename allocator_type::const_reference		const_reference;
 			typedef typename allocator_type::pointer				pointer;
 			typedef typename allocator_type::const_pointer			const_pointer;
 			typedef ft::random_access_iterator<T>					iterator;
 			typedef	ft::random_access_iterator<const T>				const_iterator;
-			typedef	std::ptrdiff_t									difference_type;
 			typedef	ft::reverse_iterator<iterator>					reverse_iterator;
 			typedef	ft::reverse_iterator<const_iterator>			const_reverse_iterator;
 
@@ -136,18 +135,12 @@ namespace ft
 
 			void resize(size_type n, value_type val = value_type())
 			{
-				if (n < this->_size)
-				{
-					for (; this->_size > n ; this->_size--)
-						this->_allocator.destroy(this->_base + n);
-				}
-				else if (n > this->_size)
-				{
-					if (n > this->_capacity)
-						this->reserve(n);
-					for (; this->_size < n; this->_size++)
-						this->_base[this->_size] = val;
-				}
+			if (n < this->_size)
+				for (size_t	i = n; i < this->_size; i++)
+					this->_allocator.destroy(&this->_base[i]);
+			else if (n > this->_size)
+				this->insert(end(), n - this->_size, val);
+			_size = n;
 			}
 
 			size_type capacity() const
@@ -182,36 +175,36 @@ namespace ft
 			*/
 
 			reference operator[](size_type n)
-			{ return (this->_base[n]); }
+			{ return (this->at(n)); }
 
 			const_reference operator[](size_type n) const
-			{ return (this->_base[n]); }
+			{ return (this->at(n)); }
 
 			reference at(size_type n)
 			{
 				if (n >= this->_size)
 					throw std::out_of_range("Out of range");
-				return (*(this->begin() + n));
+				return (this->_base[n]);
 			}
 
 			const_reference at(size_type n) const
 			{
 				if (n >= this->_size)
 					throw std::out_of_range("Out of range");
-				return (*(this->begin() + n));
+				return (this->_base[n]);
 			}
 
 			reference front()
-			{ return (*this->begin()); }
+			{ return (this->_base[0]); }
  
 			const_reference front() const
-			{ return (*this->begin()); }
+			{ return (this->_base[0]); }
 
 			reference back()
-			{ return (*(this->end() - 1)); }
+			{ return (this->_base[this->_size - 1]); }
 
 			const_reference back() const
-			{ return (*(this->end() - 1)); }
+			{ return (this->_base[this->_size - 1]); }
 
 			/*
 			** MODIFIERS
@@ -237,7 +230,7 @@ namespace ft
 				if (n > this->_capacity)
 					this->reserve(n);
 				iterator it = this->begin();
-				for(size_type i(0); i < n ; i++, it++)
+				for (size_type i(0); i < n ; i++, it++)
 					this->insert(it, val);
 			}
 
@@ -258,34 +251,32 @@ namespace ft
 			// fill (2) ---
 			void insert(iterator position, size_type n, const value_type& val)
 			{
-				difference_type	idx = position - this->begin();
-				size_type		i = this->_size;
-				int				j = n;
-				int				construct = n;
-				int				move = this->_size - idx;
-
+				difference_type index = position - this->begin();
+				size_type j = this->_size;
+				int to_construct = n, to_move = (this->_size - index), i = n;
+	
 				if (this->_size + n > this->_capacity)
 				{
 					if ((this->_capacity * 2) > (this->_capacity + n))
 						reserve(this->_size * 2);
 					else
-						reserve(this->_size + n);
+						reserve(this->_capacity + n);
 				}
-				if (this->_size != 0 && static_cast<unsigned long>(idx) != this->_size)
+				if (this->_size != 0 && static_cast<unsigned long>(index) != this->_size)
 				{
-					for (; construct; construct--)
-						this->_allocator.construct(this->_base + i++, T());
-					i = this->_size - 1;
-					for (; move; move--, i--)
-						this->_base[i + n] = this->_base[i] ;
+					for (; to_construct; to_construct--)
+						this->_allocator.construct(this->_base + j++, T());
+					j = this->_size - 1;
+					for (; to_move; to_move--, j--)
+						this->_base[j + n] = this->_base[j] ;
 					this->_size += n;
-					for (; j; j--, idx++)
-						this->_base[idx] = val;
+					for (; i; i--)
+						this->_base[index++] = val;
 				}
 				else
 				{
-					for (; j; j--, this->_size++)
-						this->_allocator.construct((this->_base + this->_size), val);
+					for (; i; i--)
+						this->_allocator.construct((this->_base + this->_size++), val);
 				}
 			}
 
@@ -382,7 +373,7 @@ namespace ft
 	{
 		if (lhs.size() != rhs.size())
 			return (false);
-		return (equal(lhs.begin(), lhs.end(), rhs.begin()));
+		return (ft::equal(lhs.begin(), lhs.end(), rhs.begin()));
 	};
 
 	// (2) ---

@@ -6,24 +6,29 @@
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 14:18:40 by jabenjam          #+#    #+#             */
-/*   Updated: 2022/07/28 19:00:37 by jabenjam         ###   ########.fr       */
+/*   Updated: 2022/07/29 21:41:04 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
 #include <iostream>
+#include <limits>
 #include <vector>
+#include <functional>
+#include <memory>
+#include <stdexcept>
+#include <limits>
 
 #define RESET		"\033[0m"			/* Reset*/
-#define BLACK		"\033[30m"			/* Black */
-#define RED			"\033[31m"			/* Red */
-#define GREEN		"\033[32m"			/* Green */
-#define YELLOW		"\033[33m"			/* Yellow */
-#define BLUE		"\033[34m"			/* Blue */
-#define MAGENTA		"\033[35m"			/* Magenta */
-#define CYAN		"\033[36m"			/* Cyan */
-#define WHITE		"\033[37m"			/* White */
+#define N_BLACK		"\033[30m"			/* Black */
+#define N_RED		"\033[31m"			/* Red */
+#define N_GREEN		"\033[32m"			/* Green */
+#define N_YELLOW	"\033[33m"			/* Yellow */
+#define N_BLUE		"\033[34m"			/* Blue */
+#define N_MAGENTA	"\033[35m"			/* Magenta */
+#define N_CYAN		"\033[36m"			/* Cyan */
+#define N_WHITE		"\033[37m"			/* White */
 #define B_BLACK		"\033[1m\033[30m"	/* Bold Black */
 #define B_RED		"\033[1m\033[31m"	/* Bold Red */
 #define B_GREEN		"\033[1m\033[32m"	/* Bold Green */

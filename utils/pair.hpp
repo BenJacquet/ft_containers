@@ -6,11 +6,13 @@
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/28 17:30:25 by jabenjam          #+#    #+#             */
-/*   Updated: 2022/07/28 23:04:24 by jabenjam         ###   ########.fr       */
+/*   Updated: 2022/07/29 21:09:20 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
+
+#include <iostream>
 
 namespace ft
 {

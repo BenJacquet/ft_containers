@@ -6,7 +6,7 @@
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/17 15:37:25 by jabenjam          #+#    #+#             */
-/*   Updated: 2022/07/28 17:19:57 by jabenjam         ###   ########.fr       */
+/*   Updated: 2022/07/30 01:09:00 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,27 +85,38 @@ void	copy_swap_tests(void)
 	for (size_t i = 0; i < 50; i++) { test.push_back(i); }
 	ft::vector<T> test_copy(test);
 	for (size_t i = 0; i < test_copy.size(); i++) { test_copy[i] += 100; }
-	COUT_NC("TEST0");
 	print_vector<T>(test_copy);
 	ft::vector<T> test_range(test.begin() + 20, test.begin() + 30);
 	print_vector<T>(test_range);
-	COUT_NC("TEST1");
 	test_copy.swap(test);
-	COUT_NC("TEST2");
 	print_vector<T>(test);
 	print_vector<T>(test_copy);
-	COUT_NC("TEST3");
 	test_copy.swap(test_range);
-	COUT_NC("TEST4");
 	print_vector<T>(test_range);
 	print_vector<T>(test_copy);
-	COUT_NC("TEST5");
 	test.swap(test_copy);
-	COUT_NC("TEST6");
 	print_vector<T>(test);
 	print_vector<T>(test_copy);
-	COUT_NC("TEST7");
 }
+}
+
+void test_reverse_iterator()
+{
+	COUT_NC("TEST1");
+	ft::vector<int> vct;
+	COUT_NC("TEST2");
+	ft::vector<int>::iterator it = vct.begin();
+	COUT_NC("TEST3");
+	ft::vector<int>::const_iterator cit = vct.begin();
+	COUT_NC("TEST4");
+	ft::vector<int>::reverse_iterator rit(it);
+	COUT_NC("TEST5");
+	ft::vector<int>::const_reverse_iterator crit(rit);
+	COUT_NC("TEST6");
+	ft::vector<int>::const_reverse_iterator crit_(it);
+	COUT_NC("TEST7");
+	ft::vector<int>::const_reverse_iterator crit_2(cit);
+	COUT_NC("TEST8");
 }
 
 void	vector_tests()
@@ -227,6 +238,7 @@ void	vector_tests()
 	COUT_NC("MAZOISE TEST FOR CHECK OF COPY_SWAP");
 	ft::copy_swap_tests<Awesome>();
 
+	test_reverse_iterator();
 }
 
 void	stack_tests()

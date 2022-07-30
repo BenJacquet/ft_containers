@@ -6,12 +6,13 @@
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/28 17:30:47 by jabenjam          #+#    #+#             */
-/*   Updated: 2022/07/29 05:01:22 by jabenjam         ###   ########.fr       */
+/*   Updated: 2022/07/29 21:23:47 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
+#include <iostream>
 #include "utils.hpp"
 
 namespace ft

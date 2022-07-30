@@ -6,19 +6,19 @@
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/04 14:04:45 by jabenjam          #+#    #+#             */
-/*   Updated: 2022/07/29 04:59:31 by jabenjam         ###   ########.fr       */
+/*   Updated: 2022/07/30 00:28:47 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
-#include <functional>
-#include <memory>
-
-#include "../iterator/iterator.hpp"
-#include "utils.hpp"
+#include "../utils/utils.hpp"
 #include "../utils/node.hpp"
 #include "../utils/pair.hpp"
+#include "../utils/algorithm.hpp"
+#include "../utils/type_traits.hpp"
+#include "../iterator/iterator.hpp"
+#include <limits>
 
 namespace ft
 {
@@ -35,9 +35,8 @@ namespace ft
 			typedef	Allocator												allocator_type;
 			typedef	value_type&												reference;
 			typedef	const value_type&										const_reference;
-			typedef	typename Allocator::pointer								pointer;
-			typedef	typename Allocator::const_pointer						const_pointer;
-			typedef typename ft::iterator_traits<iterator>::difference_type difference_type;
+			typedef	typename allocator_type::pointer						pointer;
+			typedef	typename allocator_type::const_pointer					const_pointer;
 			typedef	typename ft::bidirectional_iterator<value_type>			iterator;
 			typedef	typename ft::bidirectional_iterator<const value_type>	const_iterator;
 			typedef	typename ft::reverse_iterator<iterator>					reverse_iterator;
@@ -83,7 +82,7 @@ namespace ft
 			//iterator (3) ---
 			template <class InputIt>
 			map(InputIt first,
-				typename ft::enable_if<!isIntegral<InputIt>::value, InputIt>::type last,
+				typename ft::enable_if<!is_integral<InputIt>::value, InputIt>::type last,
 				const key_compare& comp = key_compare(),
 				const allocator_type& allocator = allocator_type()) 
 			: _allocator(allocator), _size(0), _comp(comp)
@@ -124,7 +123,7 @@ namespace ft
 				if (n)
 					return (n->get_value()->second);
 				else
-					throw std::out_of_range("");
+					throw std::out_of_range("Out of Range");
 			}
 
 			const T& at(const key_type& key) const
@@ -133,7 +132,7 @@ namespace ft
 				if (n)
 					return (n->get_value()->second);
 				else
-					throw std::out_of_range("");
+					throw std::out_of_range("Out of Range");
 			}
 
 			T& operator[](const Key& key)
@@ -241,7 +240,7 @@ namespace ft
 				node<value_type> *to_return = _find_node_by_key(value.first);
 
 				if (to_return)
-					return (make_pair(iterator(to_return), 0));
+					return (ft::make_pair(iterator(to_return), 0));
 				to_return = _add_new_node();
 				_size++;
 				return (to_return);
@@ -256,7 +255,7 @@ namespace ft
 
 			template<class InputIt>
 			void insert(InputIt first,
-				typename ft::enable_if<!isIntegral<InputIt>::value, InputIt>::type last)
+				typename ft::enable_if<!is_integral<InputIt>::value, InputIt>::type last)
 			{
 				while(first != last)
 					this->insert(*(first++));
@@ -265,9 +264,9 @@ namespace ft
 			void erase(iterator pos)
 			{
 				if (this->_size)
-					_erase_node(pos, _find_node_by_key(pos->first), );
+					this->_erase_node(pos, this->_find_node_by_key(pos->first));
 				else
-					_erase_root();
+					this->_erase_root();
 				this->_size--;
 			}
 
@@ -297,7 +296,7 @@ namespace ft
 					this->_allocator.destroy(this->_root->get_value());
 					this->_allocator.deallocate(this->_root->get_value(), 1);
 					delete this->_root;
-					this->_root = new element<value_type>();
+					this->_root = new node<value_type>();
 				}
 				_size--;
 				return (1);
@@ -325,20 +324,20 @@ namespace ft
 			iterator find(const Key& key)
 			{
 				node<value_type> *found = _find_node_by_key(key);
-				return (found ? iterator(found)) : this->end());
+				return (found ? iterator(found) : this->end());
 			}
 
 			const_iterator find(const Key& key) const
 			{
 				node<value_type> *found = _find_node_by_key(key);
-				return (found ? const_iterator(found)) : this->end());
+				return (found ? const_iterator(found) : this->end());
 			}
 
 			pair<iterator,iterator> equal_range(const Key& key)
-			{ return(make_pair<iterator, iterator(lower_bound(key), upper_bound(key))>); }
+			{ return(ft::make_pair<iterator, iterator>(lower_bound(key), upper_bound(key))); }
 
 			pair<const_iterator,const_iterator> equal_range(const Key& key) const
-			{ return(make_pair<const_iterator, const_iterator(lower_bound(key), upper_bound(key))>); }
+			{ return(ft::make_pair<const_iterator, const_iterator>(lower_bound(key), upper_bound(key))); }
 
 			iterator lower_bound(const Key& key)
 			{
@@ -410,7 +409,7 @@ namespace ft
 			private:
 				node<value_type> *_find_node_by_key(key_type key) const
 				{
-					node<value_type> *found = _this->root;
+					node<value_type> *found = this->_root;
 					bool			 direction;
 
 					while (found && !found->empty())
@@ -440,7 +439,7 @@ namespace ft
 						if (uncle && uncle->get_color() == E_RED)
 						{
 							n->get_parent()->set_color(E_BLACK);
-							uncle->set_color(BLACK);
+							uncle->set_color(E_BLACK);
 							uncle->get_parent()->set_color(E_RED);
 							n = n->get_grandparent();
 						}
@@ -463,32 +462,32 @@ namespace ft
 				pair<iterator, bool> _add_new_node(const value_type &value)
 				{
 					node<value_type> *new_node;
-					pointer new_value = _alloc.allocate(1);
+					pointer new_value = this->_allocator.allocate(1);
 
 					this->_allocator.construct(new_value, value_type(value));
 					new_node = new node<value_type>(new_value);
-					_insert_node(new_node);
-					_insertion_rebalancing(new_node);
-					return (make_pair(iterator(new_node), 1));
+					this->_insert_node(new_node);
+					this->_insertion_rebalancing(new_node);
+					return (ft::make_pair(iterator(new_node), 1));
 				}
 
 				void _erase_root()
 				{
 					this->_allocator.destroy(this->_root->get_value());
 					this->_allocator.deallocate(this->_root->get_value(), 1);
-					delete this->root;
-					this->root = new node<value_type>();
+					delete this->_root;
+					this->_root = new node<value_type>();
 				}
 
 				void _switch_nodes(node<value_type> *to_replace, node<value_type> *replacement)
 				{
-					node<value_type>	*parent = to_delete->get_parent();
+					node<value_type>	*parent = to_replace->get_parent();
 
 					if (parent->empty())
-						this->_root = n;
+						this->_root = replacement;
 					else
-						parent()->set_child(n, to_delete->get_direction());
-					n->set_parent(parent);
+						parent->set_child(replacement, to_replace->get_direction());
+					replacement->set_parent(parent);
 				}
 
 				void _steal_child(node<value_type> *new_parent, node<value_type> *old_parent, bool direction)
@@ -500,14 +499,14 @@ namespace ft
 
 				void _destroy_node(node<value_type> *to_destroy)
 				{
-					this->_allocator.destroy(to_delete->get_value());
-					this->_allocator.deallocate(to_delete->get_value, 1);
-					delete to_delete;
+					this->_allocator.destroy(to_destroy->get_value());
+					this->_allocator.deallocate(to_destroy->get_value, 1);
+					delete to_destroy;
 				}
 
 				void _removal_rebalancing(node<value_type> *n)
 				{
-					for (node<value_type> *n2; n != this->root && n->get_color(); n2 = n->get_twin())
+					for (node<value_type> *n2; n != this->_root && n->get_color(); n2 = n->get_twin())
 					{
 						//peut etre ajouter un n2 = n->get_twin()
 						if (n2->get_color() == E_RED)
@@ -550,8 +549,6 @@ namespace ft
 					bool				direction;
 					bool				color;
 
-					if (!it || !to_delete)
-						return ();
 					if (to_delete->get_left()->empty() || to_delete->get_right()->empty())
 					{
 						color = to_delete->get_color();
@@ -562,14 +559,14 @@ namespace ft
 					}
 					else
 					{
-						node<value_type> *replacement = _find_node_by_key(++it->first);
+						node<value_type> *replacement = _find_node_by_key((++it)->first);
 						color = replacement->get_color();
 						n = replacement->get_right();
 						if (to_delete == replacement->get_parent())
 							n->set_parent(replacement);
 						else
 						{
-							this->_switch_nodes(replacement, x);
+							this->_switch_nodes(replacement, n);
 							this->_steal_child(replacement, to_delete, E_RIGHT);
 						}
 						this->_switch_nodes(to_delete, replacement);
@@ -592,7 +589,7 @@ namespace ft
 					{
 						delete this->_root;
 						this->_root = new_node;
-						return ();
+						return ;
 					}
 					while (parent->get_value())
 					{
@@ -604,7 +601,7 @@ namespace ft
 							delete parent->get_child(direction);
 							parent->set_child(new_node, direction);
 							new_node->set_parent(parent);
-							return ();
+							return ;
 						}
 					}
 				}
@@ -612,7 +609,7 @@ namespace ft
 				void _rotation(node<value_type> *target, bool direction)
 				{
 					if (!target)
-						return ();
+						return ;
 					node<value_type> *n = target->get_child(!direction);
 					target->set_child(n->get_child(direction), !direction);
 					n->get_child(direction)->set_parent(target);
@@ -625,86 +622,6 @@ namespace ft
 					n->set_child(target, direction);
 					target->set_parent(n);
 				}
-
-		/*
-		**	DISPLAY TREE FUNCTION
-		*/
-		void	put_tree(node<value_type> *to_aff[] = NULL,
-			size_t nbr_tab = 50, size_t size_tab = 1) const
-		{
-			if (this->_size == 0)
-			{
-				COUT_NC("RED BLACK TREE IS EMPTY");
-				return ;
-			}
-			size_t i = 0;
-			size_t t = 0;
-			size_t nbr_tab2 = nbr_tab;
-			size_tab *= 2;
-			ft::node<value_type> *to_aff2[size_tab];
-			if (to_aff == NULL)
-			{
-				if (this->_root->left != this->_sentinel)
-					to_aff2[i++] = this->_root->left;
-				else
-					to_aff2[i++] = NULL;
-				if (this->_root->right != this->_sentinel)
-					to_aff2[i++] = this->_root->right;
-				else
-					to_aff2[i++] = NULL;
-				for (int tab = nbr_tab2; tab > 0; --tab)
-					COUT_NC(' ');
-				COUT_NC(this->_root->key_val.first);
-				if (this->_root->color == RED)
-					COUT_NC("R");
-				else
-					COUT_NC("B");
-				put_tree(to_aff2, nbr_tab - 2, size_tab);
-			}
-			else
-			{
-				for (int tab = nbr_tab2; tab > 0; --tab)
-					COUT_NC(' ');
-				COUT_NC('|');
-				while (i < (size_tab / 2))
-				{
-					if (to_aff[i] != NULL)
-					{
-						COUT_NC(to_aff[i]->key_val.first);
-						if (to_aff[i]->color == RED)
-							COUT_NC("R");
-						else
-							COUT_NC("B");
-					}
-					else
-						COUT_NC("Nu"); 
-					if (to_aff[i] != NULL && to_aff[i]->left != this->_sentinel)
-						to_aff2[t++] = to_aff[i]->left;
-					else
-						to_aff2[t++] = NULL;
-					if (to_aff[i] != NULL && to_aff[i]->right != this->_sentinel)
-						to_aff2[t++] = to_aff[i]->right;
-					else
-						to_aff2[t++] = NULL;
-					if (!(i % 2 == 0))
-						COUT_NC("|");
-					else
-						COUT_NC(" ");
-					i++;
-				}
-				COUT_NC(' ');
-				i = 0;
-				t = 0;
-				while (i < size_tab)
-				{
-					if (to_aff2[i++] != NULL)
-						t++;
-				}
-				if (t > 0)
-					put_tree(to_aff2, nbr_tab - 3, size_tab);
-			}
-		}
-
 	};
 
 	/*
@@ -723,7 +640,7 @@ namespace ft
 	template <class Key, class T, class Compare, class Alloc>
 	bool operator!=(const map<Key, T, Compare, Alloc> &lhs,
 					const map<Key, T, Compare, Alloc> &rhs)
-	{ return (!lhs != rhs); }
+	{ return (!(lhs == rhs)); }
 
 	template <class Key, class T, class Compare, class Alloc>
 	bool operator<(const map<Key, T, Compare, Alloc> &lhs,
