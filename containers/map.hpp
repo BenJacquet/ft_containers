@@ -6,7 +6,7 @@
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/04 14:04:45 by jabenjam          #+#    #+#             */
-/*   Updated: 2022/08/02 21:11:33 by jabenjam         ###   ########.fr       */
+/*   Updated: 2022/08/13 17:32:16 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #include "../utils/pair.hpp"
 #include "../utils/algorithm.hpp"
 #include "../utils/type_traits.hpp"
-#include "../iterator/iterator.hpp"
+#include "../iterator/bidirectional_iterator.hpp"
 #include <limits>
 
 namespace ft

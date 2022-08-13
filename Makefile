@@ -14,10 +14,13 @@ SRCS_FT = main_ft.cpp
 
 SRCS_STD = main_std.cpp
 
-INCS_FT =  iterator/iterator.hpp\
-		containers/vector.hpp\
+INCS_FT = containers/vector.hpp\
 		containers/stack.hpp\
 		containers/map.hpp\
+		iterator/iterator.hpp\
+		iterator/random_access_iterator.hpp\
+		iterator/bidirectional_iterator.hpp\
+		iterator/reverse_iterator.hpp\
 		utils/utils.hpp\
 		utils/type_traits.hpp\
 		utils/algorithm.hpp\

@@ -6,14 +6,14 @@
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 12:24:50 by jabenjam          #+#    #+#             */
-/*   Updated: 2022/08/13 15:10:26 by jabenjam         ###   ########.fr       */
+/*   Updated: 2022/08/13 17:40:45 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
 #include "../utils/utils.hpp"
-#include "../iterator/iterator.hpp"
+#include "../iterator/random_access_iterator.hpp"
 #include "../utils/type_traits.hpp"
 #include "../utils/algorithm.hpp"
 #include <limits>
