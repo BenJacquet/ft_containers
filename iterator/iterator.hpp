@@ -6,7 +6,7 @@
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/11 16:00:08 by jabenjam          #+#    #+#             */
-/*   Updated: 2022/07/30 02:13:31 by jabenjam         ###   ########.fr       */
+/*   Updated: 2022/08/13 16:01:20 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -255,7 +255,7 @@ namespace ft
 	*/
 
 	template <class T>
-	class bidirectional_iterator : public ft::iterator<bidirectional_iterator_tag, T>
+	class bidirectional_iterator : public iterator<bidirectional_iterator_tag, T>
 	{
 		public:
 			typedef std::ptrdiff_t					difference_type;
@@ -272,7 +272,7 @@ namespace ft
 			: _n(n)
 			{}
 
-			bidirectional_iterator(const bidirectional_iterator &it)
+			bidirectional_iterator(const bidirectional_iterator& it)
 			: _n(it._n)
 			{}
 
@@ -345,17 +345,18 @@ namespace ft
 				else if (found->get_parent())
 				{
 					if (found->get_direction() != direction)
-						found = found->get_parent();
+						return (found->get_parent());
 					else
 					{
 						while (found->get_parent() && found->get_direction() == direction)
 							found = found->get_parent();
 						if (!found->get_parent())
-							return (found->get_parent());
+							return (this->_n->get_child(direction));
+						return (found->get_parent());
 					}
 				}
 				else
-					return (this->_n->get_child[direction]);
+					return (this->_n->get_child(direction));
 			}
 	};
 

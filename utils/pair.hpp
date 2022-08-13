@@ -6,7 +6,7 @@
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/28 17:30:25 by jabenjam          #+#    #+#             */
-/*   Updated: 2022/07/29 21:09:20 by jabenjam         ###   ########.fr       */
+/*   Updated: 2022/08/01 16:48:16 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ namespace ft
 			typedef T2	second_type;
 			first_type	first;
 			second_type	second;
-
 
 			pair()
 			: first(first_type(), second(second_type()))

@@ -6,7 +6,7 @@
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/28 17:30:47 by jabenjam          #+#    #+#             */
-/*   Updated: 2022/07/29 21:23:47 by jabenjam         ###   ########.fr       */
+/*   Updated: 2022/08/01 16:36:29 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,16 +87,16 @@ namespace ft
 			{ return (this->_color); }
 
 			node *get_grandparent() const
-			{ return (this->_parent() ? this->_parent->get_parent() : NULL); }
+			{ return (this->_parent ? this->_parent->get_parent() : NULL); }
 
 			node *get_uncle() const
-			{ return (this->_parent() ? this->_parent->get_twin() : NULL); }
+			{ return (this->_parent ? this->_parent->get_twin() : NULL); }
 
 			node *get_parent() const
 			{ return (this->_parent); }
 
 			node *get_twin() const
-			{ return (this->_parent() ? this->_parent->get_child(!get_direction()) : NULL); }
+			{ return (this->_parent ? this->_parent->get_child(!get_direction()) : NULL); }
 
 			node *get_child(bool direction) const
 			{ return (this->_child[direction]); }

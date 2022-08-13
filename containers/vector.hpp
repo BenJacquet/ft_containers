@@ -6,7 +6,7 @@
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 12:24:50 by jabenjam          #+#    #+#             */
-/*   Updated: 2022/07/30 00:44:55 by jabenjam         ###   ########.fr       */
+/*   Updated: 2022/08/13 15:10:26 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,12 +135,15 @@ namespace ft
 
 			void resize(size_type n, value_type val = value_type())
 			{
-			if (n < this->_size)
-				for (size_t	i = n; i < this->_size; i++)
-					this->_allocator.destroy(&this->_base[i]);
-			else if (n > this->_size)
-				this->insert(end(), n - this->_size, val);
-			_size = n;
+				if (this->_size < n)
+				{
+					this->insert(this->end(), n - this->_size, val);
+				}
+				else
+				{
+					while (this->_size > n)
+						this->erase(this->end() - 1);
+				}
 			}
 
 			size_type capacity() const
@@ -153,7 +156,7 @@ namespace ft
 			{
 				if (n > this->max_size())
 					throw std::length_error("vector::reserve");
-				if (n > this->_capacity)
+				if (this->_capacity < n)
 				{
 					pointer old_mem = this->_base;
 					this->_base = this->_allocator.allocate(n);
@@ -257,10 +260,13 @@ namespace ft
 	
 				if (this->_size + n > this->_capacity)
 				{
-					if ((this->_capacity * 2) > (this->_capacity + n))
-						reserve(this->_size * 2);
-					else
-						reserve(this->_capacity + n);
+					if (this->_size + n > this->_capacity)
+					{
+						if ((this->_size * 2) > (this->_size + n))
+							reserve(this->_size * 2);
+						else
+							reserve(this->_size + n);
+					}
 				}
 				if (this->_size != 0 && static_cast<unsigned long>(index) != this->_size)
 				{
@@ -312,25 +318,21 @@ namespace ft
 
 			// single element (1) ---
 			iterator erase(iterator position)
-			{
-				for (iterator it = position; it != this->end() - 1; it++)
-					*it = *(it + 1);
-				this->_allocator.destroy(&this->_base[this->_size - 1]);
-				this->_size--;
-				return (position);
-			}
+			{ return erase(position, position + 1); }
 			
 			// range (2) ---
 			iterator erase(iterator first, iterator last)
 			{
-				size_type	len = last - first;
+				difference_type size = last - first;
+				difference_type index = first - this->begin();
+				difference_type it = index;
+				int i = this->_size - (size + index);
 
-				for (iterator it = first; it != this->end() - len; it++)
-					*it = *(it + len);
-				for (iterator it = this->end() - len; it != this->end(); it++)
-					this->_allocator.destroy(&(*it));
-				this->_size -= len;
-				return (first);
+				for (; i; i--, first++, index++)
+					this->_base[index] = this->_base[index + size];
+				for (; size; this->_size--, size--)
+					this->_allocator.destroy(this->_base + (this->_size - 1));
+				return iterator(this->_base + it);
 			}
 
 			void swap(vector& rhs)

@@ -6,7 +6,7 @@
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/04 14:04:45 by jabenjam          #+#    #+#             */
-/*   Updated: 2022/07/30 00:28:47 by jabenjam         ###   ########.fr       */
+/*   Updated: 2022/08/02 21:11:33 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,66 +153,66 @@ namespace ft
 
 			iterator begin()
 			{
-				node<value_type> *found = this->_root;
-				while (found->get_left())
-					found = found->get_left();
-				return (iterator(found));
+				node<value_type> *first = this->_root;
+				while(first->get_left() && first->get_left()->get_value())
+					first = first->get_left();
+				return (iterator(first));
 			}
 
 			const_iterator begin() const
 			{
-				node<value_type> *found = this->_root;
-				while (found->get_left())
-					found = found->get_left();
-				return (const_iterator(found));
+				node<value_type> *first = this->_root;
+				while(first->get_left() && first->get_left()->get_value())
+					first = first->get_left();
+				return (const_iterator(first));
 			}
 
 			iterator end()
 			{
-				node<value_type> *found = this->_root;
-				while (found->get_right())
-					found = found->get_right();
-				return (iterator(found));
+				node<value_type> *last = this->_root;
+				while(last->get_right())
+					last = last->get_right();
+				return (iterator(last));
 			}
 
 			const_iterator end() const
 			{
-				node<value_type> *found = this->_root;
-				while (found->get_right())
-					found = found->get_right();
-				return (const_iterator(found));
+				node<value_type> *last = this->_root;
+				while(last->get_right())
+					last = last->get_right();
+				return (const_iterator(last));
 			}
 
 			reverse_iterator rbegin()
 			{
-				node<value_type> *found = this->_root;
-				while (found->get_left())
-					found = found->get_left();
-				return (reverse_iterator(found));
+				node<value_type> *last = this->_root;
+				while(last->get_right())
+					last = last->get_right();
+				return (reverse_iterator(last));
 			}
 
 			const_reverse_iterator rbegin() const
 			{
-				node<value_type> *found = this->_root;
-				while (found->get_left())
-					found = found->get_left();
-				return (const_reverse_iterator(found));
+				node<value_type> *last = this->_root;
+				while(last->get_right())
+					last = last->get_right();
+				return (const_reverse_iterator(last));
 			}
 
 			reverse_iterator rend()
 			{
-				node<value_type> *found = this->_root;
-				while (found->get_right())
-					found = found->get_right();
-				return (reverse_iterator(found));
+				node<value_type> *first = this->_root;
+				while(first->get_right())
+					first = first->get_right();
+				return (reverse_iterator(first));
 			}
 
 			const_reverse_iterator rend() const
 			{
-				node<value_type> *found = this->_root;
-				while (found->get_right())
-					found = found->get_right();
-				return (const_reverse_iterator(found));
+				node<value_type> *first = this->_root;
+				while(first->get_right())
+					first = first->get_right();
+				return (const_reverse_iterator(first));
 			}
 
 			/*
@@ -241,9 +241,13 @@ namespace ft
 
 				if (to_return)
 					return (ft::make_pair(iterator(to_return), 0));
-				to_return = _add_new_node();
-				_size++;
-				return (to_return);
+				pointer new_value = this->_allocator.allocate(1);
+				this->_allocator.construct(new_value, value_type(value));
+				node<value_type> *	new_node = new node<value_type>(new_value);
+				this->_insert_node(new_node);
+				this->_insert_rebalancing(new_node);
+				this->_size++;
+				return (ft::make_pair(iterator(to_return), 1));
 			}
 
 			iterator insert(iterator hint, const value_type& value)
@@ -257,7 +261,7 @@ namespace ft
 			void insert(InputIt first,
 				typename ft::enable_if<!is_integral<InputIt>::value, InputIt>::type last)
 			{
-				while(first != last)
+				while (first != last)
 					this->insert(*(first++));
 			}
 
@@ -346,10 +350,11 @@ namespace ft
 
 				while (it != ite)
 				{
-					if (!this->key_comp()(key, it->first))
+					if (!this->key_comp()(it->first, key))
 						return (it);
 					it++;
 				}
+				return (this->end());
 			}
 
 			const_iterator lower_bound(const Key& key) const
@@ -359,10 +364,11 @@ namespace ft
 
 				while (it != ite)
 				{
-					if (!this->key_comp()(key, it->first))
+					if (!this->key_comp()(it->first, key))
 						return (it);
 					it++;
 				}
+				return (this->end());
 			}
 
 			iterator upper_bound(const Key& key)
@@ -376,6 +382,7 @@ namespace ft
 						return (it);
 					it++;
 				}
+				return (this->end());
 			}
 
 			const_iterator upper_bound(const Key& key) const
@@ -389,6 +396,7 @@ namespace ft
 						return (it);
 					it++;
 				}
+				return (this->end());
 			}
 
 			/*
@@ -432,10 +440,10 @@ namespace ft
 						n->set_color(E_BLACK);
 						return ;
 					}
-					while(n != this->_root && n->get_parent()->get_color() == E_RED)
+					while (n != this->_root && n->get_parent()->get_color() == E_RED)
 					{
 						uncle = n->get_uncle();
-						direction = n->get_parent()->get_side();
+						direction = n->get_parent()->get_direction();
 						if (uncle && uncle->get_color() == E_RED)
 						{
 							n->get_parent()->set_color(E_BLACK);
@@ -443,7 +451,7 @@ namespace ft
 							uncle->get_parent()->set_color(E_RED);
 							n = n->get_grandparent();
 						}
-						else if (n->get_side() == !direction)
+						else if (n->get_direction() == !direction)
 						{
 							n = n->get_parent();
 							this->_rotation(n, direction);
@@ -457,18 +465,6 @@ namespace ft
 						}
 						this->_root->set_color(E_BLACK);
 					}
-				}
-
-				pair<iterator, bool> _add_new_node(const value_type &value)
-				{
-					node<value_type> *new_node;
-					pointer new_value = this->_allocator.allocate(1);
-
-					this->_allocator.construct(new_value, value_type(value));
-					new_node = new node<value_type>(new_value);
-					this->_insert_node(new_node);
-					this->_insertion_rebalancing(new_node);
-					return (ft::make_pair(iterator(new_node), 1));
 				}
 
 				void _erase_root()
@@ -500,7 +496,7 @@ namespace ft
 				void _destroy_node(node<value_type> *to_destroy)
 				{
 					this->_allocator.destroy(to_destroy->get_value());
-					this->_allocator.deallocate(to_destroy->get_value, 1);
+					this->_allocator.deallocate(to_destroy->get_value(), 1);
 					delete to_destroy;
 				}
 
@@ -513,11 +509,11 @@ namespace ft
 						{
 							n2->set_color(E_BLACK);
 							n->get_parent()->set_color(E_RED);
-							this->_rotation(n->get_parent, n->get_direction());
+							this->_rotation(n->get_parent(), n->get_direction());
 						}
 						else if (n2->get_value() 
-								&& n2->get_child(n->get_direction())->get_color == E_BLACK
-								&& n2->get_child(n2->get_direction())->get_color == E_BLACK)
+								&& n2->get_child(n->get_direction())->get_color() == E_BLACK
+								&& n2->get_child(n2->get_direction())->get_color() == E_BLACK)
 						{
 							n2->set_color(E_RED);
 							n = n->get_parent();
@@ -618,7 +614,7 @@ namespace ft
 					if (!n->get_parent())
 						this->_root = n;
 					else
-						target->get_parent()->set_child(n, target->get_side());
+						target->get_parent()->set_child(n, target->get_direction());
 					n->set_child(target, direction);
 					target->set_parent(n);
 				}
