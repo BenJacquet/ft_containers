@@ -6,7 +6,7 @@
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/28 17:30:47 by jabenjam          #+#    #+#             */
-/*   Updated: 2022/08/01 16:36:29 by jabenjam         ###   ########.fr       */
+/*   Updated: 2022/08/14 16:44:30 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,10 @@ namespace ft
 			node(pointer value)
 			: _value(value), _color(E_RED), _parent(NULL)
 			{
-				this->_child[E_LEFT](create_new_node(this));
-				this->_child[E_RIGHT](create_new_node(this));
+				this->_child[E_LEFT] = new node();
+				this->_child[E_LEFT]->set_parent(this);
+				this->_child[E_RIGHT] = new node();
+				this->_child[E_RIGHT]->set_parent(this);
 			}
 
 			node(const node& rhs)
@@ -68,13 +70,6 @@ namespace ft
 
 			bool empty()
 			{ return (!this->get_value()); }
-
-			node *create_new_node(const node* parent)
-			{
-				node *new_node = new node();
-				new_node->_parent = parent;
-				return (new_node);
-			}
 
 			/*
 			** GETTERS

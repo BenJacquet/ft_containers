@@ -6,7 +6,7 @@
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/17 15:37:25 by jabenjam          #+#    #+#             */
-/*   Updated: 2022/07/30 01:09:00 by jabenjam         ###   ########.fr       */
+/*   Updated: 2022/08/14 16:13:07 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,10 @@
 #include "utils/utils.hpp"
 #include "containers/vector.hpp"
 #include "containers/stack.hpp"
+#include "containers/map.hpp"
 #include <vector>
 #include <stack>
+#include <map>
 
 template<typename T>
 void vector_status(ft::vector<T> &v)
@@ -32,72 +34,6 @@ void vector_status(ft::vector<T> &v)
 	for (int i = 0; it != ite; it++, i++)
 		COUT_NC("[" << i << "] - " << *it);
 	COUT_NC("-----------------" << std::endl);
-}
-
-class Awesome {
-
-	public:
-
-		Awesome( void ) : _n( 42 ) { std::cout << "Default constructor" << std::endl; } //should not happen too often or else there is a wrong use of allocator (which calls the copy constructor)
-		Awesome( int n ) : _n( n ) { std::cout << "Int constructor" << std::endl; (void)n; }
-		Awesome( Awesome const &rhs ) : _n( 42 ) { *this = rhs;}
-		virtual ~Awesome(void) {}
-
-		Awesome &operator=( Awesome const & rhs ) { this->_n = rhs._n; return (*this); }
-		bool operator==( Awesome const & rhs ) const { return (this->_n == rhs._n); }
-		bool operator!=( Awesome const & rhs ) const { return (this->_n != rhs._n); }
-		bool operator>( Awesome const & rhs ) const { return (this->_n > rhs._n); }
-		bool operator<( Awesome const & rhs ) const { return (this->_n < rhs._n); }
-		bool operator>=( Awesome const & rhs ) const { return (this->_n >= rhs._n); }
-		bool operator<=( Awesome const & rhs ) const { return (this->_n <= rhs._n); }
-		void operator+=(int rhs){ _n += rhs; }
-		int get( void ) const { return this->_n; }
-
-	private:
-
-		int _n;
-};
-
-std::ostream & operator<<( std::ostream & o, Awesome const & rhs ) { o << rhs.get(); return o; }
-
-namespace ft {
-
-template <class T>
-void	print_vector(vector<T> &test)
-{
-	typename vector<T>::iterator		beg = test.begin();
-	typename vector<T>::iterator		end = test.end();
-	std::cout << "size : " << test.size() << ", capacity : " << test.capacity() << std::endl;
-	for (typename vector<T>::iterator it = beg; it != end; it++)
-	{
-		std::cout << *it << " ";
-		if (((it - beg) % 10 == 9) && it > beg)
-			std::cout << std::endl;
-	}
-	std::cout << std::endl;
-}
-
-template <class T>
-void	copy_swap_tests(void)
-{
-	std::cout << std::endl << "COPY && SWAP TESTS" << std::endl;
-	ft::vector<T> test;
-	for (size_t i = 0; i < 50; i++) { test.push_back(i); }
-	ft::vector<T> test_copy(test);
-	for (size_t i = 0; i < test_copy.size(); i++) { test_copy[i] += 100; }
-	print_vector<T>(test_copy);
-	ft::vector<T> test_range(test.begin() + 20, test.begin() + 30);
-	print_vector<T>(test_range);
-	test_copy.swap(test);
-	print_vector<T>(test);
-	print_vector<T>(test_copy);
-	test_copy.swap(test_range);
-	print_vector<T>(test_range);
-	print_vector<T>(test_copy);
-	test.swap(test_copy);
-	print_vector<T>(test);
-	print_vector<T>(test_copy);
-}
 }
 
 void test_reverse_iterator()
@@ -235,9 +171,6 @@ void	vector_tests()
 	COUT_NC("numbers2");
 	vector_status(numbers2);
 
-	COUT_NC("MAZOISE TEST FOR CHECK OF COPY_SWAP");
-	ft::copy_swap_tests<Awesome>();
-
 	test_reverse_iterator();
 }
 
@@ -295,13 +228,16 @@ void	stack_tests()
 void	map_tests()
 {
 	COUT_NC("---------------------- MAP ----------------------");
+	ft::map<std::string, int>	testmap;
+
+	COUT_NC(testmap.size());
 }
 
 int main()
 {
 	vector_tests();
 	stack_tests();
-	// map_tests();
+	map_tests();
 	return (0);
 }
 
