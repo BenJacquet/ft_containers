@@ -6,7 +6,7 @@
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/28 17:30:47 by jabenjam          #+#    #+#             */
-/*   Updated: 2022/08/14 16:44:30 by jabenjam         ###   ########.fr       */
+/*   Updated: 2022/08/15 02:05:34 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,121 +14,129 @@
 
 #include <iostream>
 #include "utils.hpp"
+#include "enums.hpp"
 
 namespace ft
 {
 	template<class T>
-	class node
+	class element
 	{
-		public:
-			typedef T	value_type;
-			typedef T*	pointer;
+		public :
+			typedef T		value_type;
+			typedef T*		pointer;
 
-		private:
-			pointer _value;
-			bool	_color;
-			node	*_parent;
-			node	*_child[2];
-
-		public:
-			node()
-			: _value(NULL), _color(E_BLACK), _parent(NULL)
+			element()
+			: _value(0), _parent(0), _color(E_BLACK)
 			{
-				this->_child[E_LEFT] = NULL;
-				this->_child[E_RIGHT] = NULL;
+				_child[E_LEFT] = 0;
+				_child[E_RIGHT] = 0;
 			}
 
-			node(pointer value)
-			: _value(value), _color(E_RED), _parent(NULL)
+			element(pointer value)
+			: _value(value), _parent(0), _color(E_RED)
 			{
-				this->_child[E_LEFT] = new node();
-				this->_child[E_LEFT]->set_parent(this);
-				this->_child[E_RIGHT] = new node();
-				this->_child[E_RIGHT]->set_parent(this);
+				_child[E_LEFT] = new element();
+				_child[E_LEFT]->set_parent(this);
+				_child[E_RIGHT] = new element();
+				_child[E_RIGHT]->set_parent(this);
+
+				// _child[E_LEFT] = std::allocator<T>().allocate(1);
+				// std::allocator<T>().construct(_child[E_LEFT], value_type);
+				// _child[E_LEFT]->set_parent(this);
+				// _child[E_RIGHT] = std::allocator<T>().allocate(1);
+				// std::allocator<T>().construct(_child[E_RIGHT], value_type);
+				// _child[E_RIGHT]->set_parent(this);
 			}
 
-			node(const node& rhs)
+			element(const element &	rhs)
 			{ *this = rhs; }
 
-			virtual ~node()
+			virtual ~element()
 			{
-				if (this->_child[E_LEFT] && this->_child[E_LEFT]->empty())
-					delete this->_child[E_LEFT];
-				if (this->_child[E_RIGHT] && this->_child[E_RIGHT]->empty())
-					delete this->_child[E_RIGHT];
+				if (_child[E_LEFT] && !_child[E_LEFT]->get_value())
+					delete _child[E_LEFT];
+				if (_child[E_RIGHT] && !_child[E_RIGHT]->get_value())
+					delete _child[E_RIGHT];
 			}
 
-			node& operator=(const node& rhs)
+			element &operator=(const element & rhs)
 			{
-				this->_value = rhs._value;
-				this->_color = rhs._color;
-				this->_parent = rhs._parent;
-				this->_child[E_LEFT] = rhs._child[E_LEFT];
-				this->_child[E_RIGHT] = rhs._child[E_RIGHT];
-				return (*this);
+				_value = rhs._value;
+				_child[E_LEFT] = rhs._child[E_LEFT];
+				_child[E_RIGHT] = rhs._child[E_RIGHT];
+				_parent = rhs._parent;
+				_color = rhs._color;
+				return *this;
 			}
 
-			bool empty()
-			{ return (!this->get_value()); }
+			element *get_child(bool dir) const
+			{ return _child[dir]; }
 
-			/*
-			** GETTERS
-			*/
+			element *get_parent() const
+			{ return _parent; }
+
+			element *get_grand_parent() const
+			{
+				if (_parent)
+					return (_parent->get_parent());
+				return (0);
+			}
+
+			element *get_brother() const
+			{
+				if (!_parent)
+					return (0);
+				return (_parent->get_child(!get_side()));
+			}
+
+			element *get_uncle() const
+			{
+				element * tmp = get_parent();
+				if (!tmp)
+					return (0);
+				return (tmp->get_brother());
+			}
 
 			pointer get_value() const
-			{ return (this->_value); }
+			{ return _value; }
 
 			bool get_color() const
-			{ return (this->_color); }
+			{ return _color; }
 
-			node *get_grandparent() const
-			{ return (this->_parent ? this->_parent->get_parent() : NULL); }
-
-			node *get_uncle() const
-			{ return (this->_parent ? this->_parent->get_twin() : NULL); }
-
-			node *get_parent() const
-			{ return (this->_parent); }
-
-			node *get_twin() const
-			{ return (this->_parent ? this->_parent->get_child(!get_direction()) : NULL); }
-
-			node *get_child(bool direction) const
-			{ return (this->_child[direction]); }
-
-			node *get_left() const
-			{ return (this->_child[E_LEFT]); }
-
-			node *get_right() const
-			{ return (this->_child[E_RIGHT]); }
-
-			bool get_direction() const
+			bool get_side() const
 			{
-				if (!this->_parent || this->_parent->get_child(E_LEFT) == this)
-					return (E_LEFT);
-				return (E_RIGHT);
+				if (!_parent)
+					return (0);
+				if (_parent->get_child(E_RIGHT) == this)
+					return(E_RIGHT);
+				return (E_LEFT);
 			}
 
-			/*
-			** SETTERS
-			*/
+			void set_child(element *rhs, bool dir)
+			{ _child[dir] = rhs; }
 
-			void set_value(pointer value)
-			{ this->_value = value; }
+			void set_brother(element *rhs)
+			{ get_brother() = rhs; }
 
-			void set_color(bool color)
-			{ this->_color = color; }
+			void set_parent(element *rhs)
+			{ _parent = rhs; }
 
-			void set_parent(node *parent)
-			{ this->_parent = parent; }
+			void set_grand_parent(element *rhs)
+			{ get_grand_parent() = rhs; }
 
-			void set_child(node *child, bool direction)
-			{ this->_child[direction] = child; }
+			void set_uncle(element *rhs)
+			{ get_uncle() = rhs; }
 
-			void set_left(node *left)
-			{ this->_child[E_LEFT] = left; }
+			void set_color(bool rhs)
+			{ _color = rhs; }
 
-			void set_right(node *right)
-			{ this->_child[E_RIGHT] = right; }
-	};
+			void set_value(pointer rhs)
+			{ _value = rhs; }
+
+			private:
+				pointer		_value;
+				element *	_child[2];
+				element *	_parent;
+				bool		_color;
+		};
 }

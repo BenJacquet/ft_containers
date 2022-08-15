@@ -6,7 +6,7 @@
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/04 13:59:59 by jabenjam          #+#    #+#             */
-/*   Updated: 2022/07/29 23:40:38 by jabenjam         ###   ########.fr       */
+/*   Updated: 2022/08/15 00:52:53 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ namespace ft
 
 			stack& operator=(const stack& rhs)
 			{
-				this->c = rhs.c;
+				c = rhs.c;
 				return (*this);
 			}
 
@@ -49,30 +49,30 @@ namespace ft
 			*/
 
 			reference top()
-			{ return (this->c.back()); }
+			{ return (c.back()); }
 
 			const_reference top() const
-			{ return (this->c.back()); }
+			{ return (c.back()); }
 
 			/*
 			** MODIFIERS
 			*/
 
 			void push (const value_type& val)
-			{ this->c.push_back(val); }
+			{ c.push_back(val); }
 
 			void pop()
-			{ this->c.pop_back(); }
+			{ c.pop_back(); }
 
 			/*
 			** CAPACITY
 			*/
 
 			bool empty() const
-			{ return (this->c.empty()); }
+			{ return (c.empty()); }
 
 			size_type size() const
-			{ return (this->c.size()); }
+			{ return (c.size()); }
 
 			friend bool operator==(const stack<T, Container>& lhs, const stack<T, Container>& rhs)
 			{ return (lhs.c == rhs.c); }

@@ -6,7 +6,7 @@
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/13 17:24:35 by jabenjam          #+#    #+#             */
-/*   Updated: 2022/08/13 17:42:13 by jabenjam         ###   ########.fr       */
+/*   Updated: 2022/08/15 01:29:26 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,49 +44,49 @@ namespace ft
 			:_current(rhs) {}
 
 			operator random_access_iterator<const T>()
-			{ return (random_access_iterator<const T>(*(this->_current))); }
+			{ return (random_access_iterator<const T>(*(_current))); }
 
 			random_access_iterator& operator=(pointer rhs)
 			{
-				this->_current = rhs;
+				_current = rhs;
 				return (*this);
 			}
 
 			random_access_iterator& operator=(random_access_iterator &rhs)
 			{
-				this->_current = rhs._current;
+				_current = rhs._current;
 				return (*this);
 			}
 
 			random_access_iterator&	operator=(const random_access_iterator &rhs)
 			{
-				this->_current = rhs._current;
+				_current = rhs._current;
 				return (*this);
 			}
 
 			~random_access_iterator() {}
 
 			pointer base() const
-			{ return (this->_current); }
+			{ return (_current); }
 
 			random_access_iterator& operator++()
 			{
-				this->_current++;
+				_current++;
 				return (*this);
 			}
 
 			random_access_iterator operator++(int)
-			{ return (random_access_iterator(this->_current++)); }
+			{ return (random_access_iterator(_current++)); }
 
 			/*
 			** Forward iterator Requirements
 			*/
 
 			reference operator*() const
-			{ return (*(this->_current)); }
+			{ return (*(_current)); }
 
 			pointer operator->() const
-			{ return (this->_current); }
+			{ return (_current); }
 
 			random_access_iterator()
 			: _current(0) {};
@@ -97,40 +97,40 @@ namespace ft
 
 			random_access_iterator& operator--()
 			{
-				this->_current--;
+				_current--;
 				return (*this);
 			}
 
 			random_access_iterator operator--(int)
-			{ return (random_access_iterator(this->_current--)); }
+			{ return (random_access_iterator(_current--)); }
 
 			/*
 			** Random Access iterator Requirements
 			*/
 
 			random_access_iterator operator+(difference_type n) const
-			{ return (random_access_iterator(this->_current + n)); }
+			{ return (random_access_iterator(_current + n)); }
 
 			difference_type operator-(const random_access_iterator& rhs) const
-			{ return (this->_current - rhs._current); }
+			{ return (_current - rhs._current); }
 
 			random_access_iterator operator-(difference_type n) const
-			{ return (random_access_iterator(this->_current - n)); }
+			{ return (random_access_iterator(_current - n)); }
 
 			random_access_iterator& operator+=(difference_type n)
 			{
-				this->_current += n;
+				_current += n;
 				return (*this);
 			}
 
 			random_access_iterator& operator-=(difference_type n)
 			{
-				this->_current -= n;
+				_current -= n;
 				return (*this);
 			}
 
-			reference operator[](difference_type n)
-			{ return (this->_current[n]); }
+			reference operator[](difference_type n) const
+			{ return (_current[n]); }
 
 		private:
 			pointer _current;
@@ -170,11 +170,4 @@ namespace ft
 				const random_access_iterator<iteratorR> &rhs)
 	{ return (lhs.base() >= rhs.base()); };
 
-	template<class iterator>
-	random_access_iterator<iterator> operator+(typename random_access_iterator<iterator>::difference_type n, const random_access_iterator<iterator>& it)
-	{ return (random_access_iterator<iterator>(it.base() + n)); }
-
-	template<class iterator>
-	random_access_iterator<iterator> operator-(typename random_access_iterator<iterator>::difference_type n, const random_access_iterator<iterator>& it)
-	{ return (random_access_iterator<iterator>(it.base() - n)); }
 }

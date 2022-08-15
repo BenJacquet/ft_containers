@@ -6,125 +6,130 @@
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/13 17:24:14 by jabenjam          #+#    #+#             */
-/*   Updated: 2022/08/13 17:47:32 by jabenjam         ###   ########.fr       */
+/*   Updated: 2022/08/15 02:10:52 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
-#include "iterator.hpp"
-#include "../utils/utils.hpp"
+#include <iostream>
+#include "../iterator/iterator.hpp"
+#include "../utils/pair.hpp"
 #include "../utils/node.hpp"
+#include "../utils/enums.hpp"
 
-	/*
-	** BIDIRECTIONAL ITERATOR (FOR MAP)
-	*/
-
-namespace ft 
+namespace ft
 {
-	template <class T>
-	class bidirectional_iterator : public iterator<bidirectional_iterator_tag, T>
-	{
-		public:
-			typedef std::ptrdiff_t					difference_type;
-			typedef T								value_type;
-			typedef T*								pointer;
-			typedef T&								reference;
-			typedef bidirectional_iterator_tag		iterator_category;
 
-			bidirectional_iterator()
-			: _n(0)
-			{}
+template < class T >
+class bidirectional_iterator : public iterator<bidirectional_iterator_tag, T>
+{
+	public :
+		typedef std::ptrdiff_t						difference_type;
+		typedef T									value_type;
+		typedef T*									pointer;
+		typedef T&									reference;
+		typedef bidirectional_iterator_tag			iterator_category;
 
-			bidirectional_iterator(node<value_type> *n)
-			: _n(n)
-			{}
+		bidirectional_iterator()
+		: _node(0)
+		{}
 
-			bidirectional_iterator(const bidirectional_iterator& it)
-			: _n(it._n)
-			{}
+		bidirectional_iterator(element<value_type> * elem)
+		: _node(elem)
+		{}
 
-			virtual ~bidirectional_iterator()
-			{}
+		bidirectional_iterator(const bidirectional_iterator& rhs)
+		: _node(rhs._node)
+		{}
 
-			operator bidirectional_iterator<const T>() const
-			{ return bidirectional_iterator<const T>(reinterpret_cast<node<const value_type> *>(this->_n)); }
+		virtual ~bidirectional_iterator()
+		{}
 
-			reference	operator*()
-			{ return ( *(this->_n->get_value())); }
+		operator bidirectional_iterator<const T>() const
+		{ return bidirectional_iterator<const T>(reinterpret_cast<element<const value_type> *>(_node)); }
 
-			pointer	operator->()
-			{ return ( this->_n->get_value()); }
+		bidirectional_iterator& operator=(element<value_type> * rhs)
+		{
+			_node = rhs;
+			return *this;
+		}
+		bidirectional_iterator& operator=(const bidirectional_iterator& rhs)
+		{
+			_node = rhs._node;
+			return *this;
+		}
 
-			bool	operator==(const bidirectional_iterator& rhs) const
-			{ return (this->_n == rhs._n); }
+		bool operator==(const bidirectional_iterator& rhs) const
 
-			bool	operator!=(const bidirectional_iterator& rhs) const
-			{ return (this->_n != rhs._n); }
+		{ return (_node == rhs._node); }
 
-			bidirectional_iterator& operator++()
+		bool operator!=(const bidirectional_iterator& rhs) const
+
+		{ return (_node != rhs._node); }
+
+		reference operator*(void)
+		{ return *(_node->get_value()); }
+
+		pointer operator->(void)
+		{ return _node->get_value(); }
+
+		bidirectional_iterator& operator++(void)
+		{
+			_node = _get_nearest(E_RIGHT);
+			return *this;
+		}
+
+		bidirectional_iterator		operator++(int)
+		{
+			bidirectional_iterator tmp = *this;
+			++(*this);
+			return (tmp);
+		}
+
+		bidirectional_iterator&		operator--(void)
+		{
+			_node = _get_nearest(E_LEFT);
+			return *this;
+		}
+
+		bidirectional_iterator		operator--(int)
+		{
+			bidirectional_iterator tmp = *this;
+			--(*this);
+			return (tmp);
+		}
+
+	private :
+		element<value_type> *_node;
+
+		element<value_type> *_get_nearest(bool direction) const
+		{
+			element<value_type> * tmp = _node;
+			if (!tmp)
+				return 0;
+			if (tmp->get_child(direction) && tmp->get_child(direction)->get_value())
 			{
-				this->_n = this->_get_nearest(E_RIGHT);
-				return (*this);
+				tmp = tmp->get_child(direction);
+				while (tmp->get_child(!direction) && tmp->get_child(!direction)->get_value())
+					tmp = tmp->get_child(!direction);
+				return tmp;
 			}
-
-			bidirectional_iterator operator++(int)
+			else if (tmp->get_parent())
 			{
-				bidirectional_iterator tmp = *this;
-				(*this)++;
-				return (tmp);
-			}
-
-			bidirectional_iterator& operator--()
-			{
-				this->_n = this->_get_nearest(E_LEFT);
-				return (*this);
-			}
-
-			bidirectional_iterator operator--(int)
-			{
-				bidirectional_iterator tmp = *this;
-				(*this)--;
-				return (tmp);
-			}
-
-		private:
-			node<value_type>	*_n;
-
-			/**
-			 * @brief Returns a pointer to the nearest node according to the direction provided as argument
-			 * 
-			 * @param direction false/0 = left, true/1 = right
-			 * @return node<value_type>* 
-			 */
-			node<value_type>	*_get_nearest(bool direction) const
-			{
-				node<value_type> *found = this->_n;
-
-				if (!found)
-					return (NULL);
-				if (found->get_child(direction) && !found->get_child(direction)->empty())
-				{
-					found = found->get_child(direction);
-					while (found->get_child(!direction) && !found->get_child(!direction)->empty())
-						found = found->get_child(!direction);
-					return (found);
-				}
-				else if (found->get_parent())
-				{
-					if (found->get_direction() != direction)
-						return (found->get_parent());
-					else
-					{
-						while (found->get_parent() && found->get_direction() == direction)
-							found = found->get_parent();
-						if (!found->get_parent())
-							return (this->_n->get_child(direction));
-						return (found->get_parent());
-					}
-				}
+				if (tmp->get_side() != direction)
+					return (tmp->get_parent());
 				else
-					return (this->_n->get_child(direction));
+				{
+					while (tmp->get_parent() && tmp->get_side() == direction)
+						tmp = tmp->get_parent();
+					if (!tmp->get_parent())
+						return(_node->get_child(direction));
+					return(tmp->get_parent());
+				}
 			}
-	};
+			else
+				return _node->get_child(direction);
+		}
+};
 }

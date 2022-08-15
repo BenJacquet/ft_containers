@@ -6,7 +6,7 @@
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/11 16:00:08 by jabenjam          #+#    #+#             */
-/*   Updated: 2022/08/13 17:39:15 by jabenjam         ###   ########.fr       */
+/*   Updated: 2022/08/15 00:33:37 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 #include <iostream>
 #include "../utils/utils.hpp"
+#include "../utils/type_traits.hpp"
 #include "reverse_iterator.hpp"
 
 namespace ft

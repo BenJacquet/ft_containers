@@ -6,7 +6,7 @@
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/17 15:37:25 by jabenjam          #+#    #+#             */
-/*   Updated: 2022/08/14 16:13:07 by jabenjam         ###   ########.fr       */
+/*   Updated: 2022/08/14 22:23:38 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -230,7 +230,10 @@ void	map_tests()
 	COUT_NC("---------------------- MAP ----------------------");
 	ft::map<std::string, int>	testmap;
 
-	COUT_NC(testmap.size());
+	COUT_NC("Empty :\nsize = " << testmap.size());
+	testmap.insert(ft::make_pair("test", 15));
+	COUT_NC("After single insert :\nsize = " << testmap.size());
+	COUT_NC("fin");
 }
 
 int main()
