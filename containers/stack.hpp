@@ -6,7 +6,7 @@
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/04 13:59:59 by jabenjam          #+#    #+#             */
-/*   Updated: 2022/08/15 00:52:53 by jabenjam         ###   ########.fr       */
+/*   Updated: 2022/08/15 02:17:18 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,9 +95,5 @@ namespace ft
 			protected:
 				container_type	c;
 	};
-
-	/*
-	** Non Member Functions
-	*/
 
 }
