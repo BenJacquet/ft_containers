@@ -1,0 +1,2 @@
+std::allocator au lieu de new dans map et node
+rite2 erreur de compilation
