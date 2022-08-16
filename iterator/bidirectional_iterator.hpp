@@ -6,7 +6,7 @@
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/13 17:24:14 by jabenjam          #+#    #+#             */
-/*   Updated: 2022/08/16 17:59:24 by jabenjam         ###   ########.fr       */
+/*   Updated: 2022/08/16 20:11:25 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ namespace ft
 		bidirectional_iterator(node_type *ptr, node_type *end)
 		:current(ptr), _end(end)
 		{}
-
 
 		bidirectional_iterator(const bidirectional_iterator &copy)
 		{ *this = copy; }

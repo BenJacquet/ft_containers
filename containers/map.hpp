@@ -6,7 +6,7 @@
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/04 14:04:45 by jabenjam          #+#    #+#             */
-/*   Updated: 2022/08/16 18:15:24 by jabenjam         ###   ########.fr       */
+/*   Updated: 2022/08/16 20:11:35 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,14 +93,6 @@ namespace ft
 		** ELEMENT ACCESS
 		*/
 
-		mapped_type &operator[](const key_type &key)
-		{
-			ft::pair<iterator, bool>	it;
-
-			it = this->insert(ft::make_pair(key, mapped_type()));
-			return (it.first->second);
-		}
-
 		reference at(const Key &key)
 		{
 			Node<value_type> found = _find(key);
@@ -119,6 +111,14 @@ namespace ft
 				return (found->data.second);
 			else
 				throw std::out_of_range("");
+		}
+
+		mapped_type &operator[](const key_type &key)
+		{
+			ft::pair<iterator, bool>	it;
+
+			it = this->insert(ft::make_pair(key, mapped_type()));
+			return (it.first->second);
 		}
 
 		/*
@@ -171,6 +171,9 @@ namespace ft
 		** MODIFIERS
 		*/
 
+		void clear()
+		{ this->_tree.clear(); }
+
 		ft::pair<iterator, bool> insert(const value_type &x)
 		{ return (this->_tree.insert(x)); }
 
@@ -214,9 +217,6 @@ namespace ft
 		void swap(map &x)
 		{ this->_tree.swap(x._tree); }
 
-		void clear()
-		{ this->_tree.clear(); }
-
 		/*
 		** LOOKUP
 		*/
@@ -230,15 +230,6 @@ namespace ft
 			return (1);
 		}
 
-		key_compare	key_comp() const
-		{
-			return (key_compare());
-		}
-
-		value_compare value_comp() const
-		{ return (value_compare()); }
-
-		//*	map operations:
 		iterator find(const key_type &key)
 		{ return (this->_tree.search(ft::make_pair(key, mapped_type()))); }
 
@@ -262,6 +253,18 @@ namespace ft
 
 		const_iterator upper_bound(const key_type &x) const
 		{ return (this->_tree.upper_bound(ft::make_pair(x, mapped_type()))); }
+
+		/*
+		** OBSERVERS
+		*/
+
+		key_compare	key_comp() const
+		{
+			return (key_compare());
+		}
+
+		value_compare value_comp() const
+		{ return (value_compare()); }
 		
 		private:
 			key_compare								_comp;
@@ -276,6 +279,10 @@ namespace ft
 			return (false);
 		return (ft::equal(lhs.begin(), lhs.end(), rhs.begin()));
 	}
+
+	/*
+	** NON MEMBER FUNCTIONS
+	*/
 
 	template<class Key, class T, class Compare, class Allocator>
 	bool operator!=(const map<Key, T, Compare, Allocator> &lhs, const map<Key, T, Compare, Allocator> &rhs)
