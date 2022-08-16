@@ -6,7 +6,7 @@
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/15 14:32:04 by jabenjam          #+#    #+#             */
-/*   Updated: 2022/08/15 20:51:55 by jabenjam         ###   ########.fr       */
+/*   Updated: 2022/08/16 15:48:06 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,20 +47,20 @@ namespace ft
 	public:
 		RBTree(): _alloc(allocator_type()), _comp(key_compare()), _size(0)
 		{
-			this->_sentry = this->_allocNode(value_type(), NULL, NULL, E_BLACK);
+			this->_sentry = this->_allocate_node(value_type(), NULL, NULL, E_BLACK);
 			this->_root = this->_sentry;
 		}
 
 		explicit RBTree(const Compare	&comp, const Allocator &alloc = Allocator()):
 			_alloc(alloc), _comp(comp), _size(0)
 		{
-			this->_sentry = this->_allocNode(value_type(), NULL, NULL, E_BLACK);
+			this->_sentry = this->_allocate_node(value_type(), NULL, NULL, E_BLACK);
 			this->_root = this->_sentry;
 		}
 
 		RBTree(const RBTree &copy): _root(NULL), _size(0)
 		{
-			this->_sentry = this->_allocNode(value_type(), NULL, NULL, E_BLACK);
+			this->_sentry = this->_allocate_node(value_type(), NULL, NULL, E_BLACK);
 			this->_root = this->_sentry;
 			*this = copy;
 		}
@@ -68,10 +68,10 @@ namespace ft
 		~RBTree()
 		{
 			this->clear();
-			this->_deallocNode(this->_sentry);
+			this->_deallocate_node(this->_sentry);
 		}
 
-		RBTree	&operator=(const RBTree &other)
+		RBTree &operator=(const RBTree &other)
 		{
 			node_type const	*node = NULL;
 
@@ -88,41 +88,39 @@ namespace ft
 		}
 
 		//*	iterators:
-		iterator	begin()
+		iterator begin()
 		{ return (iterator(this->_minimum(this->root()), this->sentry())); }
 
-		const_iterator	begin() const
+		const_iterator begin() const
 		{ return (const_iterator(this->_minimum(this->root()), this->sentry())); }
 		
-		iterator	end(void)
+		iterator end(void)
 		{ return (iterator(this->sentry(), this->sentry())); }
 
-		const_iterator	end(void) const
+		const_iterator end(void) const
 		{ return (const_iterator(this->sentry(), this->sentry())); }
 
-		reverse_iterator	rbegin()
+		reverse_iterator rbegin()
 		{ return (reverse_iterator(iterator(this->sentry(), this->sentry()))); }
 
-		const_reverse_iterator	rbegin() const
+		const_reverse_iterator rbegin() const
 		{ return (const_reverse_iterator(const_iterator(this->sentry(), this->sentry()))); }
 
-		reverse_iterator	rend()
+		reverse_iterator rend()
 		{ return (reverse_iterator(iterator(this->_minimum(this->root()), this->sentry()))); }
 
-		const_reverse_iterator	rend() const
+		const_reverse_iterator rend() const
 		{ return (const_reverse_iterator(const_iterator(this->_minimum(this->root()), this->sentry()))); }
 
 		//*	capacity:
-		size_type	size() const
-		{
-			return (this->_size);
-		}
+		size_type size() const
+		{ return (this->_size); }
 
-		size_type	max_size() const
+		size_type max_size() const
 		{ return (this->_alloc.max_size()); }
 
 		//* modifier:
-		ft::pair<iterator, bool>	insert(const value_type &x)
+		ft::pair<iterator, bool> insert(const value_type &x)
 		{
 			pointer						node;
 			iterator					it = this->search(x);
@@ -130,14 +128,14 @@ namespace ft
 
 			if (it != this->end())
 				return (ft::make_pair(iterator(it), 0));
-			node = this->_allocNode(x, this->sentry(), this->sentry(), E_RED);
+			node = this->_allocate_node(x, this->sentry(), this->sentry(), E_RED);
 			ret = this->_insert(this->root(), node);
 			if (ret.second == false)
-				this->_deallocNode(node);
+				this->_deallocate_node(node);
 			return (ret);
 		}
 
-		iterator	insert(iterator hint, const value_type &x)
+		iterator insert(iterator hint, const value_type &x)
 		{
 			ft::pair<iterator, bool>	ret;
 			pointer						node;
@@ -147,7 +145,7 @@ namespace ft
 
 			if (it != this->end())
 				return (hint);
-			node = this->_allocNode(x, this->sentry(), this->sentry(), E_RED);
+			node = this->_allocate_node(x, this->sentry(), this->sentry(), E_RED);
 			while (parent != NULL && this->_comp(parent->data, x))
 			{
 				current = current->parent;
@@ -157,17 +155,17 @@ namespace ft
 				current = this->root();
 			ret = this->_insert(current, node);
 			if (ret.second == false)
-				this->_deallocNode(node);
+				this->_deallocate_node(node);
 			return (ret.first);
 		}
 
-		void	erase(iterator position)
+		void erase(iterator position)
 		{
 			if (position != this->end())
 				this->_erase(position.current);
 		}
 
-		size_type	erase(const value_type &key)
+		size_type erase(const value_type &key)
 		{
 			iterator	it = this->search(key);
 			
@@ -177,13 +175,13 @@ namespace ft
 			return (1);
 		}
 
-		void	clear()
+		void clear()
 		{
 			while (this->root() != this->sentry())
 				this->_erase(this->root());
 		}
 
-		void	swap(RBTree &x)
+		void swap(RBTree &x)
 		{
 			std::swap(this->_root, x._root);
 			std::swap(this->_sentry, x._sentry);
@@ -198,19 +196,19 @@ namespace ft
 		{ return (this->_sentry); }
 
 		//* operations:
-		iterator	search(const value_type &x)
+		iterator search(const value_type &x)
 		{
 			return (this->_search(this->root(), x));
 		}
 
-		const_iterator	search(const value_type &x) const
+		const_iterator search(const value_type &x) const
 		{
 			const_iterator	it = this->_search(this->root(), x);
 
 			return (it);
 		}
 
-		iterator	lower_bound(const value_type &x)
+		iterator lower_bound(const value_type &x)
 		{
 			for (iterator it = this->begin(); it != this->end(); it++)
 				if (!(this->_comp(it.current->data, x)))
@@ -218,7 +216,7 @@ namespace ft
 			return (this->end());
 		}
 
-		const_iterator	 lower_bound(const value_type &x) const
+		const_iterator lower_bound(const value_type &x) const
 		{
 			for (const_iterator it = this->begin(); it != this->end(); it++)
 				if (!(this->_comp(it.current->data, x)))
@@ -226,7 +224,7 @@ namespace ft
 			return (this->end());
 		}
 
-		iterator	upper_bound(const value_type &x)
+		iterator upper_bound(const value_type &x)
 		{
 			for (iterator it = this->begin(); it != this->end(); it++)
 				if (!(this->_comp(it.current->data, x)) && this->_comp(x, it.current->data))
@@ -234,7 +232,7 @@ namespace ft
 			return (this->end());
 		}
 
-		const_iterator	upper_bound(const value_type &x) const
+		const_iterator upper_bound(const value_type &x) const
 		{
 			for (const_iterator it = this->begin(); it != this->end(); it++)
 				if (!(this->_comp(it.current->data, x)) && this->_comp(x, it.current->data))
@@ -242,7 +240,7 @@ namespace ft
 			return (this->end());
 		}
 
-		ft::pair<iterator, iterator>	equal_range(const value_type &x)
+		ft::pair<iterator, iterator> equal_range(const value_type &x)
 		{
 			ft::pair<iterator, iterator>	range;
 
@@ -251,7 +249,7 @@ namespace ft
 			return (range);
 		}
 
-		ft::pair<const_iterator, const_iterator>	equal_range(const value_type &x) const
+		ft::pair<const_iterator, const_iterator> equal_range(const value_type &x) const
 		{
 			ft::pair<const_iterator, const_iterator>	range;
 
@@ -261,7 +259,7 @@ namespace ft
 		}
 
 		// A supprimer
-		void	display(pointer node)
+		void display(pointer node)
 		{
 			std::stringstream	buffer;
 
@@ -273,7 +271,7 @@ namespace ft
 			}
 		}
 
-		void	display(void)
+		void display(void)
 		{
 			std::stringstream	buffer;
 
@@ -287,7 +285,7 @@ namespace ft
 
 	private:
 
-		pointer	_allocNode(const value_type &x, pointer left, pointer right, bool color)
+		pointer	_allocate_node(const value_type &x, pointer left, pointer right, bool color)
 		{
 			pointer	node = this->_alloc.allocate(1);
 
@@ -298,13 +296,13 @@ namespace ft
 			return (node);
 		}
 
-		void	_deallocNode(pointer node)
+		void _deallocate_node(pointer node)
 		{
 			this->_alloc.destroy(node);
 			this->_alloc.deallocate(node, 1);
 		}
 
-		void	_relinkSentry(void)
+		void _relocate_sentry(void)
 		{
 			if (this->sentry() != this->root())
 				this->_sentry->parent = this->root();
@@ -313,7 +311,7 @@ namespace ft
 		}
 
 
-		ft::pair<iterator, bool>	_insert(pointer current, pointer node)
+		ft::pair<iterator, bool> _insert(pointer current, pointer node)
 		{
 			pointer	parent = NULL;
 
@@ -338,20 +336,20 @@ namespace ft
 			if (node->parent == NULL)
 			{
 				node->color = E_BLACK;
-				this->_relinkSentry();
+				this->_relocate_sentry();
 				return (ft::make_pair(node, true));
 			}
 			if (node->parent->parent == NULL)
 			{
-				this->_relinkSentry();
+				this->_relocate_sentry();
 				return (ft::make_pair(node, true));
 			}
-			this->_insertFix(node);
-			this->_relinkSentry();
+			this->_rebalance_insert(node);
+			this->_relocate_sentry();
 			return (ft::make_pair(node, true));
 		}
 
-		void	_insertFix(pointer node)
+		void _rebalance_insert(pointer node)
 		{
 			pointer	uncle = NULL;
 
@@ -407,7 +405,7 @@ namespace ft
 			this->_root->color = E_BLACK;
 		}
 
-		void	_erase(pointer node)
+		void _erase(pointer node)
 		{
 			pointer		x;
 			pointer		y = node;
@@ -416,12 +414,12 @@ namespace ft
 			if (node->left == this->sentry())
 			{
 				x = node->right;
-				this->_transplant(node, node->right);
+				this->_switch_nodes(node, node->right);
 			}
 			else if (node->right == this->sentry())
 			{
 				x = node->left;
-				this->_transplant(node, node->left);
+				this->_switch_nodes(node, node->left);
 			}
 			else
 			{
@@ -432,23 +430,23 @@ namespace ft
 					x->parent = y;
 				else
 				{
-					this->_transplant(y, y->right);
+					this->_switch_nodes(y, y->right);
 					y->right = node->right;
 					y->right->parent = y;
 				}
-				this->_transplant(node, y);
+				this->_switch_nodes(node, y);
 				y->left = node->left;
 				y->left->parent = y;
 				y->color = node->color;
 			}
-			this->_deallocNode(node);
+			this->_deallocate_node(node);
 			if (originalColor == E_BLACK)
-				this->_eraseFix(x);
+				this->_rebalance_erase(x);
 			this->_size--;
-			this->_relinkSentry();
+			this->_relocate_sentry();
 		}
 
-		void	_eraseFix(pointer node)
+		void _rebalance_erase(pointer node)
 		{
 			pointer	uncle;
 
@@ -520,7 +518,7 @@ namespace ft
 			node->color = E_BLACK;
 		}
 
-		void	_transplant(pointer node, pointer replacement)
+		void _switch_nodes(pointer node, pointer replacement)
 		{
 			if (node->parent == NULL)
 				this->_root = replacement;
@@ -531,7 +529,7 @@ namespace ft
 			replacement->parent = node->parent;
 		}
 		
-		void	_leftRotate(pointer node)
+		void _leftRotate(pointer node)
 		{
 			pointer	child = node->right;
 
@@ -549,7 +547,7 @@ namespace ft
 			node->parent = child;
 		}
 
-		void	_rightRotate(pointer node)
+		void _rightRotate(pointer node)
 		{
 			pointer	child = node->left;
 
@@ -567,7 +565,7 @@ namespace ft
 			node->parent = child;
 		}
 
-		iterator	_search(const pointer node, const value_type &x)
+		iterator _search(const pointer node, const value_type &x)
 		{
 			pointer	current = node;
 
@@ -583,7 +581,7 @@ namespace ft
 			return (this->end());
 		}
 
-		const_iterator	_search(const pointer node, const value_type &x) const
+		const_iterator _search(const pointer node, const value_type &x) const
 		{
 			pointer	current = node;
 
@@ -599,7 +597,7 @@ namespace ft
 			return (this->end());
 		}
 
-		pointer	_minimum(pointer node)
+		pointer _minimum(pointer node)
 		{
 			pointer	current = node;
 
@@ -611,7 +609,7 @@ namespace ft
 			return (current);
 		}
 
-		pointer	_minimum(pointer node) const
+		pointer _minimum(pointer node) const
 		{
 			pointer	current = node;
 
@@ -623,7 +621,7 @@ namespace ft
 			return (current);
 		}
 
-		pointer	_maximum(pointer node)
+		pointer _maximum(pointer node)
 		{
 			pointer	current = node;
 
@@ -635,7 +633,7 @@ namespace ft
 			return (current);
 		}
 
-		pointer	_maximum(pointer node) const
+		pointer _maximum(pointer node) const
 		{
 			pointer	current = node;
 
@@ -647,7 +645,7 @@ namespace ft
 			return (current);
 		}
 
-		void	_display(pointer node, std::stringstream &buffer, bool isTail, std::string prefix)
+		void _display(pointer node, std::stringstream &buffer, bool isTail, std::string prefix)
 		{
 			if (node->right != this->sentry())
 				this->_display(node->right, buffer, false, std::string(prefix).append(isTail ? "│   " : "    "));
