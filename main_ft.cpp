@@ -6,7 +6,7 @@
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/17 15:37:25 by jabenjam          #+#    #+#             */
-/*   Updated: 2022/08/15 20:52:09 by jabenjam         ###   ########.fr       */
+/*   Updated: 2022/08/16 17:18:30 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -284,10 +284,10 @@ int		erase_test()
   mymap.erase ('c');                  // erasing by key
   std::cout << "erase by key 'c'\n";
   it=mymap.find ('e');
-  mymap.display();
+//   mymap.display();
   std::cout << "erase by range 'e' to end\n";
   mymap.erase ( it, mymap.end() );    // erasing by range
-  mymap.display();
+//   mymap.display();
 
   std::cout << " display :\n";
   // show content:
