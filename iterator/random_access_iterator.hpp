@@ -6,7 +6,7 @@
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/13 17:24:35 by jabenjam          #+#    #+#             */
-/*   Updated: 2022/08/15 01:29:26 by jabenjam         ###   ########.fr       */
+/*   Updated: 2022/08/17 12:52:13 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,11 @@ namespace ft
 	class random_access_iterator : public ft::iterator<random_access_iterator_tag, T>
 	{
 		public:
-			typedef T								value_type;
+			typedef T										value_type;
 			typedef std::ptrdiff_t							difference_type;
 			typedef typename ft::random_access_iterator_tag	iterator_category;
-			typedef T*								pointer;
-			typedef T&								reference;
+			typedef T*										pointer;
+			typedef T&										reference;
 
 			/*
 			** All iterator Categories Requirements
@@ -169,5 +169,13 @@ namespace ft
 	bool operator>=(const random_access_iterator<iteratorL> &lhs,
 				const random_access_iterator<iteratorR> &rhs)
 	{ return (lhs.base() >= rhs.base()); };
+
+	template<class iterator>
+	random_access_iterator<iterator> operator+(typename random_access_iterator<iterator>::difference_type n, const random_access_iterator<iterator>& it)
+	{ return (random_access_iterator<iterator>(it.base() + n)); }
+
+	template<class iterator>
+	random_access_iterator<iterator> operator-(typename random_access_iterator<iterator>::difference_type n, const random_access_iterator<iterator>& it)
+	{ return (random_access_iterator<iterator>(it.base() - n)); }
 
 }

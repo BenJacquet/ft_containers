@@ -6,7 +6,7 @@
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 12:24:50 by jabenjam          #+#    #+#             */
-/*   Updated: 2022/08/15 00:52:54 by jabenjam         ###   ########.fr       */
+/*   Updated: 2022/08/17 11:31:31 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -254,36 +254,35 @@ namespace ft
 			// fill (2) ---
 			void insert(iterator position, size_type n, const value_type& val)
 			{
-				difference_type index = position - begin();
-				size_type j = _size;
-				int to_construct = n, to_move = (_size - index), i = n;
-	
-				if (_size + n > _capacity)
+				difference_type	start(position - begin());
+				size_type		len(_size - start);
+				pointer			tmp(NULL);
+
+				if (!n || n > max_size())
+					return ;
+				tmp = _allocator.allocate(len);
+				if (!_capacity)
+					reserve(_size + n);
+				else if (_size + n > _size * 2)
+					reserve(_size + n);
+				else if (_size + n > _capacity)
+					reserve(_size * 2);
+				for (size_type i(start); i < _size; i++)
 				{
-					if (_size + n > _capacity)
-					{
-						if ((_size * 2) > (_size + n))
-							reserve(_size * 2);
-						else
-							reserve(_size + n);
-					}
+					_allocator.construct(tmp + (i - start), _base[i]);
+					_allocator.destroy(_base + i);
 				}
-				if (_size != 0 && static_cast<unsigned long>(index) != _size)
+				for (size_type i(0); i < n; i++)
 				{
-					for (; to_construct; to_construct--)
-						_allocator.construct(_base + j++, T());
-					j = _size - 1;
-					for (; to_move; to_move--, j--)
-						_base[j + n] = _base[j] ;
-					_size += n;
-					for (; i; i--)
-						_base[index++] = val;
+					_allocator.construct(_base + (i + start), val);
+					_size++;
 				}
-				else
+				for (size_type i(0); i < len; i++)
 				{
-					for (; i; i--)
-						_allocator.construct((_base + _size++), val);
+					_allocator.construct(_base + (i + start + n), tmp[i]);
+					_allocator.destroy(tmp + i);
 				}
+				_allocator.deallocate(tmp, len);
 			}
 
 			// range (3) ---
@@ -291,29 +290,39 @@ namespace ft
 			void insert(iterator position, InputIterator first,
 					typename ft::enable_if<!is_integral<InputIterator>::value, InputIterator>::type last)
 			{
-				difference_type index = position - begin();
-				difference_type index_tmp = index;
-				size_type to_move = _size - index;
-				size_type i = _size - 1;
-				size_type size = 0, size_bkp;
-				InputIterator tmp = first;
+				difference_type	start(position - begin());
+				size_type		len(_size - start);
+				pointer			tmp(NULL);
+				size_type		n(0);
 
-				while (tmp++ != last)
-					size++;
-				if (size + _size > _capacity)
+				for (; last != first; last--)
+					n++;
+				if (!n || n > max_size())
+					return ;
+				tmp = _allocator.allocate(len);
+				if (!_capacity)
+					reserve(_size + n);
+				else if (_size + n > _size * 2)
+					reserve(_size + n);
+				else if (_size + n > _capacity)
+					reserve(_size * 2);
+				for (size_type i(start); i < _size; i++)
 				{
-					if ((_capacity * 2) > (_capacity + size))
-						reserve(_size * 2);
-					else
-						reserve(_capacity + size);
+					_allocator.construct(tmp + (i - start), _base[i]);
+					_allocator.destroy(_base + i);
 				}
-				size_bkp = size;
-				for (; size > 0; size--)
-					_allocator.construct((_base + _size++), T());
-				for (; to_move > 0; to_move--, i--)
-					_base[i + size_bkp] = _base[i] ;
-				for (; first != last; first++)
-					_base[index_tmp++] = *first;
+				for (size_type i(0); i < n; i++)
+				{
+					_allocator.construct(_base + (i + start), *first);
+					first++;
+					_size++;
+				}
+				for (size_type i(0); i < len; i++)
+				{
+					_allocator.construct(_base + (i + start + n), tmp[i]);
+					_allocator.destroy(tmp + i);
+				}
+				_allocator.deallocate(tmp, len);
 			}
 
 			// single element (1) ---

@@ -6,7 +6,7 @@
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/13 17:24:14 by jabenjam          #+#    #+#             */
-/*   Updated: 2022/08/16 20:14:30 by jabenjam         ###   ########.fr       */
+/*   Updated: 2022/08/17 11:53:44 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,169 +20,156 @@
 
 namespace ft
 {
-	template<class Node_type, class Value_type>
+	template<typename Node_type, typename Value_type>
 	class bidirectional_iterator
 	{
-		public:
-			typedef Node_type						node_type;
-			typedef Value_type						value_type;
-			typedef std::ptrdiff_t					difference_type;
-			typedef value_type*						pointer;
-			typedef value_type&						reference;
-			typedef std::bidirectional_iterator_tag	iterator_category;
+		public :
+			typedef	std::ptrdiff_t							difference_type;
+			typedef Node_type								node_type;
+			typedef	Value_type								value_type;
+			typedef	value_type*					pointer;
+			typedef	value_type&					reference;
+			typedef	ft::bidirectional_iterator_tag			iterator_category;
 
-			node_type		*current;
-
-			bidirectional_iterator()
-			:current(NULL), _end(NULL)
+			bidirectional_iterator() : _elem(), _root(), _sentinel()
 			{}
 
-			bidirectional_iterator(node_type *ptr)
-			:current(ptr), _end(NULL)
-			{}
+			bidirectional_iterator(bidirectional_iterator const & src) : _elem(src._elem),
+				_root(src._root), _sentinel(src._sentinel)
+			{ }
 
-			bidirectional_iterator(node_type *ptr, node_type *end)
-			:current(ptr), _end(end)
-			{}
-
-			bidirectional_iterator(const bidirectional_iterator &copy)
-			{ *this = copy; }
-
-			~bidirectional_iterator() {}
-
-			bidirectional_iterator	&operator=(const bidirectional_iterator &other)
+			bidirectional_iterator(node_type * elem, node_type * root) : _elem(elem)
 			{
-				if (this != &other)
-				{
-					this->current = other.current;
-					this->_end = other._end;
-				}
-				return (*this);
+				this->_root = root;
+				this->_sentinel = root->parent;
 			}
 
-			reference	operator*(void)
-			{ return (this->current->data); }
+			virtual ~bidirectional_iterator() {}
 
-			const value_type	&operator*(void) const
-			{ return (this->current->data); }
+			bidirectional_iterator&	operator=(const bidirectional_iterator &to_copy)
+			{
+				if (this != &to_copy)
+				{
+					this->_elem = to_copy._elem;
+					this->_root = to_copy._root;
+					this->_sentinel = to_copy._sentinel;
+				}
+				return *this;
+			}
 
-			value_type	*operator->(void)
+			operator bidirectional_iterator<const Node_type, const Value_type>() const
+			{
+				return bidirectional_iterator<const Node_type, const Value_type>(this->_elem, this->_root);
+			}
+
+			reference operator*()
+			{ return (this->_elem->key_val); }
+
+			reference operator*() const
+			{ return (this->_elem->key_val); }
+
+			pointer operator->()
 			{ return (&this->operator*()); }
 
-			const value_type	*operator->(void) const
+			pointer operator->() const
 			{ return (&this->operator*()); }
 
-			bidirectional_iterator	operator++(int)
+			bidirectional_iterator& operator++()
 			{
-				bidirectional_iterator	it(*this);
-				this->current = this->_increase();
-				return (it);
+				this->_elem = _found_next_one(_elem);
+				return *this;
 			}
 
-			bidirectional_iterator	&operator++(void)
+			bidirectional_iterator operator++(int)
 			{
-				this->current = this->_increase();
-				return (*this);
+				bidirectional_iterator rtn(*this);
+				operator++();
+				return (rtn);
 			}
 
-			bidirectional_iterator	operator--(int)
+			bidirectional_iterator& operator--()
 			{
-				bidirectional_iterator	it(*this);
-				this->current = this->_decrease();
-				return (it);
+				this->_elem = _found_prec(_elem);
+				return *this;
 			}
 
-			bidirectional_iterator	&operator--(void)
+			bidirectional_iterator operator--(int)
 			{
-				this->current = this->_decrease();
-				return (*this);
+				bidirectional_iterator rtn(*this);
+				operator--();
+				return (rtn);
 			}
 
-			operator bidirectional_iterator<const Node_type, const Value_type>(void) const
-			{ return (bidirectional_iterator<const Node_type, const Value_type>(this->current, this->_end)); }
+			node_type	* base() const { return this->_elem; }
 
-		private:
-			node_type			*_end;
+		private :
+			node_type	*_elem;
+			node_type	*_root;
+			node_type	*_sentinel;
 
-			node_type	*_minimum(node_type *node)
+			node_type	* _found_next_one(node_type	* node)
 			{
-				node_type	*current = node;
-				while (current->left != this->_end)
-					current = current->left;
-				return (current);
-			}
-
-			node_type	*_maximum(node_type *node)
-			{
-				node_type	*current = node;
-				while (current->right != this->_end)
-					current = current->right;
-				return (current);
-			}
-
-			node_type	*_topIncrease(node_type *node)
-			{
-				node_type	*current = node;
-				node_type	*parent = current->parent;
-				while (parent != NULL && current == parent->right)
+				if (node == _maximum(this->_root) || node == this->_sentinel)
+					return this->_sentinel;
+				if (node->right != this->_sentinel)
+					return (_minimum(node->right));
+				if (node != node->parent->left)
 				{
-					current = parent;
-					parent = parent->parent;
+					while (node != node->parent->left)
+						node = node->parent;
 				}
-				if (parent == NULL)
-					current = this->_end;
-				else
-					current = parent;
-				return (current);
+				node = node->parent;
+				return node;
 			}
 
-			node_type	*_topDecrease(node_type *node)
+			node_type	* _found_prec(node_type	* node)
 			{
-				node_type	*current = node;
-				node_type	*parent = current->parent;
-				while (parent != NULL && current == parent->left)
+				if (node == this->_sentinel)
+					return (_maximum(this->_root));
+				if (node == _minimum(this->_root))
+					return this->_sentinel;
+				if (node->left != this->_sentinel)
+					return (_maximum(node->left));
+				if (node != node->parent->right)
 				{
-					current = parent;
-					parent = parent->parent;
+					while (node != node->parent->right)
+						node = node->parent;
 				}
-				if (parent == NULL)
-					current = this->_end;
-				else
-					current = parent;
-				return (current);
+				node = node->parent;
+				return node;
 			}
 
-			node_type	*_increase(void)
+			node_type	* _minimum(node_type	* node)
 			{
-				if (this->current == this->_end && this->_end->parent != NULL)
-					return (this->_minimum(this->current->parent));
-				if (this->current->right == this->_end)
-					return (this->_topIncrease(this->current));
-				return (this->_minimum(this->current->right));
+				while (node->left != this->_sentinel)
+					node = node->left;
+				return node;
 			}
 
-			node_type	*_decrease(void)
+			node_type	* _maximum(node_type	* node)
 			{
-				if (this->current == this->_end && this->_end->parent != NULL)
-					return (this->_maximum(this->current->parent));
-				if (this->current->left == this->_end)
-					return (this->_topDecrease(this->current));
-				return (this->_maximum(this->current->left));
+				while (node->right != this->_sentinel)
+				{
+					node = node->right;
+				}
+				return node;
 			}
 	};
 
-	template<class Tx, class Ux, class Ty, class Uy>
-	bool	operator==(const bidirectional_iterator<Tx, Ux> &x, const bidirectional_iterator<Ty, Uy> &y)
+	template<typename Tx, typename Xx, typename Ty, typename Xy>
+	bool operator==(const bidirectional_iterator<Tx, Xx> & A,
+		const bidirectional_iterator<Ty, Xy> & B)
 	{
-		if (x.current == y.current)
+		if (A.base() == B.base())
 			return (true);
 		return (false);
 	}
 
-	template<class Tx, class Ux, class Ty, class Uy>
-	bool	operator!=(const bidirectional_iterator<Tx, Ux> &x, const bidirectional_iterator<Ty, Uy> &y)
+	template<typename Tx, typename Xx, typename Ty, typename Xy>
+	bool operator!=(const bidirectional_iterator<Tx, Xx> & A,
+		const bidirectional_iterator<Ty, Xy> & B)
 	{
-		if (x.current != y.current)
+		if (A.base() != B.base())
 			return (true);
 		return (false);
 	}

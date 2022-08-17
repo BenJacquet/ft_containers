@@ -6,7 +6,7 @@
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/28 17:30:47 by jabenjam          #+#    #+#             */
-/*   Updated: 2022/08/16 18:12:14 by jabenjam         ###   ########.fr       */
+/*   Updated: 2022/08/17 11:35:14 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,41 +18,15 @@
 
 namespace ft
 {
-	template<class T>
-	class Node
+	template <class value_type>
+	struct node
 	{
-		public:
-			typedef T				value_type;
-			typedef	Node*			pointer;
-			typedef	Node&			reference;
+		node(const value_type &key) : key_val(key) {}
 
-			value_type				data;
-			bool					color;
-			pointer					left;
-			pointer					right;
-			pointer					parent;
-
-			Node()
-			: data(NULL), color(E_BLACK), left(NULL), right(NULL), parent(NULL)
-			{}
-
-			Node(const value_type &x)
-			: data(x), color(E_BLACK), left(NULL), right(NULL), parent(NULL)
-			{}
-
-			~Node() {}
-
-			reference	operator=(reference rhs)
-			{
-				if (this != &rhs)
-				{
-					this->data = rhs.data;
-					this->color = rhs.color;
-					this->left = rhs.left;
-					this->right = rhs.right;
-					this->parent = rhs.parent;
-				}
-				return (*this);
-			}
+		node		*parent;
+		node		*left;
+		node		*right;
+		int			color;
+		value_type	key_val;
 	};
 }
