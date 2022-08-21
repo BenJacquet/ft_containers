@@ -33,9 +33,9 @@ OBJS_FT = $(SRCS_FT:.cpp=.o)
 
 OBJS_STD = $(SRCS_STD:.cpp=.o)
 
-CXX = c++
+CXX = clang++
 
-CXXFLAGS = -Wall -Wextra -Werror -std=c++98 -g
+CXXFLAGS = -Wall -Wextra -Werror -std=c++98
 
 # Colors
 _BLACK = $'\033[30m

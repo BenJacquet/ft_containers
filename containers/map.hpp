@@ -6,7 +6,7 @@
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/04 14:04:45 by jabenjam          #+#    #+#             */
-/*   Updated: 2022/08/17 11:53:11 by jabenjam         ###   ########.fr       */
+/*   Updated: 2022/08/21 22:32:44 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,10 @@
 
 namespace ft
 {
-	template <class Key,								  // map::key_type
-			class T,									  // map::mapped_type
-			class Compare = std::less<Key>,				  // map::key_compare
-			class Alloc = std::allocator<ft::pair<const Key, T> > > // map::allocator_type
+	template <class Key,
+			class T,
+			class Compare = std::less<Key>,
+			class Alloc = std::allocator<ft::pair<const Key, T> > >
 	class map
 	{
 		public :
@@ -57,9 +57,7 @@ namespace ft
 					typedef value_type	second_argument_type;
 
 					bool operator() (const value_type& x, const value_type& y) const
-					{
-						return _comp(x.first , y.first);
-					}
+					{ return _comp(x.first , y.first); }
 			};
 
 		private :
@@ -81,9 +79,7 @@ namespace ft
 				const key_compare &comp = key_compare(),
 				const allocator_type &alloc = allocator_type())
 				: _comp(comp), _alloc(alloc)
-			{
-				this->insert(first, last);
-			}
+			{ this->insert(first, last); }
 
 			map(const map &x)
 			{ *this = x; }
@@ -101,55 +97,37 @@ namespace ft
 				return *this;
 			}
 
-/* ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** **
-**									ITERATOR FUNC									   **
-** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** */
-
-			void put_tree() const { this->_tree.put_tree(); }
+			/*
+			** ITERATOR
+			*/
 
 			iterator begin()
-			{
-				return iterator(this->_tree.minimum(this->_tree.root()), this->_tree.root());
-			}
+			{ return iterator(this->_tree.minimum(this->_tree.root()), this->_tree.root()); }
 
 			const_iterator begin() const
-			{
-				return const_iterator(this->_tree.minimum(this->_tree.root()), this->_tree.root());
-			}
+			{ return const_iterator(this->_tree.minimum(this->_tree.root()), this->_tree.root()); }
 
 			iterator end()
-			{
-				return iterator(this->_tree.sentinel(), this->_tree.root());
-			}
+			{ return iterator(this->_tree.sentinel(), this->_tree.root()); }
 
 			const_iterator end() const
-			{
-				return const_iterator(this->_tree.sentinel(), this->_tree.root());
-			}
+			{ return const_iterator(this->_tree.sentinel(), this->_tree.root()); }
 
 			reverse_iterator rbegin()
-			{
-				return reverse_iterator(this->end());
-			}
+			{ return reverse_iterator(this->end()); }
 
 			const_reverse_iterator rbegin() const
-			{
-				return const_reverse_iterator(this->end());
-			}
+			{ return const_reverse_iterator(this->end()); }
 
 			reverse_iterator rend()
-			{
-				return reverse_iterator(this->begin());
-			}
+			{ return reverse_iterator(this->begin()); }
 
 			const_reverse_iterator rend() const
-			{
-				return const_reverse_iterator(this->begin());
-			}
+			{ return const_reverse_iterator(this->begin()); }
 
-/* ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** **
-**									CAPACITY FUNC									   **
-** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** */
+			/*
+			** CAPACITY
+			*/
 
 			bool empty() const
 			{
@@ -159,18 +137,14 @@ namespace ft
 			}
 
 			size_type size() const
-			{
-				return (this->_tree.size());
-			}
+			{ return (this->_tree.size()); }
 
 			size_type max_size() const
-			{
-				return (this->_tree.max_size());
-			}
+			{ return (this->_tree.max_size()); }
 
-/* ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** **
-**								ELEMENT ACCESS FUNC									   **
-** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** */
+			/*
+			** ELEMENT ACCESS
+			*/
 
 			mapped_type& operator[] (const key_type& k)
 			{
@@ -180,9 +154,9 @@ namespace ft
 				return it.first->second;
 			}
 
-/* ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** **
-**									MODIFIERS FUNC									   **
-** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** */
+			/*
+			** MODIFIERS
+			*/
 
 			pair<iterator, bool> insert(const value_type &val)
 			{
@@ -235,7 +209,6 @@ namespace ft
 			{
 
 				ft::vector<key_type> tab;
-				// key_type tab[s];
 				while (first != last)
 				{
 					tab.push_back(first->first);
@@ -257,23 +230,9 @@ namespace ft
 				this->_tree.destroy_tree();
 			}
 
-/* ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** **
-**									OBSERVERS FUNC									   **
-** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** */
-
-			key_compare key_comp() const
-			{
-				return key_compare();
-			}
-
-			value_compare value_comp() const
-			{
-				return value_compare(key_compare());
-			}
-
-/* ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** **
-**									OPERATIONS FUNC									   **
-** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** */
+			/*
+			** LOOKUP
+			*/
 
 			iterator find (const key_type& k)
 			{
@@ -360,19 +319,29 @@ namespace ft
 			}
 
 			pair<iterator, iterator> equal_range(const key_type &k)
-			{
-				return (ft::make_pair(lower_bound(k), upper_bound(k)));
-			}
+			{ return (ft::make_pair(lower_bound(k), upper_bound(k))); }
 
-/* ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** **
-**									ALLOCATOR FUNC									   **
-** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** */
+			/*
+			** OBSERVERS
+			*/
+
+			key_compare key_comp() const
+			{ return key_compare(); }
+
+			value_compare value_comp() const
+			{ return value_compare(key_compare()); }
+
+			/*
+			** ALLOCATOR
+			*/
 
 			allocator_type get_allocator() const
 			{ return this->_alloc; }
-
 	};
 
+	/*
+	** NON MEMBER FUNCTIONS
+	*/
 	template <class Key, class T, class Compare, class Alloc>
 	bool operator==(const map<Key, T, Compare, Alloc> &lhs,
 		const map<Key, T, Compare, Alloc> &rhs)
@@ -385,42 +354,30 @@ namespace ft
 	template <class Key, class T, class Compare, class Alloc>
 	bool operator!=(const map<Key, T, Compare, Alloc> &lhs,
 		const map<Key, T, Compare, Alloc> &rhs)
-		{
-			return (!(lhs == rhs));
-		}
+		{ return (!(lhs == rhs)); }
 
 	template <class Key, class T, class Compare, class Alloc>
 	bool operator<(const map<Key, T, Compare, Alloc> &lhs,
 		const map<Key, T, Compare, Alloc> &rhs)
-		{
-			return ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
-		}
+		{ return ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()); }
 
 	template <class Key, class T, class Compare, class Alloc>
 	bool operator<=(const map<Key, T, Compare, Alloc> &lhs,
 		const map<Key, T, Compare, Alloc> &rhs)
-		{
-			return (lhs == rhs || lhs < rhs);
-		}
+		{ return (lhs == rhs || lhs < rhs); }
 
 	template <class Key, class T, class Compare, class Alloc>
 	bool operator>(const map<Key, T, Compare, Alloc> &lhs,
 		const map<Key, T, Compare, Alloc> &rhs)
-		{
-			return(rhs < lhs);
-		}
+		{ return(rhs < lhs); }
 
 	template <class Key, class T, class Compare, class Alloc>
 	bool operator>=(const map<Key, T, Compare, Alloc> &lhs,
 		const map<Key, T, Compare, Alloc> &rhs)
-		{
-			return (lhs > rhs || lhs == rhs);
-		}
+		{ return (lhs > rhs || lhs == rhs); }
 
 	template <class Key, class T, class Compare, class Alloc>
 	void swap(map<Key, T, Compare, Alloc> &lhs,
 		map<Key, T, Compare, Alloc> &rhs)
-	{
-		lhs.swap(rhs);
-	}
+	{ lhs.swap(rhs); }
 }
