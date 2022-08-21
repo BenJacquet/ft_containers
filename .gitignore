@@ -1,5 +1,5 @@
 *.o
 logs/*
-std_continers
+std_containers
 ft_containers
 main_std.cpp
