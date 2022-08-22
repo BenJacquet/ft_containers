@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/08/13 17:24:35 by jabenjam          #+#    #+#             */
-/*   Updated: 2022/08/17 12:52:13 by jabenjam         ###   ########.fr       */
+/*   Created: 2022/05/13 17:24:35 by jabenjam          #+#    #+#             */
+/*   Updated: 2022/08/22 09:53:43 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 #include "iterator.hpp"
 
-	/*
-	** RANDOM ACCESS ITERATOR (FOR VECTOR)
-	*/
+/*
+** RANDOM ACCESS ITERATOR (FOR VECTOR)
+*/
 
 namespace ft
 {

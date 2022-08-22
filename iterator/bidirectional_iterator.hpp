@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/08/13 17:24:14 by jabenjam          #+#    #+#             */
-/*   Updated: 2022/08/17 11:53:44 by jabenjam         ###   ########.fr       */
+/*   Created: 2022/06/13 17:24:14 by jabenjam          #+#    #+#             */
+/*   Updated: 2022/08/22 09:53:11 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@ namespace ft
 			typedef	std::ptrdiff_t							difference_type;
 			typedef Node_type								node_type;
 			typedef	Value_type								value_type;
-			typedef	value_type*					pointer;
-			typedef	value_type&					reference;
+			typedef	value_type*								pointer;
+			typedef	value_type&								reference;
 			typedef	ft::bidirectional_iterator_tag			iterator_category;
 
 			bidirectional_iterator() : _elem(), _root(), _sentinel()
@@ -58,9 +58,7 @@ namespace ft
 			}
 
 			operator bidirectional_iterator<const Node_type, const Value_type>() const
-			{
-				return bidirectional_iterator<const Node_type, const Value_type>(this->_elem, this->_root);
-			}
+			{ return bidirectional_iterator<const Node_type, const Value_type>(this->_elem, this->_root); }
 
 			reference operator*()
 			{ return (this->_elem->key_val); }

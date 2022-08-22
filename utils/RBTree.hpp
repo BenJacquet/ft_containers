@@ -6,7 +6,7 @@
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/04 14:05:45 by jabenjam          #+#    #+#             */
-/*   Updated: 2022/08/17 11:53:18 by jabenjam         ###   ########.fr       */
+/*   Updated: 2022/08/22 09:51:57 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,30 +164,27 @@ namespace ft
 				return node;
 			}
 
-			/*
-			**	x = old parent && y = new parent
-			*/
-			void left_rotate(node<value_type> *x, node<value_type> *y)
+			void left_rotate(node<value_type> *old_p, node<value_type> *new_p)
 			{
-				if (x->parent == this->_sentinel)
-					this->_root = y;
-				if (y->left != this->_sentinel)
+				if (old_p->parent == this->_sentinel)
+					this->_root = new_p;
+				if (new_p->left != this->_sentinel)
 				{
-					x->right = y->left;
-					x->right->parent = x;
+					old_p->right = new_p->left;
+					old_p->right->parent = old_p;
 				}
 				else
-					x->right = this->_sentinel;
-				y->parent = x->parent;
-				if (x->parent != this->_sentinel)
+					old_p->right = this->_sentinel;
+				new_p->parent = old_p->parent;
+				if (old_p->parent != this->_sentinel)
 				{
-					if (x->parent->left == x)
-						x->parent->left = y;
+					if (old_p->parent->left == old_p)
+						old_p->parent->left = new_p;
 					else
-						x->parent->right = y;
+						old_p->parent->right = new_p;
 				}
-				x->parent = y;
-				y->left = x;
+				old_p->parent = new_p;
+				new_p->left = old_p;
 			}
 
 			void right_rotate(node<value_type> *new_p, node<value_type> *old_p)
@@ -229,12 +226,9 @@ namespace ft
 					return (insert2(ins, to_move, to_ins));
 			}
 
-			/*
-			** Try to insert in the tree.
-			*/
 			node<value_type>* insert2(const value_type& ins, node<value_type> *to_move, node<value_type> *to_ins)
 			{
-				if (this->_comp(ins, to_move->key_val)) /* if key of ins < key of to_move */
+				if (this->_comp(ins, to_move->key_val))
 				{
 					if (to_move->left == this->_sentinel)
 					{
@@ -253,7 +247,7 @@ namespace ft
 					}
 				}
 				else if (!(this->_comp(ins, to_move->key_val)) &&
-						 !(this->_comp(to_move->key_val, ins))) /* if equal the new insert is ignoE_red */
+						 !(this->_comp(to_move->key_val, ins)))
 					return to_move;
 				else
 				{
