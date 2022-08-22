@@ -6,7 +6,7 @@
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/04 14:04:45 by jabenjam          #+#    #+#             */
-/*   Updated: 2022/08/21 22:32:44 by jabenjam         ###   ########.fr       */
+/*   Updated: 2022/08/22 12:30:37 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -250,9 +250,7 @@ namespace ft
 			{
 				const_iterator it = this->begin();
 				while (it != this->end() && it->first != k)
-				{
 					it++;
-				}
 				if (it->first == k)
 					return (it);
 				return this->end();
