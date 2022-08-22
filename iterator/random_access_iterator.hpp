@@ -6,7 +6,7 @@
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/13 17:24:35 by jabenjam          #+#    #+#             */
-/*   Updated: 2022/08/22 09:53:43 by jabenjam         ###   ########.fr       */
+/*   Updated: 2022/08/22 11:36:24 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,11 +108,8 @@ namespace ft
 			** Random Access iterator Requirements
 			*/
 
-			random_access_iterator operator+(difference_type n) const
+			random_access_iterator operator+(difference_type n)
 			{ return (random_access_iterator(_current + n)); }
-
-			difference_type operator-(const random_access_iterator& rhs) const
-			{ return (_current - rhs._current); }
 
 			random_access_iterator operator-(difference_type n) const
 			{ return (random_access_iterator(_current - n)); }
@@ -177,5 +174,17 @@ namespace ft
 	template<class iterator>
 	random_access_iterator<iterator> operator-(typename random_access_iterator<iterator>::difference_type n, const random_access_iterator<iterator>& it)
 	{ return (random_access_iterator<iterator>(it.base() - n)); }
+
+	template <typename IteratorL, typename IteratorR>
+	typename ft::random_access_iterator<IteratorL>::difference_type
+	operator-(const ft::random_access_iterator<IteratorL> lhs,
+			const ft::random_access_iterator<IteratorR> rhs)
+	{ return (lhs.base() - rhs.base()); }
+
+		template <typename IteratorL, typename IteratorR>
+	typename ft::random_access_iterator<IteratorL>::difference_type
+	operator+(const ft::random_access_iterator<IteratorL> lhs,
+			const ft::random_access_iterator<IteratorR> rhs)
+	{ return (lhs.base() + rhs.base()); }
 
 }

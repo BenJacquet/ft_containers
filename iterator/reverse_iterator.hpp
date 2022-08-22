@@ -6,7 +6,7 @@
 /*   By: jabenjam <jabenjam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/13 17:28:49 by jabenjam          #+#    #+#             */
-/*   Updated: 2022/08/22 09:47:37 by jabenjam         ###   ########.fr       */
+/*   Updated: 2022/08/22 11:42:33 by jabenjam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,19 +140,15 @@ namespace ft
 	bool operator<=(const reverse_iterator<Iterator1>& lhs, const reverse_iterator<Iterator2>& rhs)
 	{ return lhs.base() >= rhs.base(); }
 
-	template <class Iter>
-	ft::reverse_iterator<Iter> operator+(typename ft::reverse_iterator<Iter>::difference_type n, const ft::reverse_iterator<Iter>& it)
-	{
-		return it + n;
-	};
-	template <class Iter>
-	typename ft::reverse_iterator<Iter>::difference_type operator-(const ft::reverse_iterator<Iter>& lhs, const ft::reverse_iterator<Iter>& rhs)
-	{
-		return rhs.base() - lhs.base();
-	};
-	template <class Iter1, class Iter2>
-	typename ft::reverse_iterator<Iter1>::difference_type operator-(const ft::reverse_iterator<Iter1>& lhs, const ft::reverse_iterator<Iter2>& rhs)
-	{
-		return rhs.base() - lhs.base();
-	};
+	template <typename IteratorL, typename IteratorR>
+	typename ft::reverse_iterator<IteratorL>::difference_type
+	operator-(const ft::reverse_iterator<IteratorL> lhs,
+			  const ft::reverse_iterator<IteratorR> rhs)
+	{ return (rhs.base() - lhs.base()); }
+
+	template <class T>
+	ft::reverse_iterator<T> operator+(
+		typename ft::reverse_iterator<T>::difference_type n,
+		typename ft::reverse_iterator<T> &rhs)
+	{ return (reverse_iterator<T>(rhs.base() - n)); }
 };
